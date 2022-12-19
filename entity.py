@@ -4,39 +4,46 @@ import random
 class Entity:
     def __init__(self, *args):
         self.rect = pygame.Rect(args[0], args[1], 10, 10)
+        self.loc = (args[0], args[1])
         self.choice = random.randint(1, 5)
         self.age = 0
-        self.age_limit = random.randint(2, 5)
+        self.age_limit = random.randint(3, 6)
         self.age_timer = 0
         self.move_timer = 0
         self.dir_timer = 0
         self.amnt_offspring = 0
         self.generation = 1
+        self.diseased = False
         if len(args) == 3:
             self.color = self._mutate_color(args[2])
         else:
             self.color = pygame.Color(random.randint(10, 200), random.randint(10, 200), random.randint(10, 200))
     
-    def update(self, height, width):
+    def update(self, width, height):
         self.choice = self._choose_dir()
         if self.move_timer > 50:
             if self.choice == 1 and self.rect.top != 0:
                 self.rect = self.rect.move(0, -10)
             elif self.choice == 2 and self.rect.left != 0:
                 self.rect = self.rect.move(-10, 0)
-            elif self.choice == 3 and self.rect.bottom != width:
+            elif self.choice == 3 and self.rect.bottom != height:
                 self.rect = self.rect.move(0, 10)
-            elif self.choice == 4 and self.rect.right != height:
+            elif self.choice == 4 and self.rect.right != width:
                 self.rect = self.rect.move(10, 0)
             self.move_timer = 0
-            return (self.rect.top, self.rect.left)
+            self.loc = (self.rect.left, self.rect.top)
     
     def reproduce(self):
-        r = random.randint(0, 1)
-        if r == 1:
-            print("an entity of generation " + str(self.generation) + " has reproduced")
+        r = random.randint(0, 1+self.amnt_offspring)
+        if r == 1 and not self.diseased:
             self.amnt_offspring += 1
+            self.age_limit -= 1
             e = Entity(self.rect.left, self.rect.top, self.color)
+            e.diseased = (random.randint(1, 100) == 1)
+            if e.diseased:
+                print("an entity of generation " + str(self.generation) + " has reproduced with disease")
+            else:
+                print("an entity of generation " + str(self.generation) + " has reproduced")
             e.generation = self.generation + 1
             return e
         return None
@@ -45,16 +52,22 @@ class Entity:
         res = pygame.Color(0, 0, 0)
         if p_color.r >= 20 and p_color.r <= 235:
             res.r = random.randint(p_color.r-20, p_color.r+20)
-        else:
-            res.r = p_color.r
+        elif p_color.r > 235:
+            res.r = random.randint(p_color.r-10, p_color.r)
+        elif p_color.r < 20:
+            res.r = random.randint(p_color.r, p_color.r+10)
         if p_color.g >= 20 and p_color.g <= 235:
             res.g = random.randint(p_color.g-20, p_color.g+20)
-        else:
-            res.g = p_color.g
+        elif p_color.g > 235:
+            res.g = random.randint(p_color.g-10, p_color.g)
+        elif p_color.g < 20:
+            res.g = random.randint(p_color.g, p_color.g+10)
         if p_color.b >= 20 and p_color.b <= 235:
             res.b = random.randint(p_color.b-20, p_color.b+20)
-        else:
-            res.b = p_color.b
+        elif p_color.b > 235:
+            res.b = random.randint(p_color.b-10, p_color.b)
+        elif p_color.b < 20:
+            res.b = random.randint(p_color.b, p_color.b+10)
         return res
 
     def _choose_dir(self):
