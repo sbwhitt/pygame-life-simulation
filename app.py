@@ -149,6 +149,21 @@ class App:
         elif key == 'r':
             for e in entities:
                 e.color = pygame.Color(random.randint(10, 200), random.randint(10, 200), random.randint(10, 200))
+        elif key == '1':
+            for e in entities:
+                e.color = colors.RED
+        elif key == '2':
+            for e in entities:
+                e.color = colors.BLUE
+        elif key == '3':
+            for e in entities:
+                e.color = colors.GREEN
+        elif key == '4':
+            for e in entities:
+                e.color = colors.YELLOW
+        elif key == '5':
+            for e in entities:
+                e.color = colors.PURPLE
         elif key == 'q':
             self._running = False
 
