@@ -110,23 +110,24 @@ class App:
     
     def _spread_color(self, collisions):
         r, g, b = 0, 0, 0
-        highest_gen = 0
+        highest_off = 0
         mod = random.randint(1, 3)
         for e in collisions:
-            highest_gen = e.generation if e.generation > highest_gen else highest_gen
+            highest_off = e.amnt_offspring if e.amnt_offspring > highest_off else highest_off
             r += e.color.r
-            if r <= 100:
-                r = r+75 if mod == 1 else r+50
+            # if r <= 100:
+            #     r = r+75 if mod == 1 else r+50
             g += e.color.g
-            if g <= 100:
-                g = g+75 if mod == 2 else g+50
+            # if g <= 100:
+            #     g = g+75 if mod == 2 else g+50
             b += e.color.b
-            if b <= 100:
-                b = b+75 if mod == 3 else b+50
+            # if b <= 100:
+            #     b = b+75 if mod == 3 else b+50
         #print(str(int(r/len(collisions))) + " " + str(int(g/len(collisions))) + " " + str(int(b/len(collisions))))
         c = pygame.Color(int(r/len(collisions)), int(g/len(collisions)), int(b/len(collisions)))
         for e in collisions:
-            e.color = c
+            if e.amnt_offspring < highest_off:
+                e.color = c
     
     def _spread_disease(self, collisions):
         for e in collisions:
