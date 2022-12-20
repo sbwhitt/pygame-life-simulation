@@ -12,10 +12,10 @@ y == height == rect.top
 class App:
     def __init__(self):
         self._running = True
-        self.width = 640
-        self.height = 480
+        self.width = 960
+        self.height = 720
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.screen = pygame.display.set_mode((self.width, self.height), pygame.SCALED | pygame.RESIZABLE)
         # self.p = player.Player(int(self.width/2), 0)
         self.p = player.Player(1000, 1000)
         self.entities = []
