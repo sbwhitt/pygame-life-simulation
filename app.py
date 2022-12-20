@@ -4,6 +4,7 @@ import entity
 import colors
 import map
 import random
+import settings
 
 '''
 x == width == rect.left
@@ -13,8 +14,8 @@ y == height == rect.top
 class App:
     def __init__(self):
         self._running = True
-        self.width = 960
-        self.height = 720
+        self.width = settings.WINDOW_WIDTH
+        self.height = settings.WINDOW_HEIGHT
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.SCALED | pygame.RESIZABLE)
         # self.p = player.Player(int(self.width/2), 0)
@@ -43,7 +44,7 @@ class App:
     def on_loop(self):
         # if len(self.entities) == 0:
         #     self._running = False
-        self.clock.tick(15)
+        self.clock.tick(settings.CLOCK_RATE)
         self.p.rect = self._handlekey(self.keys, self.p.rect)
 
         for e in self.entities:
@@ -68,7 +69,7 @@ class App:
                         self._spread_disease(self.m.grid[e.loc])
                     if random.randint(1, 3) == 1:
                         self._spread_color(self.m.grid[e.loc])
-                if e.age_timer > 3400:
+                if e.age_timer > settings.AGE_LENGTH:
                     e.age += 1
                     offspring = e.reproduce()
                     if offspring:
