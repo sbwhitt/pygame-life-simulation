@@ -154,16 +154,27 @@ class App:
                 e.color = colors.RED
         elif key == '2':
             for e in entities:
-                e.color = colors.BLUE
+                e.color = colors.GREEN
         elif key == '3':
             for e in entities:
-                e.color = colors.GREEN
+                e.color = colors.BLUE
         elif key == '4':
             for e in entities:
                 e.color = colors.YELLOW
         elif key == '5':
             for e in entities:
                 e.color = colors.PURPLE
+        elif key == 'c':
+            for e in entities:
+                r_cpy, g_cpy, b_cpy = e.color.r, e.color.g, e.color.b
+                e.color.r = g_cpy
+                e.color.g = b_cpy
+                e.color.b = r_cpy
+        elif key == 'f':
+            for e in entities:
+                e.color.r = 255 - e.color.r
+                e.color.g = 255 - e.color.g
+                e.color.b = 255 - e.color.b
         elif key == 'q':
             self._running = False
 
