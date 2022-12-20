@@ -148,33 +148,30 @@ class App:
                 entities.pop(i)
         elif key == 'r':
             for e in entities:
-                e.color = pygame.Color(random.randint(10, 200), random.randint(10, 200), random.randint(10, 200))
+                e.color = pygame.Color(random.randint(10, 245), random.randint(10, 245), random.randint(10, 245))
         elif key == '1':
             for e in entities:
-                e.color = colors.RED
+                e.color.update(255, 0, 0)
         elif key == '2':
             for e in entities:
-                e.color = colors.GREEN
+                e.color.update(0, 255, 0)
         elif key == '3':
             for e in entities:
-                e.color = colors.BLUE
+                e.color.update(0, 0, 255)
         elif key == '4':
             for e in entities:
-                e.color = colors.YELLOW
+                e.color.update(255, 255, 0)
         elif key == '5':
             for e in entities:
-                e.color = colors.PURPLE
+                e.color.update(255, 0, 255)
         elif key == 'c':
             for e in entities:
                 r_cpy, g_cpy, b_cpy = e.color.r, e.color.g, e.color.b
-                e.color.r = g_cpy
-                e.color.g = b_cpy
-                e.color.b = r_cpy
+                e.color.update(g_cpy, b_cpy, r_cpy)
         elif key == 'f':
             for e in entities:
-                e.color.r = 255 - e.color.r
-                e.color.g = 255 - e.color.g
-                e.color.b = 255 - e.color.b
+                r_cpy, g_cpy, b_cpy = e.color.r, e.color.g, e.color.b
+                e.color.update(255-g_cpy, 255-b_cpy, 255-r_cpy)
         elif key == 'q':
             self._running = False
 
