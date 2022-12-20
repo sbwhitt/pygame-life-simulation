@@ -3,6 +3,7 @@ import player
 import entity
 import colors
 import map
+import random
 
 '''
 x == width == rect.left
@@ -42,7 +43,7 @@ class App:
     def on_loop(self):
         # if len(self.entities) == 0:
         #     self._running = False
-        self.clock.tick(30)
+        self.clock.tick(15)
         self.p.rect = self._handlekey(self.keys, self.p.rect)
 
         for e in self.entities:
@@ -65,7 +66,8 @@ class App:
                 if len(self.m.grid[e.loc]) > 1:
                     if e.diseased:
                         self._spread_disease(self.m.grid[e.loc])
-                    #self._spread_color(self.m.grid[e.loc])
+                    if random.randint(1, 3) == 1:
+                        self._spread_color(self.m.grid[e.loc])
                 if e.age_timer > 3400:
                     e.age += 1
                     offspring = e.reproduce()
@@ -94,27 +96,40 @@ class App:
     
     # helpers
     def _build_entities(self):
-        e0 = entity.Entity(int(self.width/2), int(self.height/2))
-        self.m.grid[e0.loc].append(e0)
-        self.entities.append(e0)
+        e0 = entity.Entity(0, 0, colors.RED)
+        e1 = entity.Entity(self.width-10, 0, colors.GREEN)
+        e2 = entity.Entity(0, self.height-10, colors.BLUE)
+        e3 = entity.Entity(self.width-10, self.height-10, colors.YELLOW)
+        self.entities = [e0, e1, e2, e3]
+        for e in self.entities:
+            self.m.grid[e.loc].append(e)
 
     def _p_collides(self, p, e):
         return p.loc == e.loc
     
-    # def _spread_color(self, collisions):
-    #     r, g, b = 0, 0, 0
-    #     for e in collisions:
-    #         r += e.color.r
-    #         g += e.color.g
-    #         b += e.color.b
-    #     print(str(int(r/3)) + " " + str(int(g/3)) + " " + str(int(b/3)))
-    #     c = pygame.Color(int(r/3), int(g/3), int(b/3))
-    #     for e in collisions:
-    #         e.color = c
+    def _spread_color(self, collisions):
+        r, g, b = 0, 0, 0
+        highest_gen = 0
+        mod = random.randint(1, 3)
+        for e in collisions:
+            highest_gen = e.generation if e.generation > highest_gen else highest_gen
+            r += e.color.r
+            if r <= 100:
+                r = r+75 if mod == 1 else r+50
+            g += e.color.g
+            if g <= 100:
+                g = g+75 if mod == 2 else g+50
+            b += e.color.b
+            if b <= 100:
+                b = b+75 if mod == 3 else b+50
+        #print(str(int(r/len(collisions))) + " " + str(int(g/len(collisions))) + " " + str(int(b/len(collisions))))
+        c = pygame.Color(int(r/len(collisions)), int(g/len(collisions)), int(b/len(collisions)))
+        for e in collisions:
+            e.color = c
     
     def _spread_disease(self, collisions):
         for e in collisions:
-            if not e.diseased:
+            if not e.diseased and random.randint(1, 2) == 1:
                 e.diseased = True
 
     def _obituary(self, e):
@@ -129,6 +144,9 @@ class App:
                 self._obituary(entities[i])
                 self.m.grid[entities[i].loc].remove(entities[i])
                 entities.pop(i)
+        elif key == 'r':
+            for e in entities:
+                e.color = pygame.Color(random.randint(10, 200), random.randint(10, 200), random.randint(10, 200))
         elif key == 'q':
             self._running = False
 
