@@ -17,7 +17,7 @@ class App:
         self.width = settings.WINDOW_WIDTH
         self.height = settings.WINDOW_HEIGHT
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((self.width, self.height), pygame.SCALED | pygame.RESIZABLE)
+        self.screen = pygame.display.set_mode((self.width, self.height))
         # self.p = player.Player(int(self.width/2), 0)
         self.p = player.Player(1000, 1000)
         self.entities = []
@@ -45,7 +45,7 @@ class App:
         # if len(self.entities) == 0:
         #     self._running = False
         self.clock.tick(settings.CLOCK_RATE)
-        self.p.rect = self._handlekey(self.keys, self.p.rect)
+        # self.p.rect = self._handlekey(self.keys, self.p.rect)
 
         for e in self.entities:
             e.dir_timer += self.clock.get_time()
@@ -56,7 +56,7 @@ class App:
     
     def on_render(self):
         self.screen.fill(colors.WHITE)
-        pygame.draw.rect(self.screen, colors.RED, self.p.rect)
+        # pygame.draw.rect(self.screen, colors.RED, self.p.rect)
         for e in self.entities:
             if self._p_collides(self.p, e) or e.age >= e.age_limit:
                 self.m.grid[e.loc].remove(e)
@@ -111,27 +111,18 @@ class App:
     def _spread_color(self, collisions):
         r, g, b = 0, 0, 0
         highest_off = 0
-        mod = random.randint(1, 3)
         for e in collisions:
             highest_off = e.amnt_offspring if e.amnt_offspring > highest_off else highest_off
             r += e.color.r
-            # if r <= 100:
-            #     r = r+75 if mod == 1 else r+50
             g += e.color.g
-            # if g <= 100:
-            #     g = g+75 if mod == 2 else g+50
             b += e.color.b
-            # if b <= 100:
-            #     b = b+75 if mod == 3 else b+50
-        #print(str(int(r/len(collisions))) + " " + str(int(g/len(collisions))) + " " + str(int(b/len(collisions))))
         c = pygame.Color(int(r/len(collisions)), int(g/len(collisions)), int(b/len(collisions)))
         for e in collisions:
-            if e.amnt_offspring < highest_off:
-                e.color = c
+            e.color = c.lerp(e.color, 0.5)
     
     def _spread_disease(self, collisions):
         for e in collisions:
-            if not e.diseased and random.randint(1, 2) == 1:
+            if not e.diseased and random.randint(0, 1) == 1:
                 e.diseased = True
 
     def _obituary(self, e):

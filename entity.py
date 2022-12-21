@@ -38,15 +38,14 @@ class Entity:
         if r == 1 and not self.diseased:
             self.amnt_offspring += 1
             self.age_limit -= 1
-            new_color = pygame.Color(0, 0, 0)
-            if random.randint(1, 50) == 1:
-                # chance to mutate into a new random color
-                new_color = pygame.Color(random.randint(10, 200), random.randint(10, 200), random.randint(10, 200))
+            e = Entity(self.rect.left, self.rect.top)
+            if random.randint(1, 100) == 1:
+                # chance to mutate diseased into a new random color
+                e.diseased = (random.randint(0, 1) == 1)
+                e.color = pygame.Color(random.randint(10, 200), random.randint(10, 200), random.randint(10, 200))
             else:
                 # inheriting and slightly mutating parent color
-                new_color = self._mutate_color(self.color)
-            e = Entity(self.rect.left, self.rect.top, new_color)
-            e.diseased = (random.randint(1, 100) == 1)
+                e.color = self._mutate_color(self.color)
             if e.diseased:
                 print("an entity of generation " + str(self.generation) + " has reproduced with disease")
             else:
