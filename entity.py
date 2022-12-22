@@ -4,7 +4,7 @@ import random
 
 class Entity:
     def __init__(self, *args):
-        self.rect = pygame.Rect(args[0], args[1], 10, 10)
+        self.rect = pygame.Rect(args[0], args[1], settings.ENT_WIDTH, settings.ENT_WIDTH)
         self.loc = (args[0], args[1])
         self.choice = random.randint(1, 5)
         self.age = 0
@@ -22,15 +22,15 @@ class Entity:
     
     def update(self, width, height):
         self.choice = self._choose_dir()
-        if self.move_timer > 50:
+        if self.move_timer > settings.MOVE_INTERVAL:
             if self.choice == 1 and self.rect.top != 0:
-                self.rect = self.rect.move(0, -10)
+                self.rect = self.rect.move(0, -settings.ENT_WIDTH)
             elif self.choice == 2 and self.rect.left != 0:
-                self.rect = self.rect.move(-10, 0)
+                self.rect = self.rect.move(-settings.ENT_WIDTH, 0)
             elif self.choice == 3 and self.rect.bottom != height:
-                self.rect = self.rect.move(0, 10)
+                self.rect = self.rect.move(0, settings.ENT_WIDTH)
             elif self.choice == 4 and self.rect.right != width:
-                self.rect = self.rect.move(10, 0)
+                self.rect = self.rect.move(settings.ENT_WIDTH, 0)
             self.move_timer = 0
             self.loc = (self.rect.left, self.rect.top)
     
@@ -78,6 +78,6 @@ class Entity:
         return res
 
     def _choose_dir(self):
-        if (self.dir_timer > 700):
+        if (self.dir_timer > settings.DIR_INTERVAL):
             self.dir_timer = 0
             return random.randint(1, 5)

@@ -104,10 +104,10 @@ class App:
     def _add_start_entities(self):
         e0 = entity.Entity(0, 0, colors.RED)
         e1 = entity.Entity(self.width/2, 0, colors.GREEN)
-        e2 = entity.Entity(self.width-10, 0, colors.BLUE)
-        e3 = entity.Entity(0, self.height-10, colors.YELLOW)
-        e4 = entity.Entity(self.width/2, self.height-10, colors.CYAN)
-        e5 = entity.Entity(self.width-10, self.height-10, colors.MAGENTA)
+        e2 = entity.Entity(self.width-settings.ENT_WIDTH, 0, colors.BLUE)
+        e3 = entity.Entity(0, self.height-settings.ENT_WIDTH, colors.YELLOW)
+        e4 = entity.Entity(self.width/2, self.height-settings.ENT_WIDTH, colors.CYAN)
+        e5 = entity.Entity(self.width-settings.ENT_WIDTH, self.height-settings.ENT_WIDTH, colors.MAGENTA)
         for e in [e0, e1, e2, e3, e4, e5]:
             self.entities.append(e)
             self.m.grid[e.loc].append(e)
@@ -182,13 +182,13 @@ class App:
     def _handlekey(self, keys, rect):
         res = rect.copy()
         if 'w' in keys and rect.top != 0:
-            res = res.move(0, -10)
+            res = res.move(0, -settings.ENT_WIDTH)
         if 'a' in keys and rect.left != 0:
-            res = res.move(-10, 0)
+            res = res.move(-settings.ENT_WIDTH, 0)
         if 's' in keys and rect.bottom != self.height:
-            res = res.move(0, 10)
+            res = res.move(0, settings.ENT_WIDTH)
         if 'd' in keys and rect.right != self.width:
-            res = res.move(10, 0)
+            res = res.move(settings.ENT_WIDTH, 0)
         self.p.loc = (res.left, res.top)
         return res
 
