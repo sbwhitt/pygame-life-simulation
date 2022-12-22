@@ -17,7 +17,7 @@ class App:
         self.width = settings.WINDOW_WIDTH
         self.height = settings.WINDOW_HEIGHT
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.screen = pygame.display.set_mode((self.width, self.height), pygame.SCALED | pygame.RESIZABLE)
         # self.p = player.Player(int(self.width/2), 0)
         self.p = player.Player(1000, 1000)
         self.entities = []

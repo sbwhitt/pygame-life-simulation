@@ -41,7 +41,7 @@ class Entity:
             e = Entity(self.rect.left, self.rect.top)
             if random.randint(1, 100) == 1:
                 # chance to mutate diseased into a new random color
-                e.diseased = (random.randint(0, 1) == 1)
+                e.diseased = (random.randint(0, 2) == 1)
                 e.color = pygame.Color(random.randint(10, 200), random.randint(10, 200), random.randint(10, 200))
             else:
                 # inheriting and slightly mutating parent color
