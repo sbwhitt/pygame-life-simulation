@@ -1,4 +1,5 @@
 import pygame
+import settings
 import random
 
 class Entity:
@@ -47,9 +48,9 @@ class Entity:
                 # inheriting and slightly mutating parent color
                 e.color = self._mutate_color(self.color)
             if e.diseased:
-                print("an entity of generation " + str(self.generation) + " has reproduced with disease")
+                if settings.LOGGING: print("an entity of generation " + str(self.generation) + " has reproduced with disease")
             else:
-                print("an entity of generation " + str(self.generation) + " has reproduced")
+                if settings.LOGGING: print("an entity of generation " + str(self.generation) + " has reproduced")
             e.generation = self.generation + 1
             return e
         return None

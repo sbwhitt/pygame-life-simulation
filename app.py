@@ -26,6 +26,7 @@ class App:
         self.dir_timer = 0
         self.move_timer = 0
         self.m = map.Map(self.width, self.height)
+        self.avg_color = pygame.Color(0, 0, 0)
     
     def on_init(self):
         pygame.init()
@@ -61,7 +62,7 @@ class App:
             if self._p_collides(self.p, e) or e.age >= e.age_limit:
                 self.m.grid[e.loc].remove(e)
                 self.entities.remove(e)
-                self._obituary(e)
+                if settings.LOGGING: self._obituary(e)
             else:
                 pygame.draw.rect(self.screen, e.color, e.rect)
                 if len(self.m.grid[e.loc]) > 1:
@@ -76,13 +77,17 @@ class App:
                         self.m.grid[offspring.loc].append(offspring)
                         self.entities.append(offspring)
                         self.total_ent += 1
+                        self.avg_color = self._tally_avg_color(self._find_avg_color(self.entities))
                     e.age_timer = 0
                 else:
                     e.age_timer += self.clock.get_time()
         pygame.display.flip()
 
     def on_cleanup(self):
-        print("total entities: " + str(self.total_ent))
+        print("total entities (at end): " + str(len(self.entities)))
+        print("total entities (all time): " + str(self.total_ent))
+        print("average color (last frame): " + str(self._find_avg_color(self.entities)))
+        print("average color (all time): " + str(self.avg_color))
         pygame.quit()
 
     def on_execute(self):
@@ -96,14 +101,20 @@ class App:
         self.on_cleanup()
     
     # helpers
-    def _build_entities(self):
+    def _add_start_entities(self):
         e0 = entity.Entity(0, 0, colors.RED)
-        e1 = entity.Entity(self.width-10, 0, colors.GREEN)
-        e2 = entity.Entity(0, self.height-10, colors.BLUE)
-        e3 = entity.Entity(self.width-10, self.height-10, colors.YELLOW)
-        self.entities = [e0, e1, e2, e3]
-        for e in self.entities:
+        e1 = entity.Entity(self.width/2, 0, colors.GREEN)
+        e2 = entity.Entity(self.width-10, 0, colors.BLUE)
+        e3 = entity.Entity(0, self.height-10, colors.YELLOW)
+        e4 = entity.Entity(self.width/2, self.height-10, colors.CYAN)
+        e5 = entity.Entity(self.width-10, self.height-10, colors.MAGENTA)
+        for e in [e0, e1, e2, e3, e4, e5]:
+            self.entities.append(e)
             self.m.grid[e.loc].append(e)
+
+    def _build_entities(self):
+        self._add_start_entities()
+        self.avg_color = self._find_avg_color(self.entities)
 
     def _p_collides(self, p, e):
         return p.loc == e.loc
@@ -163,6 +174,8 @@ class App:
             for e in entities:
                 r_cpy, g_cpy, b_cpy = e.color.r, e.color.g, e.color.b
                 e.color.update(255-g_cpy, 255-b_cpy, 255-r_cpy)
+        elif key == 'e':
+            self._add_start_entities()
         elif key == 'q':
             self._running = False
 
@@ -178,3 +191,17 @@ class App:
             res = res.move(10, 0)
         self.p.loc = (res.left, res.top)
         return res
+
+    def _find_avg_color(self, entities):
+        r, g, b = 0, 0, 0
+        for e in entities:
+            r += e.color.r
+            g += e.color.g
+            b += e.color.b
+        num_e = len(entities)
+        return pygame.Color(int(r/num_e), int(g/num_e), int(b/num_e))
+    
+    def _tally_avg_color(self, current_avg):
+        ents = len(self.entities)
+        r, g, b = int(((ents-1)*self.avg_color.r + current_avg.r)/ents), int(((ents-1)*self.avg_color.g + current_avg.g)/ents), int(((ents-1)*self.avg_color.b + current_avg.b)/ents)
+        return pygame.Color(r, g, b)
