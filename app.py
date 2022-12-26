@@ -126,6 +126,8 @@ class App:
         ent_txt = pygame.font.Font.render(self.font, str(len(self.entities)), True, colors.BLACK)
         total_ent_title = pygame.font.Font.render(self.font, "entities all time: ", True, colors.BLACK)
         total_ent_txt = pygame.font.Font.render(self.font, str(self.total_ent), True, colors.BLACK)
+        dis_ent_title = pygame.font.Font.render(self.font, "diseased entities: ", True, colors.BLACK)
+        dis_ent_txt = pygame.font.Font.render(self.font, str(self._get_diseased_entities(self.entities)), True, colors.BLACK)
         avg_color_title = pygame.font.Font.render(self.font, "avg color", True, colors.BLACK)
         avg_color_txt = pygame.font.Font.render(self.font, str(self._find_avg_color(self.entities)), True, colors.BLACK)
         total_color_title = pygame.font.Font.render(self.font, "avg color all time", True, colors.BLACK)
@@ -134,11 +136,19 @@ class App:
         self.screen.blit(ent_txt, (self.width+10, settings.FONT_SIZE))
         self.screen.blit(total_ent_title, (self.width+10, settings.FONT_SIZE*2))
         self.screen.blit(total_ent_txt, (self.width+10, settings.FONT_SIZE*3))
-        self.screen.blit(avg_color_title, (self.width+10, settings.FONT_SIZE*4))
-        self.screen.blit(avg_color_txt, (self.width+10, settings.FONT_SIZE*5))
-        self.screen.blit(total_color_title, (self.width+10, settings.FONT_SIZE*6))
-        self.screen.blit(total_color_txt, (self.width+10, settings.FONT_SIZE*7))
+        self.screen.blit(dis_ent_title, (self.width+10, settings.FONT_SIZE*4))
+        self.screen.blit(dis_ent_txt, (self.width+10, settings.FONT_SIZE*5))
+        self.screen.blit(avg_color_title, (self.width+10, settings.FONT_SIZE*6))
+        self.screen.blit(avg_color_txt, (self.width+10, settings.FONT_SIZE*7))
+        self.screen.blit(total_color_title, (self.width+10, settings.FONT_SIZE*8))
+        self.screen.blit(total_color_txt, (self.width+10, settings.FONT_SIZE*9))
         pygame.draw.line(self.screen, colors.BLACK, (self.width, 0), (self.width, self.height))
+    
+    def _get_diseased_entities(self, entities):
+        res = 0
+        for e in entities:
+            if e.diseased: res += 1
+        return res
 
     def _p_collides(self, p, e):
         return p.loc == e.loc
