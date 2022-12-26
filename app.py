@@ -16,12 +16,13 @@ class App:
         self._running = True
         self.width = settings.WINDOW_WIDTH
         self.height = settings.WINDOW_HEIGHT
+        self.stats_width = settings.STATS_WIDTH
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((self.width, self.height), pygame.SCALED | pygame.RESIZABLE)
+        self.screen = pygame.display.set_mode((self.width+self.stats_width, self.height), pygame.SCALED | pygame.RESIZABLE)
         # self.p = player.Player(int(self.width/2), 0)
         self.p = player.Player(1000, 1000)
         self.entities = []
-        self.total_ent = len(self.entities)
+        self.total_ent = 0
         self.keys = []
         self.dir_timer = 0
         self.move_timer = 0
@@ -30,7 +31,10 @@ class App:
     
     def on_init(self):
         pygame.init()
+        pygame.font.init()
+        self.font = pygame.font.Font(pygame.font.get_default_font(), settings.FONT_SIZE)
         self._build_entities()
+        self.total_ent = len(self.entities)
         self._running = True
     
     def on_event(self, event):
@@ -81,6 +85,7 @@ class App:
                     e.age_timer = 0
                 else:
                     e.age_timer += self.clock.get_time()
+        self._display_stats()
         pygame.display.flip()
 
     def on_cleanup(self):
@@ -115,6 +120,25 @@ class App:
     def _build_entities(self):
         self._add_start_entities()
         self.avg_color = self._find_avg_color(self.entities)
+
+    def _display_stats(self):
+        ent_title = pygame.font.Font.render(self.font, "entities: ", True, colors.BLACK)
+        ent_txt = pygame.font.Font.render(self.font, str(len(self.entities)), True, colors.BLACK)
+        total_ent_title = pygame.font.Font.render(self.font, "entities all time: ", True, colors.BLACK)
+        total_ent_txt = pygame.font.Font.render(self.font, str(self.total_ent), True, colors.BLACK)
+        avg_color_title = pygame.font.Font.render(self.font, "avg color", True, colors.BLACK)
+        avg_color_txt = pygame.font.Font.render(self.font, str(self._find_avg_color(self.entities)), True, colors.BLACK)
+        total_color_title = pygame.font.Font.render(self.font, "avg color all time", True, colors.BLACK)
+        total_color_txt = pygame.font.Font.render(self.font, str(self.avg_color), True, colors.BLACK)
+        self.screen.blit(ent_title, (self.width+10, 0))
+        self.screen.blit(ent_txt, (self.width+10, settings.FONT_SIZE))
+        self.screen.blit(total_ent_title, (self.width+10, settings.FONT_SIZE*2))
+        self.screen.blit(total_ent_txt, (self.width+10, settings.FONT_SIZE*3))
+        self.screen.blit(avg_color_title, (self.width+10, settings.FONT_SIZE*4))
+        self.screen.blit(avg_color_txt, (self.width+10, settings.FONT_SIZE*5))
+        self.screen.blit(total_color_title, (self.width+10, settings.FONT_SIZE*6))
+        self.screen.blit(total_color_txt, (self.width+10, settings.FONT_SIZE*7))
+        pygame.draw.line(self.screen, colors.BLACK, (self.width, 0), (self.width, self.height))
 
     def _p_collides(self, p, e):
         return p.loc == e.loc
@@ -166,6 +190,9 @@ class App:
         elif key == '5':
             for e in entities:
                 e.color.update(255, 0, 255)
+        elif key == '6':
+            for e in entities:
+                e.color.update(0, 255, 255)
         elif key == 'c':
             for e in entities:
                 r_cpy, g_cpy, b_cpy = e.color.r, e.color.g, e.color.b
