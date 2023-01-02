@@ -238,6 +238,7 @@ class App:
         num_e = len(entities)
         return pygame.Color(int(r/num_e), int(g/num_e), int(b/num_e))
     
+    # probably broken, is it obvious??
     def _tally_avg_color(self, current_avg):
         ents = len(self.entities)
         r, g, b = int(((ents-1)*self.avg_color.r + current_avg.r)/ents), int(((ents-1)*self.avg_color.g + current_avg.g)/ents), int(((ents-1)*self.avg_color.b + current_avg.b)/ents)
