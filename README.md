@@ -16,3 +16,10 @@ Simulates the life and behavior of small colored squares called entities. Entiti
 <b>f</b>: invert all entity colors</br>
 <b>e</b>: add starting entities to screen at their original positions</br>
 <b>x</b>: delete half of all entities</br>
+
+<h2>Screenshots</h2>
+
+<b>Beginning of simulation:</b></br>
+<img src="./imgs/example.PNG"/></br>
+<b>After some time:</b></br>
+<img src="./imgs/example1.PNG"/></br>
