@@ -1,4 +1,5 @@
 import pygame
+import asyncio
 import player
 import entity
 import colors
@@ -95,7 +96,7 @@ class App:
         print("average color (all time): " + str(self.avg_color))
         pygame.quit()
 
-    def on_execute(self):
+    async def on_execute(self):
         if self.on_init() == False:
             self._running = False
         while self._running:
@@ -103,6 +104,7 @@ class App:
                 self.on_event(event)
             self.on_loop()
             self.on_render()
+            await asyncio.sleep(0)
         self.on_cleanup()
     
     # helpers
