@@ -21,8 +21,6 @@ class App:
         self.stats_width = settings.STATS_WIDTH
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((self.width+self.stats_width, self.height), pygame.SCALED | pygame.RESIZABLE)
-        # self.p = player.Player(int(self.width/2), 0)
-        self.p = player.Player(1000, 1000)
         self.entities = []
         self.total_ent = 0
         self.keys = []
@@ -50,7 +48,6 @@ class App:
         # if len(self.entities) == 0:
         #     self._running = False
         self.clock.tick(settings.CLOCK_RATE)
-        # self.p.rect = self._handlekey(self.keys, self.p.rect)
 
         for e in self.entities:
             e.dir_timer += self.clock.get_time()
@@ -61,9 +58,8 @@ class App:
     
     def on_render(self):
         self.screen.fill(colors.WHITE)
-        # pygame.draw.rect(self.screen, colors.RED, self.p.rect)
         for e in self.entities:
-            if self._p_collides(self.p, e) or e.age >= e.age_limit:
+            if e.age >= e.age_limit:
                 self.m.grid[e.loc].remove(e)
                 self.entities.remove(e)
                 if settings.LOGGING: self._obituary(e)
@@ -210,19 +206,6 @@ class App:
             self._add_start_entities()
         elif key == 'q':
             self._running = False
-
-    def _handlekey(self, keys, rect):
-        res = rect.copy()
-        if 'w' in keys and rect.top != 0:
-            res = res.move(0, -settings.ENT_WIDTH)
-        if 'a' in keys and rect.left != 0:
-            res = res.move(-settings.ENT_WIDTH, 0)
-        if 's' in keys and rect.bottom != self.height:
-            res = res.move(0, settings.ENT_WIDTH)
-        if 'd' in keys and rect.right != self.width:
-            res = res.move(settings.ENT_WIDTH, 0)
-        self.p.loc = (res.left, res.top)
-        return res
 
     def _find_avg_color(self, entities):
         r, g, b = 0, 0, 0
