@@ -1,6 +1,5 @@
 import pygame
 import asyncio
-import player
 import entity
 import colors
 import map
