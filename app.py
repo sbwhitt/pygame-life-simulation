@@ -15,11 +15,11 @@ y == height == rect.top
 class App:
     def __init__(self):
         self._running = True
+        # self.paused = False
         self.width = settings.WINDOW_WIDTH
         self.height = settings.WINDOW_HEIGHT
-        self.stats_width = settings.STATS_WIDTH
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((self.width+self.stats_width, self.height), pygame.SCALED | pygame.RESIZABLE)
+        self.screen = pygame.display.set_mode((self.width + settings.STATS_WIDTH, self.height), pygame.SCALED | pygame.RESIZABLE)
         self.entities = []
         self.total_ent = 0
         self.keys = []
@@ -61,7 +61,7 @@ class App:
             if e.age >= e.age_limit:
                 self.m.grid[e.loc].remove(e)
                 self.entities.remove(e)
-                if settings.LOGGING: self._obituary(e)
+                self._obituary(e)
             else:
                 pygame.draw.rect(self.screen, e.color, e.rect)
                 if len(self.m.grid[e.loc]) > 1:
@@ -84,10 +84,11 @@ class App:
         pygame.display.flip()
 
     def on_cleanup(self):
-        print("total entities (at end): " + str(len(self.entities)))
-        print("total entities (all time): " + str(self.total_ent))
-        print("average color (last frame): " + str(self._find_avg_color(self.entities)))
-        print("average color (all time): " + str(self.avg_color))
+        if settings.LOGGING:
+            print("total entities (at end): " + str(len(self.entities)))
+            print("total entities (all time): " + str(self.total_ent))
+            print("average color (last frame): " + str(self._find_avg_color(self.entities)))
+            print("average color (all time): " + str(self.avg_color))
         pygame.quit()
 
     async def on_execute(self):
@@ -161,6 +162,8 @@ class App:
                 e.diseased = True
 
     def _obituary(self, e):
+        if not settings.LOGGING:
+            return
         if e.diseased:
             print("an entity of generation " + str(e.generation) + " has perished from disease after " + str(e.age) + " ages, leaving " + str(e.amnt_offspring) + " offspring")
         else:
@@ -205,6 +208,9 @@ class App:
             self._add_start_entities()
         elif key == 'q':
             self._running = False
+        # escape key
+        # elif key == '\x1b':
+        #     self.paused = not self.paused
 
     def _find_avg_color(self, entities):
         r, g, b = 0, 0, 0
