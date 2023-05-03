@@ -59,15 +59,13 @@ class App:
     def on_render(self):
         self.screen.fill(colors.WHITE)
         for e in self.entities:
-            if self.paused:
-                pygame.draw.rect(self.screen, e.color, e.rect)
+            if not self.paused and e.age >= e.age_limit:
+                self._remove_entity(e)
                 continue
-            if e.age >= e.age_limit:
-                self.m.grid[e.loc].remove(e)
-                self.entities.remove(e)
-                self._obituary(e)
-                continue
+
             pygame.draw.rect(self.screen, e.color, e.rect)
+            if self.paused: continue
+
             if len(self.m.grid[e.loc]) > 1:
                 if e.diseased:
                     self._spread_disease(self.m.grid[e.loc])
@@ -77,10 +75,7 @@ class App:
                 e.age += 1
                 offspring = e.reproduce()
                 if offspring:
-                    self.m.grid[offspring.loc].append(offspring)
-                    self.entities.append(offspring)
-                    self.total_ent += 1
-                    self.avg_color = self._tally_avg_color(self._find_avg_color(self.entities))
+                    self._add_entity(offspring)
                 e.age_timer = 0
             else:
                 e.age_timer += self.clock.get_time()
@@ -117,8 +112,18 @@ class App:
             entity.Entity(self.width/2, self.height-settings.ENT_WIDTH, colors.CYAN),
             entity.Entity(self.width-settings.ENT_WIDTH, self.height-settings.ENT_WIDTH, colors.MAGENTA)
         ]:
-            self.entities.append(e)
-            self.m.grid[e.loc].append(e)
+            self._add_entity(e)
+
+    def _add_entity(self, e):
+        self.m.grid[e.loc].append(e)
+        self.entities.append(e)
+        self.total_ent += 1
+        self.avg_color = self._tally_avg_color(self._find_avg_color(self.entities))
+    
+    def _remove_entity(self, e):
+        self.m.grid[e.loc].remove(e)
+        self.entities.remove(e)
+        self._obituary(e)
 
     def _build_entities(self):
         self._add_start_entities()
