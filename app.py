@@ -4,6 +4,7 @@ import player
 import entity
 import colors
 import map
+import stats
 import random
 import settings
 
@@ -28,12 +29,10 @@ class App:
         self.dir_timer = 0
         self.move_timer = 0
         self.m = map.Map(self.width, self.height)
+        self.stats = stats.Stats(self.screen, self.width)
         self.avg_color = pygame.Color(0, 0, 0)
     
     def on_init(self):
-        pygame.init()
-        pygame.font.init()
-        self.font = pygame.font.Font(pygame.font.get_default_font(), settings.FONT_SIZE)
         self._build_entities()
         self.total_ent = len(self.entities)
         self._running = True
@@ -86,7 +85,7 @@ class App:
                     e.age_timer = 0
                 else:
                     e.age_timer += self.clock.get_time()
-        self._display_stats()
+        self._update_stats()
         pygame.display.flip()
 
     def on_cleanup(self):
@@ -109,13 +108,14 @@ class App:
     
     # helpers
     def _add_start_entities(self):
-        e0 = entity.Entity(0, 0, colors.RED)
-        e1 = entity.Entity(self.width/2, 0, colors.GREEN)
-        e2 = entity.Entity(self.width-settings.ENT_WIDTH, 0, colors.BLUE)
-        e3 = entity.Entity(0, self.height-settings.ENT_WIDTH, colors.YELLOW)
-        e4 = entity.Entity(self.width/2, self.height-settings.ENT_WIDTH, colors.CYAN)
-        e5 = entity.Entity(self.width-settings.ENT_WIDTH, self.height-settings.ENT_WIDTH, colors.MAGENTA)
-        for e in [e0, e1, e2, e3, e4, e5]:
+        for e in [
+            entity.Entity(0, 0, colors.RED),
+            entity.Entity(self.width/2, 0, colors.GREEN),
+            entity.Entity(self.width-settings.ENT_WIDTH, 0, colors.BLUE),
+            entity.Entity(0, self.height-settings.ENT_WIDTH, colors.YELLOW),
+            entity.Entity(self.width/2, self.height-settings.ENT_WIDTH, colors.CYAN),
+            entity.Entity(self.width-settings.ENT_WIDTH, self.height-settings.ENT_WIDTH, colors.MAGENTA)
+        ]:
             self.entities.append(e)
             self.m.grid[e.loc].append(e)
 
@@ -123,30 +123,22 @@ class App:
         self._add_start_entities()
         self.avg_color = self._find_avg_color(self.entities)
 
-    def _display_stats(self):
-        ent_title = pygame.font.Font.render(self.font, "entities: ", True, colors.BLACK)
-        ent_txt = pygame.font.Font.render(self.font, str(len(self.entities)), True, colors.BLACK)
-        total_ent_title = pygame.font.Font.render(self.font, "entities all time: ", True, colors.BLACK)
-        total_ent_txt = pygame.font.Font.render(self.font, str(self.total_ent), True, colors.BLACK)
-        dis_ent_title = pygame.font.Font.render(self.font, "diseased entities: ", True, colors.BLACK)
-        dis_ent_txt = pygame.font.Font.render(self.font, str(self._get_diseased_entities(self.entities)), True, colors.BLACK)
-        avg_color_title = pygame.font.Font.render(self.font, "avg color", True, colors.BLACK)
+    def _update_stats(self):
+        self.stats.clear()
+        self.stats.add_line("entities: ")
+        self.stats.add_line(str(len(self.entities)))
+        self.stats.add_line("entities all time: ")
+        self.stats.add_line(str(self.total_ent))
+        self.stats.add_line("diseased entities: ")
+        self.stats.add_line(str(self._get_diseased_entities(self.entities)))
+        self.stats.add_line("avg color")
         avg_color = self._find_avg_color(self.entities)
-        avg_color_txt = pygame.font.Font.render(self.font, str(avg_color), True, avg_color)
-        total_color_title = pygame.font.Font.render(self.font, "avg color all time", True, colors.BLACK)
-        total_color_txt = pygame.font.Font.render(self.font, str(self.avg_color), True, self.avg_color)
-        self.screen.blit(ent_title, (self.width+10, 0))
-        self.screen.blit(ent_txt, (self.width+10, settings.FONT_SIZE))
-        self.screen.blit(total_ent_title, (self.width+10, settings.FONT_SIZE*2))
-        self.screen.blit(total_ent_txt, (self.width+10, settings.FONT_SIZE*3))
-        self.screen.blit(dis_ent_title, (self.width+10, settings.FONT_SIZE*4))
-        self.screen.blit(dis_ent_txt, (self.width+10, settings.FONT_SIZE*5))
-        self.screen.blit(avg_color_title, (self.width+10, settings.FONT_SIZE*6))
-        self.screen.blit(avg_color_txt, (self.width+10, settings.FONT_SIZE*7))
-        self.screen.blit(total_color_title, (self.width+10, settings.FONT_SIZE*8))
-        self.screen.blit(total_color_txt, (self.width+10, settings.FONT_SIZE*9))
+        self.stats.add_line(str(avg_color), avg_color)
+        self.stats.add_line("avg color all time")
+        self.stats.add_line(str(self.avg_color), self.avg_color)
+        self.stats.draw_lines()
         pygame.draw.line(self.screen, colors.BLACK, (self.width, 0), (self.width, self.height))
-    
+
     def _get_diseased_entities(self, entities):
         res = 0
         for e in entities:
