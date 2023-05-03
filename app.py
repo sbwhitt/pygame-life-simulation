@@ -15,7 +15,7 @@ y == height == rect.top
 class App:
     def __init__(self):
         self._running = True
-        # self.paused = False
+        self.paused = False
         self.width = settings.WINDOW_WIDTH
         self.height = settings.WINDOW_HEIGHT
         self.clock = pygame.time.Clock()
@@ -46,8 +46,9 @@ class App:
     def on_loop(self):
         # if len(self.entities) == 0:
         #     self._running = False
+        if self.paused:
+            return
         self.clock.tick(settings.CLOCK_RATE)
-
         for e in self.entities:
             e.dir_timer += self.clock.get_time()
             e.move_timer += self.clock.get_time()
@@ -58,28 +59,32 @@ class App:
     def on_render(self):
         self.screen.fill(colors.WHITE)
         for e in self.entities:
+            if self.paused:
+                pygame.draw.rect(self.screen, e.color, e.rect)
+                continue
             if e.age >= e.age_limit:
                 self.m.grid[e.loc].remove(e)
                 self.entities.remove(e)
                 self._obituary(e)
+                continue
+            pygame.draw.rect(self.screen, e.color, e.rect)
+            if len(self.m.grid[e.loc]) > 1:
+                if e.diseased:
+                    self._spread_disease(self.m.grid[e.loc])
+                if random.randint(1, 3) == 1:
+                    self._spread_color(self.m.grid[e.loc])
+            if e.age_timer > settings.AGE_LENGTH:
+                e.age += 1
+                offspring = e.reproduce()
+                if offspring:
+                    self.m.grid[offspring.loc].append(offspring)
+                    self.entities.append(offspring)
+                    self.total_ent += 1
+                    self.avg_color = self._tally_avg_color(self._find_avg_color(self.entities))
+                e.age_timer = 0
             else:
-                pygame.draw.rect(self.screen, e.color, e.rect)
-                if len(self.m.grid[e.loc]) > 1:
-                    if e.diseased:
-                        self._spread_disease(self.m.grid[e.loc])
-                    if random.randint(1, 3) == 1:
-                        self._spread_color(self.m.grid[e.loc])
-                if e.age_timer > settings.AGE_LENGTH:
-                    e.age += 1
-                    offspring = e.reproduce()
-                    if offspring:
-                        self.m.grid[offspring.loc].append(offspring)
-                        self.entities.append(offspring)
-                        self.total_ent += 1
-                        self.avg_color = self._tally_avg_color(self._find_avg_color(self.entities))
-                    e.age_timer = 0
-                else:
-                    e.age_timer += self.clock.get_time()
+                e.age_timer += self.clock.get_time()
+
         self._update_stats()
         pygame.display.flip()
 
@@ -170,47 +175,47 @@ class App:
             print("an entity of generation " + str(e.generation) + " has perished after " + str(e.age) + " ages, leaving " + str(e.amnt_offspring) + " offspring")
 
     def _handlecmd(self, key, entities):
-        if key == 'x':
+        if key == 'x' and not self.paused:
             for i in range(int(len(entities)/2)):
                 self._obituary(entities[i])
                 self.m.grid[entities[i].loc].remove(entities[i])
                 entities.pop(i)
-        elif key == 'r':
+        elif key == 'r' and not self.paused:
             for e in entities:
                 e.color = pygame.Color(random.randint(10, 245), random.randint(10, 245), random.randint(10, 245))
-        elif key == '1':
+        elif key == '1' and not self.paused:
             for e in entities:
                 e.color.update(255, 0, 0)
-        elif key == '2':
+        elif key == '2' and not self.paused:
             for e in entities:
                 e.color.update(0, 255, 0)
-        elif key == '3':
+        elif key == '3' and not self.paused:
             for e in entities:
                 e.color.update(0, 0, 255)
-        elif key == '4':
+        elif key == '4' and not self.paused:
             for e in entities:
                 e.color.update(255, 255, 0)
-        elif key == '5':
+        elif key == '5' and not self.paused:
             for e in entities:
                 e.color.update(255, 0, 255)
-        elif key == '6':
+        elif key == '6' and not self.paused:
             for e in entities:
                 e.color.update(0, 255, 255)
-        elif key == 'c':
+        elif key == 'c' and not self.paused:
             for e in entities:
                 r_cpy, g_cpy, b_cpy = e.color.r, e.color.g, e.color.b
                 e.color.update(g_cpy, b_cpy, r_cpy)
-        elif key == 'f':
+        elif key == 'f' and not self.paused:
             for e in entities:
                 r_cpy, g_cpy, b_cpy = e.color.r, e.color.g, e.color.b
                 e.color.update(255-g_cpy, 255-b_cpy, 255-r_cpy)
-        elif key == 'e':
+        elif key == 'e' and not self.paused:
             self._add_start_entities()
         elif key == 'q':
             self._running = False
         # escape key
-        # elif key == '\x1b':
-        #     self.paused = not self.paused
+        elif key == '\x1b':
+            self.paused = not self.paused
 
     def _find_avg_color(self, entities):
         r, g, b = 0, 0, 0
