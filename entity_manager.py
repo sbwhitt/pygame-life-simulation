@@ -18,7 +18,7 @@ class EntityManager:
         self.move_timer = 0
         self.avg_color = pygame.Color(0, 0, 0)
     
-    def update_entities(self, clock_time):
+    def update_entities(self, clock_time: int) -> None:
         for e in self.entities:
             e.dir_timer += clock_time
             e.move_timer += clock_time
@@ -26,7 +26,7 @@ class EntityManager:
             e.update(self.width, self.height, self.m.get_surroundings(e.loc))
             self.m.grid[e.loc].append(e)
     
-    def render_entities(self, clock_time, paused):
+    def render_entities(self, clock_time: int, paused: bool) -> None:
         for e in self.entities:
             if not paused and e.age >= e.age_limit:
                 self._remove_entity(e)
@@ -41,7 +41,7 @@ class EntityManager:
             self._handle_collisions(e)
             self._handle_aging(e, clock_time)
 
-    def add_start_entities(self):
+    def add_start_entities(self) -> None:
         for e in [
             Entity(0, 0, colors.RED),
             Entity(self.width/2, 0, colors.GREEN),
@@ -53,19 +53,19 @@ class EntityManager:
         ]:
             self._add_entity(e)
     
-    def build_entities(self):
+    def build_entities(self) -> None:
         self.add_start_entities()
         self.avg_color = self.find_avg_color()
         self.total_ent = len(self.entities)
 
-    def get_diseased_entities(self, entities):
+    def get_diseased_entities(self, entities: list[Entity]) -> int:
         res = 0
         for e in entities:
             if e.diseased:
                 res += 1
         return res
     
-    def find_avg_color(self):
+    def find_avg_color(self) -> pygame.Color:
         r, g, b = 0, 0, 0
         for e in self.entities:
             r += e.color.r
@@ -75,42 +75,42 @@ class EntityManager:
         return pygame.Color(int(r/num_e), int(g/num_e), int(b/num_e))
 
     # key command function helpers
-    def cull(self):
+    def cull(self) -> None:
         for i in range(int(len(self.entities)/2)):
             self._remove_entity(self.entities[i])
     
-    def randomize_color(self):
+    def randomize_color(self) -> None:
         for e in self.entities:
             e.color = pygame.Color(random.randint(10, 245), random.randint(10, 245), random.randint(10, 245))
     
-    def update_all_colors(self, color):
+    def update_all_colors(self, color) -> None:
         for e in self.entities:
             e.color.update(color)
     
-    def shift_colors(self):
+    def shift_colors(self) -> None:
         for e in self.entities:
             r_cpy, g_cpy, b_cpy = e.color.r, e.color.g, e.color.b
             e.color.update(g_cpy, b_cpy, r_cpy)
 
-    def flip_colors(self):
+    def flip_colors(self) -> None:
         for e in self.entities:
             r_cpy, g_cpy, b_cpy = e.color.r, e.color.g, e.color.b
             e.color.update(255-g_cpy, 255-b_cpy, 255-r_cpy)
     
     # helpers
-    def _add_entity(self, e):
+    def _add_entity(self, e: Entity) -> None:
         self.m.grid[e.loc].append(e)
         self.entities.append(e)
         self.total_ent += 1
         self.avg_color = self._tally_avg_color(
             self.find_avg_color())
 
-    def _remove_entity(self, e):
+    def _remove_entity(self, e: Entity) -> None:
         self.m.grid[e.loc].remove(e)
         self.entities.remove(e)
         self._obituary(e)
 
-    def _spread_color(self, collisions):
+    def _spread_color(self, collisions: list[Entity]) -> None:
         r, g, b = 0, 0, 0
         highest_off = 0
         for e in collisions:
@@ -123,18 +123,18 @@ class EntityManager:
         for e in collisions:
             e.color = c.lerp(e.color, 0.5)
 
-    def _spread_disease(self, collisions):
+    def _spread_disease(self, collisions: list[Entity]) -> None:
         for e in collisions:
             if not e.diseased and random.randint(0, 1) == 1:
                 e.diseased = True
     
-    def _cannibalize(self, eater, collisions):
+    def _cannibalize(self, eater, collisions: list[Entity]) -> None:
         for c in collisions:
             if c != eater and random.randint(0, 1) == 1:
                 eater.age_limit += c.age_limit
                 self._remove_entity(c)
     
-    def _handle_collisions(self, e):
+    def _handle_collisions(self, e: Entity) -> None:
         collisions = self.m.grid[e.loc]
         if len(collisions) > 1:
             if e.diseased:
@@ -144,7 +144,7 @@ class EntityManager:
             if random.randint(1, 100) == 1:
                 self._cannibalize(e, collisions)
     
-    def _handle_aging(self, e, clock_time):
+    def _handle_aging(self, e: Entity, clock_time: int) -> None:
         if e.age_timer > settings.AGE_LENGTH:
             e.age += 1
             offspring = e.reproduce()
@@ -154,7 +154,7 @@ class EntityManager:
         else:
             e.age_timer += clock_time
 
-    def _obituary(self, e):
+    def _obituary(self, e: Entity) -> None:
         if not settings.LOGGING:
             return
         if e.diseased:
@@ -165,7 +165,7 @@ class EntityManager:
                   str(e.age) + " ages, leaving " + str(e.amnt_offspring) + " offspring")
 
     # probably broken, is it obvious??
-    def _tally_avg_color(self, current_avg):
+    def _tally_avg_color(self, current_avg: tuple) -> pygame.Color:
         ents = len(self.entities)
         r, g, b = int(((ents-1)*self.avg_color.r + current_avg.r)/ents), int(((ents-1) *
                                                                               self.avg_color.g + current_avg.g)/ents), int(((ents-1)*self.avg_color.b + current_avg.b)/ents)
