@@ -49,7 +49,7 @@ class App:
         pygame.display.flip()
 
     def on_cleanup(self) -> None:
-        if settings.LOGGING:
+        if settings.IN_GAME_SETTINGS["LOGGING"]:
             print("total entities (at end): " + str(len(self.e_man.entities)))
             print("total entities (all time): " + str(self.e_man.total_ent))
             print("average color (last frame): " + str(self.e_man.find_avg_color()))
@@ -84,11 +84,11 @@ class App:
         self.stats.draw_lines()
         pygame.draw.line(self.screen, colors.BLACK, (self.width, 0), (self.width, self.height))
     
-    def _toggle_mark_diseased(self) -> None:
-        if settings.MARK_DISEASED:
-            settings.MARK_DISEASED = 0
+    def _toggle_setting(self, setting: str) -> None:
+        if settings.IN_GAME_SETTINGS[setting]:
+            settings.IN_GAME_SETTINGS[setting] = 0
         else:
-            settings.MARK_DISEASED = 1
+            settings.IN_GAME_SETTINGS[setting] = 1
 
     def _handlecmd(self, key: str) -> None:
         # cull half of entities
@@ -125,7 +125,9 @@ class App:
         elif key == ('e' or key == 'E') and not self.paused:
             self.e_man.add_start_entities()
         elif key == 'd' or key == 'D':
-            self._toggle_mark_diseased()
+            self._toggle_setting("MARK_DISEASED")
+        elif key == 'l' or key == 'L':
+            self._toggle_setting("LOGGING")
         # quit
         elif key == 'q' or key == 'Q':
             self._running = False

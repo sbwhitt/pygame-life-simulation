@@ -50,9 +50,9 @@ class Entity:
                 # inheriting and slightly mutating parent color
                 offspring.color = self._mutate_color(self.color)
             if offspring.diseased:
-                if settings.LOGGING: print("an entity of generation " + str(self.generation) + " has reproduced with disease")
+                if settings.IN_GAME_SETTINGS["LOGGING"]: print("an entity of generation " + str(self.generation) + " has reproduced with disease")
             else:
-                if settings.LOGGING: print("an entity of generation " + str(self.generation) + " has reproduced")
+                if settings.IN_GAME_SETTINGS["LOGGING"]: print("an entity of generation " + str(self.generation) + " has reproduced")
             offspring.generation = self.generation + 1
             return offspring
         return None

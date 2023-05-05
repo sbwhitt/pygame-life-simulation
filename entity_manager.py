@@ -32,7 +32,7 @@ class EntityManager:
                 self._remove_entity(e)
                 continue
 
-            if e.diseased and settings.MARK_DISEASED:
+            if e.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
                 pygame.draw.rect(self.screen, colors.BLACK, e.rect, border_radius=1)
             else:
                 pygame.draw.rect(self.screen, e.color, e.rect, border_radius=1)
@@ -158,7 +158,7 @@ class EntityManager:
             e.age_timer += clock_time
 
     def _obituary(self, e: Entity) -> None:
-        if not settings.LOGGING:
+        if not settings.IN_GAME_SETTINGS["LOGGING"]:
             return
         if e.diseased:
             print("an entity of generation " + str(e.generation) + " has perished from disease after " +
