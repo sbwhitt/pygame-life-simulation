@@ -20,7 +20,7 @@ class Entity:
         else:
             self.color = pygame.Color(random.randint(10, 200), random.randint(10, 200), random.randint(10, 200))
     
-    def update(self, width, height, surroundings) -> None:
+    def update(self, width: int, height: int, surroundings: list[list["Entity"]|None]) -> None:
         self.choice = self._choose_dir(surroundings)
         if self.move_timer > settings.MOVE_INTERVAL:
             if self.choice == 0 and self.rect.top != 0: #up
@@ -34,7 +34,7 @@ class Entity:
             self.move_timer = 0
             self.loc = (self.rect.left, self.rect.top)
     
-    def reproduce(self):
+    def reproduce(self) -> "Entity|None":
         r = random.randint(0, 1+self.amnt_offspring)
         if r == 1 and not self.diseased:
             self.amnt_offspring += 1
@@ -55,7 +55,7 @@ class Entity:
             return offspring
         return None
     
-    def _mutate_color(self, p_color) -> pygame.Color:
+    def _mutate_color(self, p_color: pygame.Color) -> pygame.Color:
         res = pygame.Color(0, 0, 0)
         if p_color.r >= 20 and p_color.r <= 235:
             res.r = random.randint(p_color.r-20, p_color.r+20)
@@ -77,13 +77,13 @@ class Entity:
             res.b = random.randint(p_color.b, p_color.b+10)
         return res
 
-    def _safe(self, target) -> bool:
+    def _safe(self, target: list["Entity"]) -> bool:
         for e in target:
             if e.diseased:
                 return False
         return True
 
-    def _choose_dir(self, surroundings) -> int:
+    def _choose_dir(self, surroundings: list[list["Entity"]|None]) -> int:
         if (self.dir_timer > settings.DIR_INTERVAL):
             self.dir_timer = 0
             choices = []
