@@ -87,8 +87,10 @@ class App:
     def _toggle_setting(self, setting: str) -> None:
         if settings.IN_GAME_SETTINGS[setting]:
             settings.IN_GAME_SETTINGS[setting] = 0
+            print(setting + ' toggled off')
         else:
             settings.IN_GAME_SETTINGS[setting] = 1
+            print(setting + ' toggled on')
 
     def _handlecmd(self, key: str) -> None:
         # cull half of entities
