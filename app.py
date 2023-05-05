@@ -22,12 +22,12 @@ class App:
         self.keys = []
         self.stats = Stats(self.screen, self.width)
     
-    def on_init(self):
+    def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
         self.e_man.build_entities()
         self._running = True
     
-    def on_event(self, event):
+    def on_event(self, event: pygame.event.Event) -> None:
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == pygame.KEYUP:
@@ -36,19 +36,19 @@ class App:
             self._handlecmd(event.unicode)
             self.keys.append(event.unicode)
 
-    def on_loop(self):
+    def on_loop(self) -> None:
         if self.paused:
             return
         self.clock.tick(settings.CLOCK_RATE)
         self.e_man.update_entities(self.clock.get_time())
     
-    def on_render(self):
+    def on_render(self) -> None:
         self.screen.fill(colors.WHITE)
         self.e_man.render_entities(self.clock.get_time(), self.paused)
         self._update_stats()
         pygame.display.flip()
 
-    def on_cleanup(self):
+    def on_cleanup(self) -> None:
         if settings.LOGGING:
             print("total entities (at end): " + str(len(self.e_man.entities)))
             print("total entities (all time): " + str(self.e_man.total_ent))
@@ -56,7 +56,7 @@ class App:
             print("average color (all time): " + str(self.e_man.avg_color))
         pygame.quit()
 
-    async def on_execute(self):
+    async def on_execute(self) -> None:
         if self.on_init() == False:
             self._running = False
         while self._running:
@@ -68,7 +68,7 @@ class App:
         self.on_cleanup()
     
     # helpers
-    def _update_stats(self):
+    def _update_stats(self) -> None:
         self.stats.clear()
         self.stats.add_line("entities: ")
         self.stats.add_line(str(len(self.e_man.entities)))
@@ -84,13 +84,13 @@ class App:
         self.stats.draw_lines()
         pygame.draw.line(self.screen, colors.BLACK, (self.width, 0), (self.width, self.height))
     
-    def _toggle_mark_diseased(self):
+    def _toggle_mark_diseased(self) -> None:
         if settings.MARK_DISEASED:
             settings.MARK_DISEASED = 0
         else:
             settings.MARK_DISEASED = 1
 
-    def _handlecmd(self, key):
+    def _handlecmd(self, key: str) -> None:
         # cull half of entities
         if key == ('x' or key == 'X') and not self.paused:
             self.e_man.cull()
