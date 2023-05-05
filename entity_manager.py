@@ -132,7 +132,7 @@ class EntityManager:
         for c in collisions:
             if c != eater and random.randint(0, 1) == 1:
                 self._spread_color([eater, c])
-                eater.age_limit += c.age_limit
+                eater.age_limit += 1
                 eater.nourished = True
                 c.eaten = True
                 self._remove_entity(c)
@@ -150,9 +150,10 @@ class EntityManager:
     def _handle_aging(self, e: Entity, clock_time: int) -> None:
         if e.age_timer > settings.AGE_LENGTH:
             e.age += 1
-            offspring = e.reproduce()
-            if offspring:
-                self._add_entity(offspring)
+            if len(self.entities) < settings.ENTITY_LIMIT:
+                offspring = e.reproduce()
+                if offspring:
+                    self._add_entity(offspring)
             e.age_timer = 0
         else:
             e.age_timer += clock_time
