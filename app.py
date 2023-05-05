@@ -1,11 +1,11 @@
 import pygame
 import asyncio
-import entity
 import colors
-import map
-import stats
 import random
 import settings
+from entity import Entity
+from map import Map
+from stats import Stats
 
 '''
 x == width == rect.left
@@ -25,11 +25,12 @@ class App:
         self.keys = []
         self.dir_timer = 0
         self.move_timer = 0
-        self.m = map.Map(self.width, self.height)
-        self.stats = stats.Stats(self.screen, self.width)
+        self.m = Map(self.width, self.height)
+        self.stats = Stats(self.screen, self.width)
         self.avg_color = pygame.Color(0, 0, 0)
     
     def on_init(self):
+        pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
         self._build_entities()
         self.total_ent = len(self.entities)
         self._running = True
@@ -63,7 +64,7 @@ class App:
                 self._remove_entity(e)
                 continue
 
-            pygame.draw.rect(self.screen, e.color, e.rect)
+            pygame.draw.rect(self.screen, e.color, e.rect, border_radius=1)
             if self.paused: continue
 
             if len(self.m.grid[e.loc]) > 1:
@@ -105,12 +106,12 @@ class App:
     # helpers
     def _add_start_entities(self):
         for e in [
-            entity.Entity(0, 0, colors.RED),
-            entity.Entity(self.width/2, 0, colors.GREEN),
-            entity.Entity(self.width-settings.ENT_WIDTH, 0, colors.BLUE),
-            entity.Entity(0, self.height-settings.ENT_WIDTH, colors.YELLOW),
-            entity.Entity(self.width/2, self.height-settings.ENT_WIDTH, colors.CYAN),
-            entity.Entity(self.width-settings.ENT_WIDTH, self.height-settings.ENT_WIDTH, colors.MAGENTA)
+            Entity(0, 0, colors.RED),
+            Entity(self.width/2, 0, colors.GREEN),
+            Entity(self.width-settings.ENT_WIDTH, 0, colors.BLUE),
+            Entity(0, self.height-settings.ENT_WIDTH, colors.YELLOW),
+            Entity(self.width/2, self.height-settings.ENT_WIDTH, colors.CYAN),
+            Entity(self.width-settings.ENT_WIDTH, self.height-settings.ENT_WIDTH, colors.MAGENTA)
         ]:
             self._add_entity(e)
 
@@ -150,9 +151,6 @@ class App:
         for e in entities:
             if e.diseased: res += 1
         return res
-
-    def _p_collides(self, p, e):
-        return p.loc == e.loc
     
     def _spread_color(self, collisions):
         r, g, b = 0, 0, 0
@@ -180,45 +178,57 @@ class App:
             print("an entity of generation " + str(e.generation) + " has perished after " + str(e.age) + " ages, leaving " + str(e.amnt_offspring) + " offspring")
 
     def _handlecmd(self, key, entities):
-        if key == 'x' and not self.paused:
+        # cull half of entities
+        if key == ('x' or key == 'X') and not self.paused:
             for i in range(int(len(entities)/2)):
                 self._obituary(entities[i])
                 self.m.grid[entities[i].loc].remove(entities[i])
                 entities.pop(i)
-        elif key == 'r' and not self.paused:
+        # randomize entity colors
+        elif key == ('r' or key == 'R') and not self.paused:
             for e in entities:
                 e.color = pygame.Color(random.randint(10, 245), random.randint(10, 245), random.randint(10, 245))
+        # change colors to red
         elif key == '1' and not self.paused:
             for e in entities:
                 e.color.update(255, 0, 0)
+        # change colors to green
         elif key == '2' and not self.paused:
             for e in entities:
                 e.color.update(0, 255, 0)
+        # change colors to blue
         elif key == '3' and not self.paused:
             for e in entities:
                 e.color.update(0, 0, 255)
+        # change colors to yellow
         elif key == '4' and not self.paused:
             for e in entities:
                 e.color.update(255, 255, 0)
+        # change colors to magenta
         elif key == '5' and not self.paused:
             for e in entities:
                 e.color.update(255, 0, 255)
+        # change colors to cyan
         elif key == '6' and not self.paused:
             for e in entities:
                 e.color.update(0, 255, 255)
-        elif key == 'c' and not self.paused:
+        # shift colors
+        elif key == ('c' or key == 'C') and not self.paused:
             for e in entities:
                 r_cpy, g_cpy, b_cpy = e.color.r, e.color.g, e.color.b
                 e.color.update(g_cpy, b_cpy, r_cpy)
-        elif key == 'f' and not self.paused:
+        # flip colors
+        elif key == ('f' or key == 'F') and not self.paused:
             for e in entities:
                 r_cpy, g_cpy, b_cpy = e.color.r, e.color.g, e.color.b
                 e.color.update(255-g_cpy, 255-b_cpy, 255-r_cpy)
-        elif key == 'e' and not self.paused:
+        # add in start entities
+        elif key == ('e' or key == 'E') and not self.paused:
             self._add_start_entities()
-        elif key == 'q':
+        # quit
+        elif key == 'q' or key == 'Q':
             self._running = False
-        # escape key
+        # escape key, pause simulation
         elif key == '\x1b':
             self.paused = not self.paused
 
