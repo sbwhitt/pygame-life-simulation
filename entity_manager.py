@@ -131,7 +131,10 @@ class EntityManager:
     def _cannibalize(self, eater, collisions: list[Entity]) -> None:
         for c in collisions:
             if c != eater and random.randint(0, 1) == 1:
+                self._spread_color([eater, c])
                 eater.age_limit += c.age_limit
+                eater.nourished = True
+                c.eaten = True
                 self._remove_entity(c)
     
     def _handle_collisions(self, e: Entity) -> None:
@@ -159,6 +162,9 @@ class EntityManager:
             return
         if e.diseased:
             print("an entity of generation " + str(e.generation) + " has perished from disease after " +
+                  str(e.age) + " ages, leaving " + str(e.amnt_offspring) + " offspring")
+        elif e.eaten:
+            print("an entity of generation " + str(e.generation) + " has been eaten after " +
                   str(e.age) + " ages, leaving " + str(e.amnt_offspring) + " offspring")
         else:
             print("an entity of generation " + str(e.generation) + " has perished after " +

@@ -15,6 +15,8 @@ class Entity:
         self.amnt_offspring = 0
         self.generation = 1
         self.diseased = False
+        self.nourished = False
+        self.eaten = False
         if len(args) == 3:
             self.color = args[2]
         else:
@@ -36,7 +38,7 @@ class Entity:
     
     def reproduce(self) -> "Entity|None":
         r = random.randint(0, 1+self.amnt_offspring)
-        if r == 1 and not self.diseased:
+        if (self.nourished or r == 1) and not self.diseased:
             self.amnt_offspring += 1
             self.age_limit -= 1
             offspring = Entity(self.rect.left, self.rect.top)
