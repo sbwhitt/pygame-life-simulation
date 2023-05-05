@@ -3,7 +3,7 @@
 <h2>Overview</h2>
 
 <p>
-Simulates the life and behavior of small colored squares called entities. Entities can move around at random, interact with other entities and reproduce to build colonies that share 'genetic' characteristics (mostly just color). Unfortunately, to control the population of these entities, disease also has a small chance to mutate in offspring which will spread by contact. Any entity that has contracted a disease will be unable to reproduce. Ultimately the entities will live, spread, and die while creating interesting patterns/color palettes in a pseudo-biological way. Nothing in this project is scientific. I made it all up.
+Simulates the life and behavior of small colored squares called entities. Entities can move around at random, interact with other entities and reproduce to build colonies that share 'genetic' characteristics (mostly just color). Unfortunately, to control the population of these entities, disease also has a small chance to mutate in offspring which will spread by contact. Any entity that has contracted a disease will be unable to reproduce. They also have a tendency to eat one another. Ultimately the entities will live, spread, and die while creating interesting patterns/color palettes in a pseudo-biological way. Nothing in this project is scientific. I made it all up.
 </p>
 
 <h2>Commands</h2>

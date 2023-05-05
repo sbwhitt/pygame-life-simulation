@@ -128,12 +128,21 @@ class EntityManager:
             if not e.diseased and random.randint(0, 1) == 1:
                 e.diseased = True
     
+    def _cannibalize(self, eater, collisions):
+        for c in collisions:
+            if c != eater and random.randint(0, 1) == 1:
+                eater.age_limit += c.age_limit
+                self._remove_entity(c)
+    
     def _handle_collisions(self, e):
-        if len(self.m.grid[e.loc]) > 1:
+        collisions = self.m.grid[e.loc]
+        if len(collisions) > 1:
             if e.diseased:
-                self._spread_disease(self.m.grid[e.loc])
+                self._spread_disease(collisions)
             if random.randint(1, 3) == 1:
-                self._spread_color(self.m.grid[e.loc])
+                self._spread_color(collisions)
+            if random.randint(1, 100) == 1:
+                self._cannibalize(e, collisions)
     
     def _handle_aging(self, e, clock_time):
         if e.age_timer > settings.AGE_LENGTH:
