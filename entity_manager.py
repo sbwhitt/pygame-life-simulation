@@ -38,19 +38,8 @@ class EntityManager:
                 pygame.draw.rect(self.screen, e.color, e.rect, border_radius=1)
             if paused: continue
 
-            if len(self.m.grid[e.loc]) > 1:
-                if e.diseased:
-                    self._spread_disease(self.m.grid[e.loc])
-                if random.randint(1, 3) == 1:
-                    self._spread_color(self.m.grid[e.loc])
-            if e.age_timer > settings.AGE_LENGTH:
-                e.age += 1
-                offspring = e.reproduce()
-                if offspring:
-                    self._add_entity(offspring)
-                e.age_timer = 0
-            else:
-                e.age_timer += clock_time
+            self._handle_collisions(e)
+            self._handle_aging(e, clock_time)
 
     def add_start_entities(self):
         for e in [
@@ -138,6 +127,23 @@ class EntityManager:
         for e in collisions:
             if not e.diseased and random.randint(0, 1) == 1:
                 e.diseased = True
+    
+    def _handle_collisions(self, e):
+        if len(self.m.grid[e.loc]) > 1:
+            if e.diseased:
+                self._spread_disease(self.m.grid[e.loc])
+            if random.randint(1, 3) == 1:
+                self._spread_color(self.m.grid[e.loc])
+    
+    def _handle_aging(self, e, clock_time):
+        if e.age_timer > settings.AGE_LENGTH:
+            e.age += 1
+            offspring = e.reproduce()
+            if offspring:
+                self._add_entity(offspring)
+            e.age_timer = 0
+        else:
+            e.age_timer += clock_time
 
     def _obituary(self, e):
         if not settings.LOGGING:
