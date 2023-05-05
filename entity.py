@@ -20,16 +20,16 @@ class Entity:
         else:
             self.color = pygame.Color(random.randint(10, 200), random.randint(10, 200), random.randint(10, 200))
     
-    def update(self, width, height):
-        self.choice = self._choose_dir()
+    def update(self, width, height, surroundings) -> None:
+        self.choice = self._choose_dir(surroundings)
         if self.move_timer > settings.MOVE_INTERVAL:
-            if self.choice == 1 and self.rect.top != 0:
+            if self.choice == 0 and self.rect.top != 0: #up
                 self.rect = self.rect.move(0, -settings.ENT_WIDTH)
-            elif self.choice == 2 and self.rect.left != 0:
+            elif self.choice == 1 and self.rect.left != 0: #left
                 self.rect = self.rect.move(-settings.ENT_WIDTH, 0)
-            elif self.choice == 3 and self.rect.bottom != height:
+            elif self.choice == 2 and self.rect.bottom != height: #down
                 self.rect = self.rect.move(0, settings.ENT_WIDTH)
-            elif self.choice == 4 and self.rect.right != width:
+            elif self.choice == 3 and self.rect.right != width: #right
                 self.rect = self.rect.move(settings.ENT_WIDTH, 0)
             self.move_timer = 0
             self.loc = (self.rect.left, self.rect.top)
@@ -55,7 +55,7 @@ class Entity:
             return e
         return None
     
-    def _mutate_color(self, p_color):
+    def _mutate_color(self, p_color) -> pygame.Color:
         res = pygame.Color(0, 0, 0)
         if p_color.r >= 20 and p_color.r <= 235:
             res.r = random.randint(p_color.r-20, p_color.r+20)
@@ -77,7 +77,21 @@ class Entity:
             res.b = random.randint(p_color.b, p_color.b+10)
         return res
 
-    def _choose_dir(self):
+    def _safe(self, target) -> bool:
+        for e in target:
+            if e.diseased:
+                return False
+        return True
+
+    def _choose_dir(self, surroundings) -> int:
         if (self.dir_timer > settings.DIR_INTERVAL):
             self.dir_timer = 0
-            return random.randint(1, 5)
+            choices = []
+            for i in range(len(surroundings)):
+                if surroundings[i] != None and self._safe(surroundings[i]):
+                    choices.append(i)
+            if choices:
+                c = choices[random.randint(0, len(choices)-1)]
+                return c
+            else:
+                return -1

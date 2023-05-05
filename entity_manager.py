@@ -23,7 +23,7 @@ class EntityManager:
             e.dir_timer += clock_time
             e.move_timer += clock_time
             self.m.grid[e.loc].remove(e)
-            e.update(self.width, self.height)
+            e.update(self.width, self.height, self.m.get_surroundings(e.loc))
             self.m.grid[e.loc].append(e)
     
     def render_entities(self, clock_time, paused):
@@ -32,7 +32,10 @@ class EntityManager:
                 self._remove_entity(e)
                 continue
 
-            pygame.draw.rect(self.screen, e.color, e.rect, border_radius=1)
+            if e.diseased and settings.MARK_DISEASED:
+                pygame.draw.rect(self.screen, colors.BLACK, e.rect, border_radius=1)
+            else:
+                pygame.draw.rect(self.screen, e.color, e.rect, border_radius=1)
             if paused: continue
 
             if len(self.m.grid[e.loc]) > 1:

@@ -83,6 +83,12 @@ class App:
         self.stats.add_line(str(self.e_man.avg_color), self.e_man.avg_color)
         self.stats.draw_lines()
         pygame.draw.line(self.screen, colors.BLACK, (self.width, 0), (self.width, self.height))
+    
+    def _toggle_mark_diseased(self):
+        if settings.MARK_DISEASED:
+            settings.MARK_DISEASED = 0
+        else:
+            settings.MARK_DISEASED = 1
 
     def _handlecmd(self, key):
         # cull half of entities
@@ -118,6 +124,8 @@ class App:
         # add in start entities
         elif key == ('e' or key == 'E') and not self.paused:
             self.e_man.add_start_entities()
+        elif key == 'd' or key == 'D':
+            self._toggle_mark_diseased()
         # quit
         elif key == 'q' or key == 'Q':
             self._running = False

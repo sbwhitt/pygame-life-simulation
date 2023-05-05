@@ -11,5 +11,7 @@ AGE_LENGTH = 1700
 MOVE_INTERVAL = 50
 DIR_INTERVAL = 700
 
+MARK_DISEASED = 1
+
 # best not to change this yet
 ENT_WIDTH = 10

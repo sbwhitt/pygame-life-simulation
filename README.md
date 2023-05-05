@@ -15,6 +15,7 @@ Simulates the life and behavior of small colored squares called entities. Entiti
 <b>c</b>: shift entity colors by one position (red values become green value, green becomes blue...)</br>
 <b>f</b>: invert all entity colors</br>
 <b>e</b>: add starting entities to screen at their original positions</br>
+<b>d</b>: toggle whether diseased entities will be marked or not</br>
 <b>x</b>: delete half of all entities</br>
 
 <h2>Screenshots</h2>
