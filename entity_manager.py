@@ -125,7 +125,7 @@ class EntityManager:
 
     def _spread_disease(self, collisions: list[Entity]) -> None:
         for e in collisions:
-            if not e.diseased and random.randint(0, 1) == 1:
+            if not e.diseased and not e.immune and random.randint(0, 1) == 1:
                 e.diseased = True
     
     def _cannibalize(self, eater, collisions: list[Entity]) -> None:

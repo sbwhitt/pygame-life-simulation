@@ -15,6 +15,7 @@ class Entity:
         self.amnt_offspring = 0
         self.generation = 1
         self.diseased = False
+        self.immune = False
         self.nourished = False
         self.eaten = False
         if len(args) == 3:
@@ -46,17 +47,23 @@ class Entity:
             if random.randint(1, 100) == 1:
                 # chance to mutate diseased into a new random color
                 offspring.diseased = (random.randint(0, 2) == 1)
+                offspring.immune = (not offspring.diseased and self._determine_immunity())
                 offspring.color = pygame.Color(random.randint(10, 200), random.randint(10, 200), random.randint(10, 200))
             else:
                 # inheriting and slightly mutating parent color
                 offspring.color = self._mutate_color(self.color)
             if offspring.diseased:
                 if settings.IN_GAME_SETTINGS["LOGGING"]: print("an entity of generation " + str(self.generation) + " has reproduced with disease")
+            elif offspring.immune:
+                if settings.IN_GAME_SETTINGS["LOGGING"]: print("an entity of generation " + str(self.generation) + " has reproduced with immunity")
             else:
                 if settings.IN_GAME_SETTINGS["LOGGING"]: print("an entity of generation " + str(self.generation) + " has reproduced")
             offspring.generation = self.generation + 1
             return offspring
         return None
+
+    def _determine_immunity(self) -> bool:
+        return self.immune or (random.randint(0, 2) == 1)
     
     def _mutate_color(self, p_color: pygame.Color) -> pygame.Color:
         res = pygame.Color(0, 0, 0)
