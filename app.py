@@ -3,6 +3,7 @@ import asyncio
 import colors
 import settings
 from stats import Stats
+from metrics import Metrics
 from entity_manager import EntityManager
 
 '''
@@ -21,9 +22,13 @@ class App:
         self.e_man = EntityManager(self.screen)
         self.keys = []
         self.stats = Stats(self.screen, self.width)
-    
+        self.metrics = Metrics()
+
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
+        self.metrics.create_tracker("created")
+        self.metrics.create_tracker("destroyed")
+        self._update_metrics()
         self.e_man.build_entities()
         self._running = True
     
@@ -51,7 +56,7 @@ class App:
     def on_cleanup(self) -> None:
         if settings.IN_GAME_SETTINGS["LOGGING"]:
             print("total entities (at end): " + str(len(self.e_man.entities)))
-            print("total entities (all time): " + str(self.e_man.total_ent))
+            print("total entities (all time): " + str(self.e_man.created))
             print("average color (last frame): " + str(self.e_man.find_avg_color()))
             print("average color (all time): " + str(self.e_man.avg_color))
         pygame.quit()
@@ -64,6 +69,7 @@ class App:
                 self.on_event(event)
             self.on_loop()
             self.on_render()
+            self._update_metrics()
             await asyncio.sleep(0)
         self.on_cleanup()
     
@@ -73,16 +79,28 @@ class App:
         self.stats.add_line("entities: ")
         self.stats.add_line(str(len(self.e_man.entities)))
         self.stats.add_line("entities all time: ")
-        self.stats.add_line(str(self.e_man.total_ent))
+        self.stats.add_line(str(self.e_man.created))
         self.stats.add_line("diseased entities: ")
         self.stats.add_line(str(self.e_man.get_diseased_entities(self.e_man.entities)))
-        self.stats.add_line("avg color")
-        current_avg = self.e_man.find_avg_color()
-        self.stats.add_line(str(current_avg), current_avg)
-        self.stats.add_line("avg color all time")
-        self.stats.add_line(str(self.e_man.avg_color), self.e_man.avg_color)
+        # self.stats.add_line("avg color")
+        # current_avg = self.e_man.find_avg_color()
+        # self.stats.add_line(str(current_avg), current_avg)
+        # self.stats.add_line("avg color all time")
+        # self.stats.add_line(str(self.e_man.avg_color), self.e_man.avg_color)
+        self.stats.add_line("time elapsed: ")
+        self.stats.add_line(str(int(self.metrics.time_elapsed)))
+        self.stats.add_line("created per minute: ")
+        self.stats.add_line(str(int(self.metrics.get_rate("created"))), color=colors.BLUE)
+        self.stats.add_line("destroyed per minute: ")
+        self.stats.add_line(str(int(self.metrics.get_rate("destroyed"))), color=colors.RED)
+        self.stats.add_line("entities per minute: ")
+        self.stats.add_line(str(int(self.metrics.get_rate("created") - self.metrics.get_rate("destroyed"))), color=colors.GREEN)
         self.stats.draw_lines()
         pygame.draw.line(self.screen, colors.BLACK, (self.width, 0), (self.width, self.height))
+    
+    def _update_metrics(self) -> None:
+        self.metrics.update("created", self.e_man.created)
+        self.metrics.update("destroyed", self.e_man.destroyed)
     
     def _toggle_setting(self, setting: str) -> None:
         if settings.IN_GAME_SETTINGS[setting]:

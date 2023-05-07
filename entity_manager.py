@@ -13,7 +13,8 @@ class EntityManager:
         self.height = settings.WINDOW_HEIGHT
         self.m = Map(self.width, self.height)
         self.entities = []
-        self.total_ent = 0
+        self.created = 0
+        self.destroyed = 0
         self.dir_timer = 0
         self.move_timer = 0
         self.avg_color = pygame.Color(0, 0, 0)
@@ -56,7 +57,7 @@ class EntityManager:
     def build_entities(self) -> None:
         self.add_start_entities()
         self.avg_color = self.find_avg_color()
-        self.total_ent = len(self.entities)
+        self.created = len(self.entities)
 
     def get_diseased_entities(self, entities: list[Entity]) -> int:
         res = 0
@@ -101,13 +102,14 @@ class EntityManager:
     def _add_entity(self, e: Entity) -> None:
         self.m.grid[e.loc].append(e)
         self.entities.append(e)
-        self.total_ent += 1
+        self.created += 1
         self.avg_color = self._tally_avg_color(
             self.find_avg_color())
 
     def _remove_entity(self, e: Entity) -> None:
         self.m.grid[e.loc].remove(e)
         self.entities.remove(e)
+        self.destroyed += 1
         self._obituary(e)
 
     def _spread_color(self, collisions: list[Entity]) -> None:

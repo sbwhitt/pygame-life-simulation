@@ -1,6 +1,6 @@
 # both settings have to be divisible by 20
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 960
+WINDOW_WIDTH = 960
+WINDOW_HEIGHT = 720
 
 STATS_WIDTH = 240
 
