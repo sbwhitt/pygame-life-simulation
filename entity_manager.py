@@ -15,6 +15,8 @@ class EntityManager:
         self.entities = []
         self.created = 0
         self.destroyed = 0
+        self.diseased = 0
+        self.eaten = 0
         self.dir_timer = 0
         self.move_timer = 0
         self.avg_color = pygame.Color(0, 0, 0)
@@ -106,6 +108,8 @@ class EntityManager:
         self.m.grid[e.loc].append(e)
         self.entities.append(e)
         self.created += 1
+        if e.diseased:
+            self.diseased += 1
         self.avg_color = self._tally_avg_color(
             self.find_avg_color())
 
@@ -132,6 +136,7 @@ class EntityManager:
         for e in collisions:
             if not e.diseased and not e.immune and random.randint(0, 1) == 1:
                 e.diseased = True
+                self.diseased += 1
 
     def _cannibalize(self, eater, collisions: list[Entity]) -> None:
         for c in collisions:
@@ -140,6 +145,7 @@ class EntityManager:
                 eater.age_limit += 1
                 eater.nourished = True
                 c.eaten = True
+                self.eaten += 1
                 self._remove_entity(c)
 
     def _handle_collisions(self, e: Entity) -> None:

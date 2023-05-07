@@ -15,4 +15,4 @@ ENTITY_LIMIT = 4000
 IN_GAME_SETTINGS= {"MARK_DISEASED": 1, "LOGGING": 0}
 
 # must divide evenly into window height and width (5, 10, 20, 40...)
-ENT_WIDTH = 20
+ENT_WIDTH = 10

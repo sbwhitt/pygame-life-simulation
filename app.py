@@ -28,8 +28,7 @@ class App:
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
-        self.metrics.create_tracker("created")
-        self.metrics.create_tracker("destroyed")
+        self._create_metrics()
         self._update_metrics()
         self.e_man.build_entities()
         self._running = True
@@ -79,36 +78,45 @@ class App:
     # helpers
     def _update_stats(self) -> None:
         self.stats.clear()
-        self.stats.add_line("entities: ")
-        self.stats.add_line(str(len(self.e_man.entities)))
-        self.stats.add_line("entities all time: ")
-        self.stats.add_line(str(self.e_man.created))
-        self.stats.add_line("diseased entities: ")
-        self.stats.add_line(
-            str(self.e_man.get_diseased_entities(self.e_man.entities)))
-        # self.stats.add_line("avg color")
-        # current_avg = self.e_man.find_avg_color()
-        # self.stats.add_line(str(current_avg), current_avg)
-        # self.stats.add_line("avg color all time")
-        # self.stats.add_line(str(self.e_man.avg_color), self.e_man.avg_color)
-        self.stats.add_line("time elapsed: ")
-        self.stats.add_line(self.metrics.get_time_elapsed())
-        self.stats.add_line("created per minute: ")
-        self.stats.add_line(
-            str(int(self.metrics.get_rate("created"))), color=colors.BLUE)
-        self.stats.add_line("destroyed per minute: ")
-        self.stats.add_line(
-            str(int(self.metrics.get_rate("destroyed"))), color=colors.RED)
-        self.stats.add_line("entities per minute: ")
-        self.stats.add_line(str(int(self.metrics.get_rate(
-            "created") - self.metrics.get_rate("destroyed"))), color=colors.GREEN)
+        self.stats.add_line("entities: ", 
+                            str(len(self.e_man.entities)))
+        self.stats.add_line("entities all time: ", 
+                            str(self.e_man.created))
+        self.stats.add_line("diseased entities: ", 
+                            str(self.e_man.get_diseased_entities(self.e_man.entities)))
+        self.stats.add_line("entities eaten: ", 
+                            str(self.e_man.eaten))
+        self.stats.add_line("time elapsed: ", self.metrics.get_time_elapsed())
+        self.stats.add_line("entities per minute: ", 
+                            str(int(self.metrics.get_rate("created") - self.metrics.get_rate("destroyed"))), 
+                            color=colors.GREEN)
+        self.stats.add_line("created per minute: ", 
+                            str(int(self.metrics.get_rate("created"))), 
+                            color=colors.BLUE)
+        self.stats.add_line("destroyed per minute: ", 
+                            str(int(self.metrics.get_rate("destroyed"))), 
+                            color=colors.RED)
+        self.stats.add_line("diseased per minute: ", 
+                            str(int(self.metrics.get_rate("diseased"))), 
+                            colors.BROWN)
+        self.stats.add_line("eaten per minute: ", 
+                            str(int(self.metrics.get_rate("eaten"))), 
+                            colors.ORANGE)
         self.stats.draw_lines()
         pygame.draw.line(self.screen, colors.BLACK,
                          (self.width, 0), (self.width, self.height))
 
+    def _create_metrics(self) -> None:
+        self.metrics.create_tracker("created")
+        self.metrics.create_tracker("destroyed")
+        self.metrics.create_tracker("diseased")
+        self.metrics.create_tracker("eaten")
+
     def _update_metrics(self) -> None:
         self.metrics.update("created", self.e_man.created)
         self.metrics.update("destroyed", self.e_man.destroyed)
+        self.metrics.update("diseased", self.e_man.diseased)
+        self.metrics.update("eaten", self.e_man.eaten)
 
     def _toggle_setting(self, setting: str) -> None:
         if settings.IN_GAME_SETTINGS[setting]:
