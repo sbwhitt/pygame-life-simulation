@@ -26,4 +26,5 @@ class Metrics:
         self.trackers[name] = Tracker(name)
 
     def _calculate_per_minute(self, amount: int) -> float:
+        if self.time_elapsed == 0: return 0
         return amount / (self.time_elapsed/60)
