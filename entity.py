@@ -2,9 +2,11 @@ import pygame
 import settings
 import random
 
+
 class Entity:
     def __init__(self, *args):
-        self.rect = pygame.Rect(args[0], args[1], settings.ENT_WIDTH, settings.ENT_WIDTH)
+        self.rect = pygame.Rect(
+            args[0], args[1], settings.ENT_WIDTH, settings.ENT_WIDTH)
         self.loc = (args[0], args[1])
         self.choice = random.randint(1, 5)
         self.age = 0
@@ -21,22 +23,23 @@ class Entity:
         if len(args) == 3:
             self.color = args[2]
         else:
-            self.color = pygame.Color(random.randint(10, 200), random.randint(10, 200), random.randint(10, 200))
-    
-    def update(self, width: int, height: int, surroundings: list[list["Entity"]|None]) -> None:
+            self.color = pygame.Color(random.randint(
+                10, 200), random.randint(10, 200), random.randint(10, 200))
+
+    def update(self, width: int, height: int, surroundings: list[list["Entity"] | None]) -> None:
         self.choice = self._choose_dir(surroundings)
         if self.move_timer > settings.MOVE_INTERVAL:
-            if self.choice == 0 and self.rect.top != 0: #up
+            if self.choice == 0 and self.rect.top != 0:  # up
                 self.rect = self.rect.move(0, -settings.ENT_WIDTH)
-            elif self.choice == 1 and self.rect.left != 0: #left
+            elif self.choice == 1 and self.rect.left != 0:  # left
                 self.rect = self.rect.move(-settings.ENT_WIDTH, 0)
-            elif self.choice == 2 and self.rect.bottom != height: #down
+            elif self.choice == 2 and self.rect.bottom != height:  # down
                 self.rect = self.rect.move(0, settings.ENT_WIDTH)
-            elif self.choice == 3 and self.rect.right != width: #right
+            elif self.choice == 3 and self.rect.right != width:  # right
                 self.rect = self.rect.move(settings.ENT_WIDTH, 0)
             self.move_timer = 0
             self.loc = (self.rect.left, self.rect.top)
-    
+
     def reproduce(self) -> "Entity|None":
         r = random.randint(0, 1+self.amnt_offspring)
         if (self.nourished or r == 1) and not self.diseased:
@@ -47,24 +50,32 @@ class Entity:
             if random.randint(1, 100) == 1:
                 # chance to mutate diseased into a new random color
                 offspring.diseased = (random.randint(0, 2) == 1)
-                offspring.immune = (not offspring.diseased and self._determine_immunity())
-                offspring.color = pygame.Color(random.randint(10, 200), random.randint(10, 200), random.randint(10, 200))
+                offspring.immune = (
+                    not offspring.diseased and self._determine_immunity())
+                offspring.color = pygame.Color(random.randint(
+                    10, 200), random.randint(10, 200), random.randint(10, 200))
             else:
                 # inheriting and slightly mutating parent color
                 offspring.color = self._mutate_color(self.color)
             if offspring.diseased:
-                if settings.IN_GAME_SETTINGS["LOGGING"]: print("an entity of generation " + str(self.generation) + " has reproduced with disease")
+                if settings.IN_GAME_SETTINGS["LOGGING"]:
+                    print("an entity of generation " +
+                          str(self.generation) + " has reproduced with disease")
             elif offspring.immune:
-                if settings.IN_GAME_SETTINGS["LOGGING"]: print("an entity of generation " + str(self.generation) + " has reproduced with immunity")
+                if settings.IN_GAME_SETTINGS["LOGGING"]:
+                    print("an entity of generation " +
+                          str(self.generation) + " has reproduced with immunity")
             else:
-                if settings.IN_GAME_SETTINGS["LOGGING"]: print("an entity of generation " + str(self.generation) + " has reproduced")
+                if settings.IN_GAME_SETTINGS["LOGGING"]:
+                    print("an entity of generation " +
+                          str(self.generation) + " has reproduced")
             offspring.generation = self.generation + 1
             return offspring
         return None
 
     def _determine_immunity(self) -> bool:
         return self.immune or (random.randint(0, 2) == 1)
-    
+
     def _mutate_color(self, p_color: pygame.Color) -> pygame.Color:
         res = pygame.Color(0, 0, 0)
         if p_color.r >= 20 and p_color.r <= 235:
@@ -93,7 +104,7 @@ class Entity:
                 return False
         return True
 
-    def _choose_dir(self, surroundings: list[list["Entity"]|None]) -> int:
+    def _choose_dir(self, surroundings: list[list["Entity"] | None]) -> int:
         if (self.dir_timer > settings.DIR_INTERVAL):
             self.dir_timer = 0
             choices = []

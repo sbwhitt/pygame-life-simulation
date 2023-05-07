@@ -3,6 +3,7 @@ import random
 from app import App
 from pygame import display
 
+
 async def main(a: App) -> None:
     await a.on_execute()
 
