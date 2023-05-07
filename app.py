@@ -92,7 +92,7 @@ class App:
         # self.stats.add_line("avg color all time")
         # self.stats.add_line(str(self.e_man.avg_color), self.e_man.avg_color)
         self.stats.add_line("time elapsed: ")
-        self.stats.add_line(str(int(self.metrics.time_elapsed)))
+        self.stats.add_line(self.metrics.get_time_elapsed())
         self.stats.add_line("created per minute: ")
         self.stats.add_line(
             str(int(self.metrics.get_rate("created"))), color=colors.BLUE)
