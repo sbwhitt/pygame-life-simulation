@@ -43,10 +43,10 @@ class App:
             self.keys.append(event.key)
 
     def on_loop(self) -> None:
+        self._handle_keys_pressed()
         if self.paused:
             return
         self.clock.tick(settings.CLOCK_RATE)
-        self._handle_keys_pressed()
         self.e_man.update_entities(self.clock.get_time())
 
     def on_render(self) -> None:
