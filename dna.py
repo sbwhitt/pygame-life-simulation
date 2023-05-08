@@ -1,5 +1,6 @@
 import pygame
 import random
+import settings
 
 
 class DNA:
@@ -7,7 +8,7 @@ class DNA:
         self.age = 0
         self.age_limit = random.randint(3, 6)
         self.age_timer = 0
-        self.curve = 0
+        self.curve = random.randint(0, int(settings.ENT_WIDTH/2))
         self.move_timer = 0
         self.dir_timer = 0
         self.amnt_offspring = 0
@@ -21,13 +22,15 @@ class DNA:
     def inherit(self, parent: "DNA") -> None:
         self.color = self._mutate_color(parent.color)
         self.generation = parent.generation + 1
+        self.curve = parent.curve
 
-    def mutate(self, parent: "DNA") -> None:
+    def mutate(self) -> None:
         self.diseased = (random.randint(0, 2) == 1)
         self.immune = (
             not self.diseased and self._determine_immunity())
         self.color = pygame.Color(random.randint(
             10, 200), random.randint(10, 200), random.randint(10, 200))
+        self.curve = random.randint(0, int(settings.ENT_WIDTH/2))
 
     def _determine_immunity(self) -> bool:
         return self.immune or (random.randint(0, 2) == 1) 

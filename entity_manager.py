@@ -37,9 +37,9 @@ class EntityManager:
 
             if e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
                 pygame.draw.rect(self.screen, colors.BLACK,
-                                 e.rect, border_radius=e.dna.curve)
+                                 e.rect, border_radius=0)
             else:
-                pygame.draw.rect(self.screen, e.dna.color, e.rect, border_radius=e.dna.curve)
+                pygame.draw.rect(self.screen, e.dna.color, e.rect, border_radius=0)
             if paused:
                 continue
 
@@ -138,6 +138,14 @@ class EntityManager:
                 e.dna.diseased = True
                 self.diseased += 1
 
+    def _spread_curve(self, collisions: list[Entity]) -> None:
+        c = 0
+        for e in collisions:
+            c += e.dna.curve
+        c = int(c/len(collisions))
+        for e in collisions:
+            e.dna.curve = c
+
     def _cannibalize(self, eater, collisions: list[Entity]) -> None:
         for c in collisions:
             if c != eater and random.randint(0, 1) == 1:
@@ -156,7 +164,9 @@ class EntityManager:
                 self._spread_disease(collisions)
             if random.randint(1, 3) == 1:
                 self._spread_color(collisions)
-            if random.randint(1, 100) == 1:
+            # if random.randint(1, 3) == 1:
+            #     self._spread_curve(collisions)
+            if random.randint(1, 50) == 1:
                 self._cannibalize(e, collisions)
 
     def _handle_aging(self, e: Entity, clock_time: int) -> None:
