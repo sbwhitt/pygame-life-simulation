@@ -2,6 +2,7 @@ import pygame
 import asyncio
 import static.colors as colors
 import static.settings as settings
+from src.window import Window
 from src.stats import Stats
 from src.metrics import Metrics
 from src.entity_manager import EntityManager
@@ -16,41 +17,41 @@ class App:
     def __init__(self):
         self._running = True
         self.paused = False
-        self.width = settings.WINDOW_WIDTH
-        self.height = settings.WINDOW_HEIGHT
+        self.window = Window(0, 0)
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode(
-            (self.width + settings.STATS_WIDTH, self.height), pygame.SCALED | pygame.RESIZABLE)
+            (self.window.width + settings.STATS_WIDTH, self.window.height), pygame.SCALED | pygame.RESIZABLE)
         self.e_man = EntityManager(self.screen)
         self.keys = []
-        self.stats = Stats(self.screen, self.width)
+        self.stats = Stats(self.screen, self.window.width)
         self.metrics = Metrics()
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
         self._create_metrics()
         self._update_metrics()
-        self.e_man.build_entities()
+        self.e_man.build_entities(self.window)
         self._running = True
 
     def on_event(self, event: pygame.event.Event) -> None:
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == pygame.KEYUP:
-            self.keys.remove(event.unicode)
+            self.keys.remove(event.key)
         if event.type == pygame.KEYDOWN:
-            self._handlecmd(event.unicode)
-            self.keys.append(event.unicode)
+            self._handlecmd(event.key)
+            self.keys.append(event.key)
 
     def on_loop(self) -> None:
         if self.paused:
             return
         self.clock.tick(settings.CLOCK_RATE)
+        self._handle_keys_pressed()
         self.e_man.update_entities(self.clock.get_time())
 
     def on_render(self) -> None:
         self.screen.fill(colors.WHITE)
-        self.e_man.render_entities()
+        self.e_man.render_entities(self.window)
         self._update_stats()
         pygame.display.flip()
 
@@ -104,7 +105,7 @@ class App:
                             colors.ORANGE)
         self.stats.draw_lines()
         pygame.draw.line(self.screen, colors.BLACK,
-                         (self.width, 0), (self.width, self.height))
+                         (self.window.width, 0), (self.window.width, self.window.height))
 
     def _create_metrics(self) -> None:
         self.metrics.create_tracker("created")
@@ -128,45 +129,55 @@ class App:
 
     def _handlecmd(self, key: str) -> None:
         # cull half of entities
-        if key == ('x' or key == 'X') and not self.paused:
+        if key == pygame.K_x and not self.paused:
             self.e_man.cull()
         # randomize entity colors
-        elif key == ('r' or key == 'R') and not self.paused:
+        elif key == pygame.K_r and not self.paused:
             self.e_man.randomize_color()
         # change colors to red
-        elif key == '1' and not self.paused:
+        elif key == pygame.K_1 and not self.paused:
             self.e_man.update_all_colors((255, 0, 0))
         # change colors to green
-        elif key == '2' and not self.paused:
+        elif key == pygame.K_2 and not self.paused:
             self.e_man.update_all_colors((0, 255, 0))
         # change colors to blue
-        elif key == '3' and not self.paused:
+        elif key == pygame.K_3 and not self.paused:
             self.e_man.update_all_colors((0, 0, 255))
         # change colors to yellow
-        elif key == '4' and not self.paused:
+        elif key == pygame.K_4 and not self.paused:
             self.e_man.update_all_colors((255, 255, 0))
         # change colors to magenta
-        elif key == '5' and not self.paused:
+        elif key == pygame.K_5 and not self.paused:
             self.e_man.update_all_colors((255, 0, 255))
         # change colors to cyan
-        elif key == '6' and not self.paused:
+        elif key == pygame.K_6 and not self.paused:
             self.e_man.update_all_colors((0, 255, 255))
         # shift colors
-        elif key == ('c' or key == 'C') and not self.paused:
+        elif key == pygame.K_c and not self.paused:
             self.e_man.shift_colors()
         # flip colors
-        elif key == ('f' or key == 'F') and not self.paused:
+        elif key == pygame.K_f and not self.paused:
             self.e_man.flip_colors()
         # add in start entities
-        elif key == ('e' or key == 'E') and not self.paused:
-            self.e_man.add_start_entities()
-        elif key == 'd' or key == 'D':
+        elif key == pygame.K_e and not self.paused:
+            self.e_man.add_start_entities(self.window)
+        elif key == pygame.K_d:
             self._toggle_setting("MARK_DISEASED")
-        elif key == 'l' or key == 'L':
+        elif key == pygame.K_l:
             self._toggle_setting("LOGGING")
         # quit
-        elif key == 'q' or key == 'Q':
+        elif key == pygame.K_q:
             self._running = False
         # escape key, pause simulation
-        elif key == '\x1b':
+        elif key == pygame.K_ESCAPE:
             self.paused = not self.paused
+    
+    def _handle_keys_pressed(self) -> None:
+        if pygame.K_UP in self.keys:
+            self.window.move((0, -settings.ENT_WIDTH))
+        if pygame.K_DOWN in self.keys:
+            self.window.move((0, settings.ENT_WIDTH))
+        if pygame.K_LEFT in self.keys:
+            self.window.move((-settings.ENT_WIDTH, 0))
+        if pygame.K_RIGHT in self.keys:
+            self.window.move((settings.ENT_WIDTH, 0))

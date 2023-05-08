@@ -4,14 +4,13 @@ import static.colors as colors
 import static.settings as settings
 from src.entity import Entity
 from src.map import Map
+from src.window import Window
 
 
 class EntityManager:
-    def __init__(self, screen):
+    def __init__(self, screen: pygame.Surface):
         self.screen = screen
-        self.width = settings.WINDOW_WIDTH
-        self.height = settings.WINDOW_HEIGHT
-        self.m = Map(self.width, self.height)
+        self.m = Map(settings.WORLD_SIZE, settings.WORLD_SIZE)
         self.entities = []
         self.created = 0
         self.destroyed = 0
@@ -26,34 +25,40 @@ class EntityManager:
             e.dna.dir_timer += clock_time
             e.dna.move_timer += clock_time
             self.m.grid[e.loc].remove(e)
-            e.update(self.width, self.height, self.m.get_surroundings(e.loc))
+            e.update(settings.WORLD_SIZE, settings.WORLD_SIZE, self.m.get_surroundings(e.loc))
             self.m.grid[e.loc].append(e)
             self._handle_collisions(e)
             self._handle_aging(e, clock_time)
 
-    def render_entities(self) -> None:
+    def render_entities(self, window: Window) -> None:
         for e in self.entities:
-            if e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
+            if window.under_stats(e.loc):
+                pygame.draw.rect(self.screen, colors.GRAY,
+                                 e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
+            elif not window.contains(e.loc):
+                pass
+            elif e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
                 pygame.draw.rect(self.screen, colors.BLACK,
-                                 e.rect, border_radius=0)
+                                 e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
             else:
-                pygame.draw.rect(self.screen, e.dna.color, e.rect, border_radius=0)
+                pygame.draw.rect(self.screen, e.dna.color, 
+                                 e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
 
-    def add_start_entities(self) -> None:
+    def add_start_entities(self, window: Window) -> None:
         for e in [
-            Entity(0, 0, colors.RED),
-            Entity(self.width/2, 0, colors.GREEN),
-            Entity(self.width-settings.ENT_WIDTH, 0, colors.BLUE),
-            Entity(0, self.height-settings.ENT_WIDTH, colors.YELLOW),
-            Entity(self.width/2, self.height-settings.ENT_WIDTH, colors.CYAN),
-            Entity(self.width-settings.ENT_WIDTH, self.height -
+            Entity(0+window.offset[0], 0+window.offset[1], colors.RED),
+            Entity(int((window.width+window.offset[0])/2), 0+window.offset[1], colors.GREEN),
+            Entity(window.width+window.offset[0]-settings.ENT_WIDTH, 0+window.offset[1], colors.BLUE),
+            Entity(0+window.offset[0], window.height+window.offset[1]-settings.ENT_WIDTH, colors.YELLOW),
+            Entity(int((window.width+window.offset[0])/2), window.height+window.offset[1]-settings.ENT_WIDTH, colors.CYAN),
+            Entity(window.width+window.offset[0]-settings.ENT_WIDTH, window.height+window.offset[1] -
                    settings.ENT_WIDTH, colors.MAGENTA)
         ]:
             self._add_entity(e)
 
-    def build_entities(self) -> None:
-        self.add_start_entities()
-        self.avg_color = self.find_avg_color()
+    def build_entities(self, window: Window) -> None:
+        self.add_start_entities(window)
+        # self.avg_color = self.find_avg_color()
         self.created = len(self.entities)
 
     def get_diseased_entities(self, entities: list[Entity]) -> int:
@@ -98,13 +103,14 @@ class EntityManager:
 
     # helpers
     def _add_entity(self, e: Entity) -> None:
+        if self.m.grid.get(e.loc) == None: return
         self.m.grid[e.loc].append(e)
         self.entities.append(e)
         self.created += 1
         if e.dna.diseased:
             self.diseased += 1
-        self.avg_color = self._tally_avg_color(
-            self.find_avg_color())
+        # self.avg_color = self._tally_avg_color(
+        #     self.find_avg_color())
 
     def _remove_entity(self, e: Entity) -> None:
         self.m.grid[e.loc].remove(e)
