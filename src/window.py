@@ -8,9 +8,9 @@ class Window:
         self.offset = (offset_x, offset_y)
     
     def move(self, dir: tuple) -> None:
-        if self.offset[0] + dir[0] >= 0 and self.offset[0] + self.width + dir[0] < settings.WORLD_SIZE:
+        if self.offset[0] + dir[0] >= 0 and self.offset[0] + self.width + dir[0] <= settings.WORLD_SIZE:
             self.offset = (self.offset[0] + dir[0], self.offset[1])
-        if self.offset[1] + dir[1] >= 0 and self.offset[1] + self.height + dir[1] < settings.WORLD_SIZE:
+        if self.offset[1] + dir[1] >= 0 and self.offset[1] + self.height + dir[1] <= settings.WORLD_SIZE:
             self.offset = (self.offset[0], self.offset[1] + dir[1])
     
     def contains(self, point: tuple) -> bool:

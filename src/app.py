@@ -174,10 +174,10 @@ class App:
     
     def _handle_keys_pressed(self) -> None:
         if pygame.K_UP in self.keys:
-            self.window.move((0, -settings.ENT_WIDTH))
+            self.window.move((0, -settings.ENT_WIDTH*2))
         if pygame.K_DOWN in self.keys:
-            self.window.move((0, settings.ENT_WIDTH))
+            self.window.move((0, settings.ENT_WIDTH*2))
         if pygame.K_LEFT in self.keys:
-            self.window.move((-settings.ENT_WIDTH, 0))
+            self.window.move((-settings.ENT_WIDTH*2, 0))
         if pygame.K_RIGHT in self.keys:
-            self.window.move((settings.ENT_WIDTH, 0))
+            self.window.move((settings.ENT_WIDTH*2, 0))
