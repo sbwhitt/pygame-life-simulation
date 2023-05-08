@@ -28,23 +28,16 @@ class EntityManager:
             self.m.grid[e.loc].remove(e)
             e.update(self.width, self.height, self.m.get_surroundings(e.loc))
             self.m.grid[e.loc].append(e)
+            self._handle_collisions(e)
+            self._handle_aging(e, clock_time)
 
-    def render_entities(self, clock_time: int, paused: bool) -> None:
+    def render_entities(self) -> None:
         for e in self.entities:
-            if not paused and e.dna.age >= e.dna.age_limit:
-                self._remove_entity(e)
-                continue
-
             if e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
                 pygame.draw.rect(self.screen, colors.BLACK,
                                  e.rect, border_radius=0)
             else:
                 pygame.draw.rect(self.screen, e.dna.color, e.rect, border_radius=0)
-            if paused:
-                continue
-
-            self._handle_collisions(e)
-            self._handle_aging(e, clock_time)
 
     def add_start_entities(self) -> None:
         for e in [
@@ -172,6 +165,9 @@ class EntityManager:
     def _handle_aging(self, e: Entity, clock_time: int) -> None:
         if e.dna.age_timer > settings.AGE_LENGTH:
             e.dna.age += 1
+            if e.dna.age >= e.dna.age_limit:
+                self._remove_entity(e)
+                return
             if len(self.entities) < settings.ENTITY_LIMIT:
                 offspring = e.reproduce()
                 if offspring:

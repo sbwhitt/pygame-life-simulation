@@ -50,7 +50,7 @@ class App:
 
     def on_render(self) -> None:
         self.screen.fill(colors.WHITE)
-        self.e_man.render_entities(self.clock.get_time(), self.paused)
+        self.e_man.render_entities()
         self._update_stats()
         pygame.display.flip()
 

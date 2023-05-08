@@ -1,6 +1,6 @@
 # both settings have to be divisible by 20
-WINDOW_WIDTH = 960
-WINDOW_HEIGHT = 720
+WINDOW_WIDTH = 1080
+WINDOW_HEIGHT = 960
 
 STATS_WIDTH = 240
 
@@ -15,4 +15,4 @@ ENTITY_LIMIT = 4000
 IN_GAME_SETTINGS= {"MARK_DISEASED": 1, "LOGGING": 0}
 
 # must divide evenly into window height and width (5, 10, 20, 40...)
-ENT_WIDTH = 20
+ENT_WIDTH = 10
