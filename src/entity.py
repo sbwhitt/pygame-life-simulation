@@ -1,7 +1,7 @@
 import pygame
-import settings
 import random
-from dna import DNA
+import static.settings as settings
+from src.dna import DNA
 
 
 class Entity:

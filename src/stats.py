@@ -1,6 +1,6 @@
 import pygame
-import colors
-import settings
+import static.colors as colors
+import static.settings as settings
 
 
 class Stats:

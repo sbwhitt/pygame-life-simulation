@@ -1,9 +1,9 @@
 import pygame
-import colors
-import settings
 import random
-from entity import Entity
-from map import Map
+import static.colors as colors
+import static.settings as settings
+from src.entity import Entity
+from src.map import Map
 
 
 class EntityManager:

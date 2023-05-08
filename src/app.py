@@ -1,10 +1,10 @@
 import pygame
 import asyncio
-import colors
-import settings
-from stats import Stats
-from metrics import Metrics
-from entity_manager import EntityManager
+import static.colors as colors
+import static.settings as settings
+from src.stats import Stats
+from src.metrics import Metrics
+from src.entity_manager import EntityManager
 
 '''
 x == width == rect.left

@@ -1,5 +1,5 @@
-import settings
-from entity import Entity
+import static.settings as settings
+from src.entity import Entity
 
 
 class Map:
