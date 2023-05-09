@@ -5,6 +5,7 @@ import static.settings as settings
 from src.entity import Entity
 from src.map import Map
 from src.window import Window
+from src.colony_manager import ColonyManager
 
 
 class EntityManager:
@@ -20,13 +21,15 @@ class EntityManager:
         self.move_timer = 0
         self.avg_color = pygame.Color(0, 0, 0)
 
-    def update_entities(self, clock_time: int) -> None:
+    def update_entities(self, clock_time: int, c_man: ColonyManager) -> None:
         for e in self.entities:
-            e.dna.dir_timer += clock_time
-            e.dna.move_timer += clock_time
-            self.m.grid[e.loc].remove(e)
-            if not e.bound: e.update(settings.WORLD_SIZE, settings.WORLD_SIZE, self.m.get_surroundings(e.loc))
-            self.m.grid[e.loc].append(e)
+            if not e.bound:
+                e.dna.dir_timer += clock_time
+                e.dna.move_timer += clock_time
+                self.m.grid[e.loc].remove(e)
+                neighbor = e.update(settings.WORLD_SIZE, settings.WORLD_SIZE, self.m.get_surroundings(e.loc))
+                if neighbor != None: c_man.bind(e, neighbor)
+                self.m.grid[e.loc].append(e)
             self._handle_collisions(e)
             self._handle_aging(e, clock_time)
 
@@ -43,8 +46,6 @@ class EntityManager:
             else:
                 pygame.draw.rect(self.screen, e.dna.color, 
                                  e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
-            if settings.IN_GAME_SETTINGS["HIGHLIGHT"] and e.bound:
-                self._highlight(e, window)
 
     def add_start_entities(self, window: Window) -> None:
         for e in [
@@ -117,17 +118,11 @@ class EntityManager:
     def _remove_entity(self, e: Entity) -> None:
         self.m.grid[e.loc].remove(e)
         self.entities.remove(e)
+        if e.colony:
+            e.colony.remove_member(e)
+            e.colony = None
         self.destroyed += 1
         self._obituary(e)
-    
-    def _highlight(self, entity: Entity, window: Window) -> None:
-        points = [(entity.loc[0]-(entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]-(entity.loc[1] % settings.ENT_WIDTH)),
-                  (entity.loc[0]+(settings.ENT_WIDTH - entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]-(entity.loc[1] % settings.ENT_WIDTH)),
-                  (entity.loc[0]+(settings.ENT_WIDTH - entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]+(settings.ENT_WIDTH - entity.loc[1] % settings.ENT_WIDTH)),
-                  (entity.loc[0]-(entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]+(settings.ENT_WIDTH - entity.loc[1] % settings.ENT_WIDTH))]
-        for i in range(len(points)):
-            points[i] = (points[i][0]-window.offset[0], points[i][1]-window.offset[1])
-        pygame.draw.lines(self.screen, colors.GRAY, True, points, 2)
 
     def _spread_color(self, collisions: list[Entity]) -> None:
         r, g, b = 0, 0, 0

@@ -2,7 +2,6 @@ import pygame
 import random
 import static.settings as settings
 from src.dna import DNA
-from src.colony import Colony
 
 
 class Entity:
@@ -19,7 +18,10 @@ class Entity:
             self.dna = DNA(pygame.Color(random.randint(
                 10, 200), random.randint(10, 200), random.randint(10, 200)))
 
-    def update(self, width: int, height: int, surroundings: list[list["Entity"] | None]) -> None:
+    def update(self, width: int, height: int, surroundings: list[list["Entity"] | None]) -> "Entity":
+        neighbor = self._choose_neighbor(surroundings)
+        if neighbor != None:
+            return neighbor
         self.choice = self._choose_dir(surroundings)
         if self.dna.move_timer > settings.MOVE_INTERVAL:
             if self.choice == 0 and self.rect.top != 0:  # up
@@ -72,43 +74,32 @@ class Entity:
                 return False
         return True
 
-    def _is_empty(self, target: list["Entity"]) -> bool:
-        if len(target) > 0:
-            return False
-        return True
+    # def _is_empty(self, target: list["Entity"]) -> bool:
+    #     if len(target) > 0:
+    #         return False
+    #     return True
     
-    def _join_colony(self, partner: "Entity") -> None:
-        if partner.colony:
-            self.colony = partner.colony
-            partner.colony.members.append(self)
-        else:
-            c = Colony()
-            c.members.append(self)
-            c.members.append(partner)
-            self.colony = c
-            partner.colony = c
-    
-    def _bind(self, collisions: list["Entity"]) -> bool:
+    def _check_neighbor(self, collisions: list["Entity"]) -> "Entity":
         for c in collisions:
             if self.dna.compatible(c.dna):
-                self.bound = True
-                c.bound = True
-                self._join_colony(c)
-                if c.dna.diseased or self.dna.diseased:
-                    c.dna.diseased = True
-                    self.dna.diseased = True
-                return True
-        return False
+                return c
+        return None
+    
+    def _choose_neighbor(self, surroundings: list[list["Entity"] | None]) -> "Entity":
+        for i in range(len(surroundings)):
+            if random.randint(1, 10) == 1 and surroundings[i] != None:
+                neighbor = self._check_neighbor(surroundings[i])
+                if neighbor != None:
+                    return neighbor
+        return None
 
     def _choose_dir(self, surroundings: list[list["Entity"] | None]) -> int:
         if (not self.bound and self.dna.dir_timer > settings.DIR_INTERVAL):
             self.dna.dir_timer = 0
             choices = []
             for i in range(len(surroundings)):
-                if surroundings[i] != None:
-                    if random.randint(1, 5) == 1 and self._bind(surroundings[i]): return
-                    if self._is_safe(surroundings[i]):
-                        choices.append(i)
+                if surroundings[i] != None and self._is_safe(surroundings[i]):
+                    choices.append(i)
             if choices:
                 c = choices[random.randint(0, len(choices)-1)]
                 return c

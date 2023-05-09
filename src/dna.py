@@ -36,11 +36,18 @@ class DNA:
         if self._compare_colors(candidate.color):
             return True
         return False
+    
+    def send_color(self, target: "DNA") -> None:
+        c = pygame.color.Color(int((self.color.r + target.color.r)/2),
+                                int((self.color.g + target.color.g)/2),
+                                int((self.color.b + target.color.b)/2))
+        self.color = c
+        target.color = c
 
     def _compare_colors(self, color: pygame.Color) -> bool:
-        return ((self.color.r - color.r <= 20 or self.color.r - color.r >= -20) and
-                (self.color.g - color.g <= 20 or self.color.g - color.g >= -20) and
-                (self.color.b - color.b <= 20 or self.color.b - color.b >= -20))
+        return ((self.color.r - color.r <= 10 or self.color.r - color.r >= -10) and
+                (self.color.g - color.g <= 10 or self.color.g - color.g >= -10) and
+                (self.color.b - color.b <= 10 or self.color.b - color.b >= -10))
 
     def _determine_immunity(self) -> bool:
         return self.immune or (random.randint(0, 2) == 1) 
