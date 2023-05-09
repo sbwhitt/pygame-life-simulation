@@ -33,22 +33,18 @@ class ColonyManager:
         e1.nourished = True
         e2.nourished = True
         if e1.colony and e2.colony:
-            pass
+            self._join_colonies(e1.colony, e2.colony)
         elif e1.colony and not e2.colony:
             e1.colony.add_member(e2)
-            e2.colony = e1.colony
             e2.bound = True
         elif not e1.colony and e2.colony:
             e2.colony.add_member(e1)
-            e1.colony = e2.colony
             e1.bound = True
         else:
             c = Colony()
             self._add_colony(c)
             c.add_member(e1)
             c.add_member(e2)
-            e1.colony = c
-            e2.colony = c
             e1.bound = True
             e2.bound = True
     
@@ -63,6 +59,11 @@ class ColonyManager:
         colony.members = []
         self.colonies.remove(colony)
         self.destroyed += 1
+    
+    def _join_colonies(self, c1: "Colony", c2: "Colony") -> None:
+        for m in c2.members:
+            c1.add_member(m)
+        self._remove_colony(c2)
 
     def _highlight(self, entity: Entity, window: Window) -> None:
         points = [(entity.loc[0]-(entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]-(entity.loc[1] % settings.ENT_WIDTH)),

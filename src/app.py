@@ -53,6 +53,7 @@ class App:
         self.clock.tick(settings.CLOCK_RATE)
         self.e_man.update_entities(self.clock.get_time(), self.c_man)
         self.c_man.update_colonies()
+        self._update_metrics()
 
     def on_render(self) -> None:
         self.screen.fill(colors.WHITE)
@@ -79,7 +80,6 @@ class App:
                 self.on_event(event)
             self.on_loop()
             self.on_render()
-            self._update_metrics()
             await asyncio.sleep(0)
         self.on_cleanup()
 
@@ -94,6 +94,8 @@ class App:
                             str(self.e_man.get_diseased_entities(self.e_man.entities)))
         self.stats.add_line("entities eaten: ", 
                             str(self.e_man.eaten))
+        self.stats.add_line("colonies: ",
+                            str(len(self.c_man.colonies)))
         self.stats.add_line("time elapsed: ", self.metrics.get_time_elapsed())
         self.stats.add_line("entities per minute: ", 
                             str(int(self.metrics.get_rate("created") - self.metrics.get_rate("destroyed"))), 
