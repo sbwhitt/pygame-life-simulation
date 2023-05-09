@@ -25,7 +25,7 @@ class EntityManager:
             e.dna.dir_timer += clock_time
             e.dna.move_timer += clock_time
             self.m.grid[e.loc].remove(e)
-            e.update(settings.WORLD_SIZE, settings.WORLD_SIZE, self.m.get_surroundings(e.loc))
+            if not e.bound: e.update(settings.WORLD_SIZE, settings.WORLD_SIZE, self.m.get_surroundings(e.loc))
             self.m.grid[e.loc].append(e)
             self._handle_collisions(e)
             self._handle_aging(e, clock_time)
@@ -36,8 +36,10 @@ class EntityManager:
             #     pygame.draw.rect(self.screen, colors.GRAY,
             #                      e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
             if not window.contains(e.loc):
-                pass
-            elif e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
+                continue
+            if e.bound:
+                self._highlight(e, window)
+            if e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
                 pygame.draw.rect(self.screen, colors.BLACK,
                                  e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
             else:
@@ -117,6 +119,15 @@ class EntityManager:
         self.entities.remove(e)
         self.destroyed += 1
         self._obituary(e)
+    
+    def _highlight(self, entity: Entity, window: Window) -> None:
+        points = [(entity.loc[0]-(entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]-(entity.loc[1] % settings.ENT_WIDTH)),
+                  (entity.loc[0]+(settings.ENT_WIDTH - entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]-(entity.loc[1] % settings.ENT_WIDTH)),
+                  (entity.loc[0]+(settings.ENT_WIDTH - entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]+(settings.ENT_WIDTH - entity.loc[1] % settings.ENT_WIDTH)),
+                  (entity.loc[0]-(entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]+(settings.ENT_WIDTH - entity.loc[1] % settings.ENT_WIDTH))]
+        for i in range(len(points)):
+            points[i] = (points[i][0]-window.offset[0], points[i][1]-window.offset[1])
+        pygame.draw.lines(self.screen, colors.BLACK, True, points, 3)
 
     def _spread_color(self, collisions: list[Entity]) -> None:
         r, g, b = 0, 0, 0
@@ -145,7 +156,7 @@ class EntityManager:
         for e in collisions:
             e.dna.curve = c
 
-    def _cannibalize(self, eater, collisions: list[Entity]) -> None:
+    def _cannibalize(self, eater: Entity, collisions: list[Entity]) -> None:
         for c in collisions:
             if c != eater and random.randint(0, 1) == 1:
                 self._spread_color([eater, c])

@@ -10,6 +10,7 @@ class Entity:
             args[0], args[1], settings.ENT_WIDTH, settings.ENT_WIDTH)
         self.loc = (args[0], args[1])
         self.choice = 0
+        self.bound = False
         if len(args) == 3:
             self.dna = DNA(args[2])
         else:
@@ -73,13 +74,22 @@ class Entity:
         if len(target) > 0:
             return False
         return True
+    
+    def _bind(self, collisions: list["Entity"]) -> bool:
+        for c in collisions:
+            if self.dna.compatible(c.dna):
+                self.bound = True
+                c.bound = True
+                return True
+        return False
 
     def _choose_dir(self, surroundings: list[list["Entity"] | None]) -> int:
-        if (self.dna.dir_timer > settings.DIR_INTERVAL):
+        if (not self.bound and self.dna.dir_timer > settings.DIR_INTERVAL):
             self.dna.dir_timer = 0
             choices = []
             for i in range(len(surroundings)):
                 if surroundings[i] != None and self._is_safe(surroundings[i]):
+                    if random.randint(1, 5) == 1 and self._bind(surroundings[i]): return
                     choices.append(i)
             if choices:
                 c = choices[random.randint(0, len(choices)-1)]
