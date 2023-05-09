@@ -14,7 +14,7 @@ MOVE_INTERVAL = 50
 DIR_INTERVAL = 700
 ENTITY_LIMIT = 8000
 
-IN_GAME_SETTINGS= {"MARK_DISEASED": 1, "LOGGING": 0}
+IN_GAME_SETTINGS= {"MARK_DISEASED": 1, "LOGGING": 0, "HIGHLIGHT": 1}
 
 # must divide evenly into window height and width (5, 10, 20, 40...)
 ENT_WIDTH = 10

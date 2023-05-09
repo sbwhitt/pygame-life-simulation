@@ -37,7 +37,7 @@ class EntityManager:
             #                      e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
             if not window.contains(e.loc):
                 continue
-            if e.bound:
+            if settings.IN_GAME_SETTINGS["HIGHLIGHT"] and e.bound:
                 self._highlight(e, window)
             if e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
                 pygame.draw.rect(self.screen, colors.BLACK,

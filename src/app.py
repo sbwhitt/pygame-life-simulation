@@ -174,6 +174,8 @@ class App:
             self._toggle_setting("MARK_DISEASED")
         elif key == pygame.K_l:
             self._toggle_setting("LOGGING")
+        elif key == pygame.K_h:
+            self._toggle_setting("HIGHLIGHT")
         # quit
         elif key == pygame.K_q:
             self._running = False
