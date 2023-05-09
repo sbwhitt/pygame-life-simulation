@@ -49,6 +49,17 @@ class Entity:
             self._broadcast(offspring)
             return offspring
         return None
+    
+    def look_for_colony(self, surroundings: list[list["Entity"] | None]) -> "Entity":
+        for i in range(len(surroundings)):
+            if surroundings[i] != None:
+                neighbor = self._check_neighbor(surroundings[i])
+                if neighbor != None and neighbor.bound and neighbor.colony != self.colony:
+                    return neighbor
+        return None
+    
+    def get_edges(self) -> list[tuple]:
+        pass
 
     def _degenerate(self) -> None:
         self.dna.nourished = False

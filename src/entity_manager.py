@@ -22,6 +22,7 @@ class EntityManager:
         self.avg_color = pygame.Color(0, 0, 0)
 
     def update_entities(self, clock_time: int, c_man: ColonyManager) -> None:
+        e: Entity
         for e in self.entities:
             if not e.bound:
                 e.dna.dir_timer += clock_time
@@ -30,6 +31,9 @@ class EntityManager:
                 neighbor = e.update(settings.WORLD_SIZE, settings.WORLD_SIZE, self.m.get_surroundings(e.loc))
                 if neighbor != None: c_man.bind(e, neighbor)
                 self.m.grid[e.loc].append(e)
+            elif e.bound:
+                neighbor = e.look_for_colony(self.m.get_surroundings(e.loc))
+                if neighbor != None: c_man.bind(e, neighbor)
             self._handle_collisions(e)
             self._handle_aging(e, clock_time)
 
@@ -123,7 +127,7 @@ class EntityManager:
     def _remove_entity(self, e: Entity) -> None:
         self.m.grid[e.loc].remove(e)
         self.entities.remove(e)
-        if e.colony:
+        if e.bound:
             e.colony.remove_member(e)
             e.colony = None
         self.destroyed += 1
