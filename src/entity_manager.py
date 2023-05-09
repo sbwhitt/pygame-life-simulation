@@ -37,14 +37,14 @@ class EntityManager:
             #                      e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
             if not window.contains(e.loc):
                 continue
-            if settings.IN_GAME_SETTINGS["HIGHLIGHT"] and e.bound:
-                self._highlight(e, window)
             if e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
                 pygame.draw.rect(self.screen, colors.BLACK,
                                  e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
             else:
                 pygame.draw.rect(self.screen, e.dna.color, 
                                  e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
+            if settings.IN_GAME_SETTINGS["HIGHLIGHT"] and e.bound:
+                self._highlight(e, window)
 
     def add_start_entities(self, window: Window) -> None:
         for e in [
@@ -127,7 +127,7 @@ class EntityManager:
                   (entity.loc[0]-(entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]+(settings.ENT_WIDTH - entity.loc[1] % settings.ENT_WIDTH))]
         for i in range(len(points)):
             points[i] = (points[i][0]-window.offset[0], points[i][1]-window.offset[1])
-        pygame.draw.lines(self.screen, colors.BLACK, True, points, 3)
+        pygame.draw.lines(self.screen, colors.GRAY, True, points, 2)
 
     def _spread_color(self, collisions: list[Entity]) -> None:
         r, g, b = 0, 0, 0

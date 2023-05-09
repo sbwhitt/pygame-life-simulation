@@ -17,6 +17,7 @@ Simulates the life and behavior of small colored squares called entities. Entiti
 <b>e</b>: add starting entities to screen at their original positions</br>
 <b>d</b>: toggle whether diseased entities will be marked or not</br>
 <b>l</b>: toggle logging</br>
+<b>h</b>: toggle colony highlighting</br>
 <b>x</b>: delete half of all entities</br>
 
 <h2>Screenshots</h2>

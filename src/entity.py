@@ -2,6 +2,7 @@ import pygame
 import random
 import static.settings as settings
 from src.dna import DNA
+from src.colony import Colony
 
 
 class Entity:
@@ -11,6 +12,7 @@ class Entity:
         self.loc = (args[0], args[1])
         self.choice = 0
         self.bound = False
+        self.colony = None
         if len(args) == 3:
             self.dna = DNA(args[2])
         else:
@@ -75,11 +77,26 @@ class Entity:
             return False
         return True
     
+    def _join_colony(self, partner: "Entity") -> None:
+        if partner.colony:
+            self.colony = partner.colony
+            partner.colony.members.append(self)
+        else:
+            c = Colony()
+            c.members.append(self)
+            c.members.append(partner)
+            self.colony = c
+            partner.colony = c
+    
     def _bind(self, collisions: list["Entity"]) -> bool:
         for c in collisions:
             if self.dna.compatible(c.dna):
                 self.bound = True
                 c.bound = True
+                self._join_colony(c)
+                if c.dna.diseased or self.dna.diseased:
+                    c.dna.diseased = True
+                    self.dna.diseased = True
                 return True
         return False
 
@@ -88,9 +105,10 @@ class Entity:
             self.dna.dir_timer = 0
             choices = []
             for i in range(len(surroundings)):
-                if surroundings[i] != None and self._is_safe(surroundings[i]):
+                if surroundings[i] != None:
                     if random.randint(1, 5) == 1 and self._bind(surroundings[i]): return
-                    choices.append(i)
+                    if self._is_safe(surroundings[i]):
+                        choices.append(i)
             if choices:
                 c = choices[random.randint(0, len(choices)-1)]
                 return c
