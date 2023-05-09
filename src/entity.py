@@ -69,6 +69,11 @@ class Entity:
                 return False
         return True
 
+    def _is_empty(self, target: list["Entity"]) -> bool:
+        if len(target) > 0:
+            return False
+        return True
+
     def _choose_dir(self, surroundings: list[list["Entity"] | None]) -> int:
         if (self.dna.dir_timer > settings.DIR_INTERVAL):
             self.dna.dir_timer = 0

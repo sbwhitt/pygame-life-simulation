@@ -32,10 +32,10 @@ class EntityManager:
 
     def render_entities(self, window: Window) -> None:
         for e in self.entities:
-            if window.under_stats(e.loc):
-                pygame.draw.rect(self.screen, colors.GRAY,
-                                 e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
-            elif not window.contains(e.loc):
+            # if window.under_stats(e.loc):
+            #     pygame.draw.rect(self.screen, colors.GRAY,
+            #                      e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
+            if not window.contains(e.loc):
                 pass
             elif e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
                 pygame.draw.rect(self.screen, colors.BLACK,

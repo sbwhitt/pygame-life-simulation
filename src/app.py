@@ -53,6 +53,7 @@ class App:
         self.screen.fill(colors.WHITE)
         self.e_man.render_entities(self.window)
         self._update_stats()
+        self._highlight_cursor()
         pygame.display.flip()
 
     def on_cleanup(self) -> None:
@@ -126,6 +127,14 @@ class App:
         else:
             settings.IN_GAME_SETTINGS[setting] = 1
             print(setting + ' toggled on')
+
+    def _highlight_cursor(self) -> None:
+        pos = pygame.mouse.get_pos()
+        points = [(pos[0]-(pos[0] % settings.ENT_WIDTH), pos[1]-(pos[1] % settings.ENT_WIDTH)),
+                  (pos[0]+(settings.ENT_WIDTH - pos[0] % settings.ENT_WIDTH), pos[1]-(pos[1] % settings.ENT_WIDTH)),
+                  (pos[0]+(settings.ENT_WIDTH - pos[0] % settings.ENT_WIDTH), pos[1]+(settings.ENT_WIDTH - pos[1] % settings.ENT_WIDTH)),
+                  (pos[0]-(pos[0] % settings.ENT_WIDTH), pos[1]+(settings.ENT_WIDTH - pos[1] % settings.ENT_WIDTH))]
+        pygame.draw.lines(self.screen, colors.BLACK, True, points=points)
 
     def _handlecmd(self, key: str) -> None:
         # cull half of entities
