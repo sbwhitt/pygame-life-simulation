@@ -29,10 +29,10 @@ class App:
         self.metrics = Metrics()
 
     def on_init(self) -> None:
-        pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
+        pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])
         self._create_metrics()
         self._update_metrics()
-        self.e_man.build_entities(self.window)
+        # self.e_man.build_entities(self.window)
         self._running = True
 
     def on_event(self, event: pygame.event.Event) -> None:
@@ -41,8 +41,10 @@ class App:
         if event.type == pygame.KEYUP:
             self.keys.remove(event.key)
         if event.type == pygame.KEYDOWN:
-            self._handlecmd(event.key)
+            self._handle_cmd(event.key)
             self.keys.append(event.key)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            self._handle_mouse_cmd(event.button)
 
     def on_loop(self) -> None:
         self._handle_keys_pressed()
@@ -131,6 +133,10 @@ class App:
         else:
             settings.IN_GAME_SETTINGS[setting] = 1
             print(setting + ' toggled on')
+    
+    def _get_tile_pos(self, pos: tuple) -> tuple:
+        loc = (pos[0]+self.window.offset[0], pos[1]+self.window.offset[1])
+        return (loc[0]-(loc[0] % settings.ENT_WIDTH), loc[1]-(loc[1] % settings.ENT_WIDTH))
 
     def _highlight_cursor(self) -> None:
         pos = pygame.mouse.get_pos()
@@ -140,7 +146,11 @@ class App:
                   (pos[0]-(pos[0] % settings.ENT_WIDTH), pos[1]+(settings.ENT_WIDTH - pos[1] % settings.ENT_WIDTH))]
         pygame.draw.lines(self.screen, colors.BLACK, True, points=points)
 
-    def _handlecmd(self, key: str) -> None:
+    def _handle_mouse_cmd(self, button: int) -> None:
+        if button == 1 and not self.paused:
+            self.e_man.place_entity(self._get_tile_pos(pygame.mouse.get_pos()))
+    
+    def _handle_cmd(self, key: str) -> None:
         # cull half of entities
         if key == pygame.K_x and not self.paused:
             self.e_man.cull()

@@ -80,6 +80,11 @@ class EntityManager:
         num_e = len(self.entities)
         return pygame.Color(int(r/num_e), int(g/num_e), int(b/num_e))
 
+    # mouse command function helpers
+    def place_entity(self, pos: tuple) -> None:
+        e = Entity(pos[0], pos[1])
+        self._add_entity(e)
+
     # key command function helpers
     def cull(self) -> None:
         for i in range(int(len(self.entities)/2)):
