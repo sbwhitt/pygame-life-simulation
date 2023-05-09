@@ -10,13 +10,18 @@ class Entity:
             args[0], args[1], settings.ENT_WIDTH, settings.ENT_WIDTH)
         self.loc = (args[0], args[1])
         self.choice = 0
+        self.bound = False
+        self.colony = None
         if len(args) == 3:
             self.dna = DNA(args[2])
         else:
             self.dna = DNA(pygame.Color(random.randint(
                 10, 200), random.randint(10, 200), random.randint(10, 200)))
 
-    def update(self, width: int, height: int, surroundings: list[list["Entity"] | None]) -> None:
+    def update(self, width: int, height: int, surroundings: list[list["Entity"] | None]) -> "Entity":
+        neighbor = self._choose_neighbor(surroundings)
+        if neighbor != None:
+            return neighbor
         self.choice = self._choose_dir(surroundings)
         if self.dna.move_timer > settings.MOVE_INTERVAL:
             if self.choice == 0 and self.rect.top != 0:  # up
@@ -69,13 +74,27 @@ class Entity:
                 return False
         return True
 
-    def _is_empty(self, target: list["Entity"]) -> bool:
-        if len(target) > 0:
-            return False
-        return True
+    # def _is_empty(self, target: list["Entity"]) -> bool:
+    #     if len(target) > 0:
+    #         return False
+    #     return True
+    
+    def _check_neighbor(self, collisions: list["Entity"]) -> "Entity":
+        for c in collisions:
+            if self.dna.compatible(c.dna):
+                return c
+        return None
+    
+    def _choose_neighbor(self, surroundings: list[list["Entity"] | None]) -> "Entity":
+        for i in range(len(surroundings)):
+            if random.randint(1, 10) == 1 and surroundings[i] != None:
+                neighbor = self._check_neighbor(surroundings[i])
+                if neighbor != None:
+                    return neighbor
+        return None
 
     def _choose_dir(self, surroundings: list[list["Entity"] | None]) -> int:
-        if (self.dna.dir_timer > settings.DIR_INTERVAL):
+        if (not self.bound and self.dna.dir_timer > settings.DIR_INTERVAL):
             self.dna.dir_timer = 0
             choices = []
             for i in range(len(surroundings)):

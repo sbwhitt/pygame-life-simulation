@@ -6,6 +6,7 @@ from src.window import Window
 from src.stats import Stats
 from src.metrics import Metrics
 from src.entity_manager import EntityManager
+from src.colony_manager import ColonyManager
 
 '''
 x == width == rect.left
@@ -22,6 +23,7 @@ class App:
         self.screen = pygame.display.set_mode(
             (self.window.width + settings.STATS_WIDTH, self.window.height), pygame.SCALED | pygame.RESIZABLE)
         self.e_man = EntityManager(self.screen)
+        self.c_man = ColonyManager(self.screen)
         self.keys = []
         self.stats = Stats(self.screen, self.window.width)
         self.metrics = Metrics()
@@ -47,11 +49,13 @@ class App:
         if self.paused:
             return
         self.clock.tick(settings.CLOCK_RATE)
-        self.e_man.update_entities(self.clock.get_time())
+        self.e_man.update_entities(self.clock.get_time(), self.c_man)
+        self.c_man.update_colonies()
 
     def on_render(self) -> None:
         self.screen.fill(colors.WHITE)
         self.e_man.render_entities(self.window)
+        self.c_man.render_colonies(self.window)
         self._update_stats()
         self._highlight_cursor()
         pygame.display.flip()
@@ -174,6 +178,8 @@ class App:
             self._toggle_setting("MARK_DISEASED")
         elif key == pygame.K_l:
             self._toggle_setting("LOGGING")
+        elif key == pygame.K_h:
+            self._toggle_setting("HIGHLIGHT")
         # quit
         elif key == pygame.K_q:
             self._running = False

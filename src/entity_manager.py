@@ -5,6 +5,7 @@ import static.settings as settings
 from src.entity import Entity
 from src.map import Map
 from src.window import Window
+from src.colony_manager import ColonyManager
 
 
 class EntityManager:
@@ -20,13 +21,15 @@ class EntityManager:
         self.move_timer = 0
         self.avg_color = pygame.Color(0, 0, 0)
 
-    def update_entities(self, clock_time: int) -> None:
+    def update_entities(self, clock_time: int, c_man: ColonyManager) -> None:
         for e in self.entities:
-            e.dna.dir_timer += clock_time
-            e.dna.move_timer += clock_time
-            self.m.grid[e.loc].remove(e)
-            e.update(settings.WORLD_SIZE, settings.WORLD_SIZE, self.m.get_surroundings(e.loc))
-            self.m.grid[e.loc].append(e)
+            if not e.bound:
+                e.dna.dir_timer += clock_time
+                e.dna.move_timer += clock_time
+                self.m.grid[e.loc].remove(e)
+                neighbor = e.update(settings.WORLD_SIZE, settings.WORLD_SIZE, self.m.get_surroundings(e.loc))
+                if neighbor != None: c_man.bind(e, neighbor)
+                self.m.grid[e.loc].append(e)
             self._handle_collisions(e)
             self._handle_aging(e, clock_time)
 
@@ -36,8 +39,8 @@ class EntityManager:
             #     pygame.draw.rect(self.screen, colors.GRAY,
             #                      e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
             if not window.contains(e.loc):
-                pass
-            elif e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
+                continue
+            if e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
                 pygame.draw.rect(self.screen, colors.BLACK,
                                  e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
             else:
@@ -115,6 +118,9 @@ class EntityManager:
     def _remove_entity(self, e: Entity) -> None:
         self.m.grid[e.loc].remove(e)
         self.entities.remove(e)
+        if e.colony:
+            e.colony.remove_member(e)
+            e.colony = None
         self.destroyed += 1
         self._obituary(e)
 
@@ -145,7 +151,7 @@ class EntityManager:
         for e in collisions:
             e.dna.curve = c
 
-    def _cannibalize(self, eater, collisions: list[Entity]) -> None:
+    def _cannibalize(self, eater: Entity, collisions: list[Entity]) -> None:
         for c in collisions:
             if c != eater and random.randint(0, 1) == 1:
                 self._spread_color([eater, c])
