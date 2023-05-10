@@ -16,7 +16,6 @@ class ColonyManager:
     def update_colonies(self) -> None:
         for c in self.colonies:
             if len(c.members) <= 1:
-                print(c)
                 for e in c.members:
                     e.bound = False
                 self._remove_colony(c)
