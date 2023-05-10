@@ -29,8 +29,8 @@ class ColonyManager:
     
     def bind(self, e1: Entity, e2: Entity) -> None:
         e1.dna.send_color(e2.dna)
-        e1.dna.age_limit += 1
-        e2.dna.age_limit += 1
+        if e1.dna.diseased or e2.dna.diseased:
+            e1.dna.diseased, e2.dna.diseased = True, True
         e1.nourished = True
         e2.nourished = True
         if e1.colony and e2.colony:
