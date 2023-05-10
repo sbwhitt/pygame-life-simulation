@@ -52,6 +52,7 @@ class App:
             return
         self.clock.tick(settings.CLOCK_RATE)
         self.e_man.update_entities(self.clock.get_time(), self.c_man)
+        self.e_man.build_entity_edges()
         self.c_man.update_colonies()
         self._update_metrics()
 

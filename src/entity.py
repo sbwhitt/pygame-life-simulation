@@ -12,6 +12,8 @@ class Entity:
         self.choice = 0
         self.bound = False
         self.colony = None
+        # up, left, down, right
+        self.edges = [True, True, True, True]
         if len(args) == 3:
             self.dna = DNA(args[2])
         else:
@@ -57,9 +59,22 @@ class Entity:
                 if neighbor != None and neighbor.bound and neighbor.colony != self.colony:
                     return neighbor
         return None
+
+    # def surrounded(self, surroundings: list[list["Entity"] | None]) -> bool:
+    #     for i in range(len(surroundings)):
+    #         if surroundings[i] != None:
+    #             neighbor = self._check_neighbor(surroundings[i])
+    #             if neighbor != None and neighbor.bound:
+    #                 continue
+    #         return False
+    #     return True
     
-    def get_edges(self) -> list[tuple]:
-        pass
+    def build_edges(self, surroundings: list[list["Entity"] | None]) -> None:
+        for i in range(len(surroundings)):
+            if surroundings[i] != None:
+                for e in surroundings[i]:
+                    if e.bound: self.edges[i] = False
+                    else: self.edges[i] = True
 
     def _degenerate(self) -> None:
         self.dna.nourished = False

@@ -24,15 +24,16 @@ class EntityManager:
     def update_entities(self, clock_time: int, c_man: ColonyManager) -> None:
         e: Entity
         for e in self.entities:
+            surroundings = self.m.get_surroundings(e.loc)
             if not e.bound:
                 e.dna.dir_timer += clock_time
                 e.dna.move_timer += clock_time
                 self.m.grid[e.loc].remove(e)
-                neighbor = e.update(settings.WORLD_SIZE, settings.WORLD_SIZE, self.m.get_surroundings(e.loc))
+                neighbor = e.update(settings.WORLD_SIZE, settings.WORLD_SIZE, surroundings)
                 if neighbor != None: c_man.bind(e, neighbor)
                 self.m.grid[e.loc].append(e)
             elif e.bound:
-                neighbor = e.look_for_colony(self.m.get_surroundings(e.loc))
+                neighbor = e.look_for_colony(surroundings)
                 if neighbor != None: c_man.bind(e, neighbor)
             self._handle_collisions(e)
             self._handle_aging(e, clock_time)
@@ -62,6 +63,11 @@ class EntityManager:
                    settings.ENT_WIDTH, colors.MAGENTA)
         ]:
             self._add_entity(e)
+
+    def build_entity_edges(self) -> None:
+        for e in self.entities:
+            if e.bound:
+                e.build_edges(self.m.get_surroundings(e.loc))
 
     def build_entities(self, window: Window) -> None:
         self.add_start_entities(window)

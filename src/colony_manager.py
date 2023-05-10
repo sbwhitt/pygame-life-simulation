@@ -28,10 +28,10 @@ class ColonyManager:
     
     def bind(self, e1: Entity, e2: Entity) -> None:
         e1.dna.send_color(e2.dna)
-        e1.dna.age_limit += 1
-        e2.dna.age_limit += 1
-        e1.nourished = True
-        e2.nourished = True
+        # e1.dna.age_limit += 1
+        # e2.dna.age_limit += 1
+        # e1.nourished = True
+        # e2.nourished = True
         if e1.colony and e2.colony:
             # self._join_colonies(e1.colony, e2.colony)
             pass
@@ -67,10 +67,33 @@ class ColonyManager:
         self._remove_colony(c2)
 
     def _highlight(self, entity: Entity, window: Window) -> None:
-        points = [(entity.loc[0]-(entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]-(entity.loc[1] % settings.ENT_WIDTH)),
-                  (entity.loc[0]+(settings.ENT_WIDTH - entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]-(entity.loc[1] % settings.ENT_WIDTH)),
-                  (entity.loc[0]+(settings.ENT_WIDTH - entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]+(settings.ENT_WIDTH - entity.loc[1] % settings.ENT_WIDTH)),
-                  (entity.loc[0]-(entity.loc[0] % settings.ENT_WIDTH), entity.loc[1]+(settings.ENT_WIDTH - entity.loc[1] % settings.ENT_WIDTH))]
-        for i in range(len(points)):
-            points[i] = (points[i][0]-window.offset[0], points[i][1]-window.offset[1])
-        pygame.draw.lines(self.screen, colors.GRAY, True, points, 2)
+        # line segments of entity: up, left, down, right
+        uldr = [
+            (
+                # top left
+                (entity.loc[0] - (entity.loc[0] % settings.ENT_WIDTH) - window.offset[0], entity.loc[1] - (entity.loc[1] % settings.ENT_WIDTH) - window.offset[1]),
+                # top right
+                (entity.loc[0] + (settings.ENT_WIDTH - entity.loc[0] % settings.ENT_WIDTH) - window.offset[0], entity.loc[1] + entity.loc[1] % settings.ENT_WIDTH - window.offset[1])
+            ),
+            (
+                # top left
+                (entity.loc[0] - (entity.loc[0] % settings.ENT_WIDTH) - window.offset[0], entity.loc[1] - (entity.loc[1] % settings.ENT_WIDTH) - window.offset[1]),
+                # bottom left
+                (entity.loc[0] - (entity.loc[0] % settings.ENT_WIDTH) - window.offset[0], settings.ENT_WIDTH + (entity.loc[1] - (entity.loc[1] % settings.ENT_WIDTH)) - window.offset[1])
+            ),
+            (
+                # bottom left
+                (entity.loc[0] - (entity.loc[0] % settings.ENT_WIDTH) - window.offset[0], settings.ENT_WIDTH + (entity.loc[1] - (entity.loc[1] % settings.ENT_WIDTH)) - window.offset[1]),
+                # bottom right
+                (settings.ENT_WIDTH + entity.loc[0] - entity.loc[0] % settings.ENT_WIDTH - window.offset[0], settings.ENT_WIDTH + entity.loc[1] - entity.loc[1] % settings.ENT_WIDTH - window.offset[1])
+            ),
+            (
+                # top right
+                (entity.loc[0] + (settings.ENT_WIDTH - entity.loc[0] % settings.ENT_WIDTH) - window.offset[0], entity.loc[1] + (settings.ENT_WIDTH - entity.loc[1] % settings.ENT_WIDTH) - window.offset[1]),
+                # bottom right
+                (settings.ENT_WIDTH + entity.loc[0] - entity.loc[0] % settings.ENT_WIDTH - window.offset[0], entity.loc[1] - entity.loc[1] % settings.ENT_WIDTH - window.offset[1])
+            )
+        ]
+        for i in range(len(entity.edges)):
+            if entity.edges[i]:
+                pygame.draw.lines(self.screen, colors.BLACK, True, uldr[i], 2)
