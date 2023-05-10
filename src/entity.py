@@ -39,8 +39,10 @@ class Entity:
 
     def reproduce(self) -> "Entity|None":
         r = random.randint(0, 1+self.dna.amnt_offspring)
-        if (self.dna.nourished or r == 1) and not self.dna.diseased:
-            offspring = Entity(self.rect.left, self.rect.top)
+        spawn_loc = self._choose_spawn_location()
+        if (self.dna.nourished or r == 1) and not self.dna.diseased and spawn_loc:
+            self.dna.nourished = False
+            offspring = Entity(spawn_loc[0], spawn_loc[1])
             if random.randint(1, 100) == 1:
                 # chance to mutate diseased into a new random color
                 offspring.dna.mutate()
@@ -71,10 +73,20 @@ class Entity:
     
     def build_edges(self, surroundings: list[list["Entity"] | None]) -> None:
         for i in range(len(surroundings)):
-            if surroundings[i] != None:
+            if surroundings[i] != None and len(surroundings[i]) > 0:
                 for e in surroundings[i]:
                     if e.bound: self.edges[i] = False
                     else: self.edges[i] = True
+            else:
+                self.edges[i] = True
+    
+    def _choose_spawn_location(self) -> tuple|None:
+        # up left down right
+        dirs = [(0, -settings.ENT_WIDTH), (-settings.ENT_WIDTH, 0), (0, settings.ENT_WIDTH), (settings.ENT_WIDTH, 0)]
+        for i in range(len(self.edges)):
+            if self.edges[i]:
+                return (self.loc[0] + dirs[i][0], self.loc[1] + dirs[i][1])
+        return None
 
     def _degenerate(self) -> None:
         self.dna.nourished = False
@@ -94,16 +106,16 @@ class Entity:
             print("an entity of generation " +
                     str(self.dna.generation) + " has reproduced")
 
-    def _is_safe(self, target: list["Entity"]) -> bool:
-        for e in target:
-            if e.dna.diseased:
-                return False
-        return True
-
-    # def _is_empty(self, target: list["Entity"]) -> bool:
-    #     if len(target) > 0:
-    #         return False
+    # def _is_safe(self, target: list["Entity"]) -> bool:
+    #     for e in target:
+    #         if e.dna.diseased:
+    #             return False
     #     return True
+
+    def _is_empty(self, target: list["Entity"]) -> bool:
+        if len(target) > 0:
+            return False
+        return True
     
     def _check_neighbor(self, collisions: list["Entity"]) -> "Entity":
         for c in collisions:
@@ -124,7 +136,7 @@ class Entity:
             self.dna.dir_timer = 0
             choices = []
             for i in range(len(surroundings)):
-                if surroundings[i] != None and self._is_safe(surroundings[i]):
+                if surroundings[i] != None and self._is_empty(surroundings[i]):
                     choices.append(i)
             if choices:
                 c = choices[random.randint(0, len(choices)-1)]

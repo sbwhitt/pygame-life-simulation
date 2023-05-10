@@ -16,6 +16,7 @@ class ColonyManager:
     def update_colonies(self) -> None:
         for c in self.colonies:
             if len(c.members) <= 1:
+                print(c)
                 for e in c.members:
                     e.bound = False
                 self._remove_colony(c)
@@ -28,10 +29,10 @@ class ColonyManager:
     
     def bind(self, e1: Entity, e2: Entity) -> None:
         e1.dna.send_color(e2.dna)
-        # e1.dna.age_limit += 1
-        # e2.dna.age_limit += 1
-        # e1.nourished = True
-        # e2.nourished = True
+        e1.dna.age_limit += 1
+        e2.dna.age_limit += 1
+        e1.nourished = True
+        e2.nourished = True
         if e1.colony and e2.colony:
             # self._join_colonies(e1.colony, e2.colony)
             pass
@@ -70,27 +71,27 @@ class ColonyManager:
         # line segments of entity: up, left, down, right
         uldr = [
             (
-                # top left
+                # top left point
                 (entity.loc[0] - (entity.loc[0] % settings.ENT_WIDTH) - window.offset[0], entity.loc[1] - (entity.loc[1] % settings.ENT_WIDTH) - window.offset[1]),
-                # top right
+                # top right point
                 (entity.loc[0] + (settings.ENT_WIDTH - entity.loc[0] % settings.ENT_WIDTH) - window.offset[0], entity.loc[1] + entity.loc[1] % settings.ENT_WIDTH - window.offset[1])
             ),
             (
-                # top left
+                # top left point
                 (entity.loc[0] - (entity.loc[0] % settings.ENT_WIDTH) - window.offset[0], entity.loc[1] - (entity.loc[1] % settings.ENT_WIDTH) - window.offset[1]),
-                # bottom left
+                # bottom left point
                 (entity.loc[0] - (entity.loc[0] % settings.ENT_WIDTH) - window.offset[0], settings.ENT_WIDTH + (entity.loc[1] - (entity.loc[1] % settings.ENT_WIDTH)) - window.offset[1])
             ),
             (
-                # bottom left
+                # bottom left point
                 (entity.loc[0] - (entity.loc[0] % settings.ENT_WIDTH) - window.offset[0], settings.ENT_WIDTH + (entity.loc[1] - (entity.loc[1] % settings.ENT_WIDTH)) - window.offset[1]),
-                # bottom right
+                # bottom right point
                 (settings.ENT_WIDTH + entity.loc[0] - entity.loc[0] % settings.ENT_WIDTH - window.offset[0], settings.ENT_WIDTH + entity.loc[1] - entity.loc[1] % settings.ENT_WIDTH - window.offset[1])
             ),
             (
-                # top right
+                # top right point
                 (entity.loc[0] + (settings.ENT_WIDTH - entity.loc[0] % settings.ENT_WIDTH) - window.offset[0], entity.loc[1] + (settings.ENT_WIDTH - entity.loc[1] % settings.ENT_WIDTH) - window.offset[1]),
-                # bottom right
+                # bottom right point
                 (settings.ENT_WIDTH + entity.loc[0] - entity.loc[0] % settings.ENT_WIDTH - window.offset[0], entity.loc[1] - entity.loc[1] % settings.ENT_WIDTH - window.offset[1])
             )
         ]

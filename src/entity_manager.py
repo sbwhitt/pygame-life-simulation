@@ -66,8 +66,7 @@ class EntityManager:
 
     def build_entity_edges(self) -> None:
         for e in self.entities:
-            if e.bound:
-                e.build_edges(self.m.get_surroundings(e.loc))
+            e.build_edges(self.m.get_surroundings(e.loc))
 
     def build_entities(self, window: Window) -> None:
         self.add_start_entities(window)
