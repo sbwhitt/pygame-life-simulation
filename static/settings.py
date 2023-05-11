@@ -1,6 +1,6 @@
 # both settings have to be divisible by 20
-WINDOW_WIDTH = 1080
-WINDOW_HEIGHT = 960
+WINDOW_WIDTH = 960
+WINDOW_HEIGHT = 720
 
 WORLD_SIZE = 2000
 

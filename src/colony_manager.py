@@ -30,8 +30,11 @@ class ColonyManager:
         e1.dna.send_color(e2.dna)
         if e1.dna.diseased or e2.dna.diseased:
             e1.dna.diseased, e2.dna.diseased = True, True
-        e1.nourished = True
-        e2.nourished = True
+        else:
+            e1.dna.age_limit += 1
+            e2.dna.age_limit += 1
+            e1.nourished = True
+            e2.nourished = True
         if e1.colony and e2.colony:
             # self._join_colonies(e1.colony, e2.colony)
             pass
