@@ -1,4 +1,5 @@
 import pygame
+import random
 import static.colors as colors
 import static.settings as settings
 from src.colony import Colony
@@ -27,14 +28,7 @@ class ColonyManager:
                     self._highlight(e, window)
     
     def bind(self, e1: Entity, e2: Entity) -> None:
-        e1.dna.send_color(e2.dna)
-        if e1.dna.diseased or e2.dna.diseased:
-            e1.dna.diseased, e2.dna.diseased = True, True
-        else:
-            e1.dna.age_limit += 1
-            e2.dna.age_limit += 1
-            e1.nourished = True
-            e2.nourished = True
+        self._spread_characteristics(e1, e2)
         if e1.colony and e2.colony:
             # self._join_colonies(e1.colony, e2.colony)
             pass
@@ -64,6 +58,18 @@ class ColonyManager:
         self.colonies.remove(colony)
         self.destroyed += 1
     
+    def _spread_characteristics(self, e1: Entity, e2: Entity) -> None:
+        e1.dna.send_color(e2.dna)
+        r = random.randint(1, 4)
+        if e1.dna.diseased or e2.dna.diseased:
+            e1.dna.diseased, e2.dna.diseased = True, True
+        elif r == 1:
+            e1.dna.age_limit += 1
+            e2.dna.age_limit += 1
+        elif r == 2:
+            e1.nourished = True
+            e2.nourished = True
+
     def _join_colonies(self, c1: "Colony", c2: "Colony") -> None:
         for i in range(len(c2.members)):
             c1.add_member(c2.members[i])
