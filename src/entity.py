@@ -77,7 +77,7 @@ class Entity:
                 for e in surroundings[i]:
                     if e.bound:
                         self.edges[i] = False
-                        self._bleed_edge(e)
+                        if random.randint(1, 4) == 1: self._bleed_edge(e)
                     else: self.edges[i] = True
             else:
                 self.edges[i] = True
