@@ -55,10 +55,10 @@ class EntityManager:
     def add_start_entities(self, window: Window) -> None:
         for e in [
             Entity(0+window.offset[0], 0+window.offset[1], colors.RED),
-            Entity(int((window.width+window.offset[0])/2), 0+window.offset[1], colors.GREEN),
+            Entity(int(window.offset[0]+((window.width)/2)), 0+window.offset[1], colors.GREEN),
             Entity(window.width+window.offset[0]-settings.ENT_WIDTH, 0+window.offset[1], colors.BLUE),
             Entity(0+window.offset[0], window.height+window.offset[1]-settings.ENT_WIDTH, colors.YELLOW),
-            Entity(int((window.width+window.offset[0])/2), window.height+window.offset[1]-settings.ENT_WIDTH, colors.CYAN),
+            Entity(int(window.offset[0]+((window.width)/2)), window.height+window.offset[1]-settings.ENT_WIDTH, colors.CYAN),
             Entity(window.width+window.offset[0]-settings.ENT_WIDTH, window.height+window.offset[1] -
                    settings.ENT_WIDTH, colors.MAGENTA)
         ]:

@@ -75,10 +75,15 @@ class Entity:
         for i in range(len(surroundings)):
             if surroundings[i] != None and len(surroundings[i]) > 0:
                 for e in surroundings[i]:
-                    if e.bound: self.edges[i] = False
+                    if e.bound:
+                        self.edges[i] = False
+                        self._bleed_edge(e)
                     else: self.edges[i] = True
             else:
                 self.edges[i] = True
+    
+    def _bleed_edge(self, e: "Entity") -> None:
+        self.dna.send_color(e.dna)
     
     def _choose_spawn_location(self) -> tuple|None:
         # up left down right
