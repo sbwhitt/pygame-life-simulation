@@ -79,6 +79,7 @@ class Entity:
                         self.edges[i] = False
                         if random.randint(1, 4) == 1: self._bleed_edge(e)
                     else: self.edges[i] = True
+                    if e.dna.diseased and random.randint(1, 100) == 1: self.dna.diseased = True
             else:
                 self.edges[i] = True
     

@@ -39,9 +39,9 @@ class DNA:
     
     def send_color(self, target: "DNA") -> None:
         c = pygame.Color(self.color.r, self.color.g, self.color.b)
-        c.r = c.r+random.randint(-1, 1) if c.r < 240 else c.r
-        c.g = c.g+random.randint(-1, 1) if c.g < 240 else c.g
-        c.b = c.b+random.randint(-1, 1) if c.b < 240 else c.b
+        c.r = c.r+random.randint(-1, 2) if c.r < 240 and c.r > 50 else c.r
+        c.g = c.g+random.randint(-1, 2) if c.g < 240 and c.g > 50 else c.g
+        c.b = c.b+random.randint(-1, 2) if c.b < 240 and c.b > 50 else c.b
         c = pygame.color.Color(int((c.r + target.color.r)/2),
                                 int((c.g + target.color.g)/2),
                                 int((c.b + target.color.b)/2))

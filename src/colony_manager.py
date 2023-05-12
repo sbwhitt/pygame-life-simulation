@@ -63,9 +63,9 @@ class ColonyManager:
         r = random.randint(1, 4)
         if e1.dna.diseased or e2.dna.diseased:
             e1.dna.diseased, e2.dna.diseased = True, True
-        elif r == 1:
-            e1.dna.age_limit += 1
-            e2.dna.age_limit += 1
+        # elif r == 1:
+        #     e1.dna.age_limit += 1
+        #     e2.dna.age_limit += 1
         elif r == 2:
             e1.nourished = True
             e2.nourished = True
