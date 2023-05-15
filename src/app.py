@@ -48,13 +48,13 @@ class App:
 
     def on_loop(self) -> None:
         self._handle_keys_pressed()
+        self._update_metrics()
         if self.paused:
             return
         self.clock.tick(settings.CLOCK_RATE)
         self.e_man.update_entities(self.clock.get_time(), self.c_man)
         self.e_man.build_entity_edges()
         self.c_man.update_colonies()
-        self._update_metrics()
 
     def on_render(self) -> None:
         self.screen.fill(colors.WHITE)
@@ -124,10 +124,10 @@ class App:
         self.metrics.create_tracker("eaten")
 
     def _update_metrics(self) -> None:
-        self.metrics.update("created", self.e_man.created)
-        self.metrics.update("destroyed", self.e_man.destroyed)
-        self.metrics.update("diseased", self.e_man.diseased)
-        self.metrics.update("eaten", self.e_man.eaten)
+        self.metrics.update("created", self.e_man.created, self.paused)
+        self.metrics.update("destroyed", self.e_man.destroyed, self.paused)
+        self.metrics.update("diseased", self.e_man.diseased, self.paused)
+        self.metrics.update("eaten", self.e_man.eaten, self.paused)
 
     def _toggle_setting(self, setting: str) -> None:
         if settings.IN_GAME_SETTINGS[setting]:

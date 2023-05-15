@@ -28,8 +28,9 @@ class Metrics:
         t -= int(minutes*60)
         return str(hours) + "h:" + str(minutes) + "m:" + str(int(t)) + "s"
 
-    def update(self, name: str, amount: int) -> None:
-        self.time_elapsed += time.time() - self.timestamp
+    def update(self, name: str, amount: int, paused: bool) -> None:
+        if not paused:
+            self.time_elapsed += time.time() - self.timestamp
         self.timestamp = time.time()
         if self.trackers.get(name):
             self.trackers[name].per_minute = self._calculate_per_minute(amount)
