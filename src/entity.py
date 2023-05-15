@@ -18,7 +18,7 @@ class Entity:
             self.dna = DNA(args[2])
         else:
             self.dna = DNA(pygame.Color(random.randint(
-                10, 200), random.randint(10, 200), random.randint(10, 200)))
+                10, 245), random.randint(10, 245), random.randint(10, 245)))
 
     def update(self, width: int, height: int, surroundings: list[list["Entity"] | None]) -> "Entity":
         neighbor = self._choose_neighbor(surroundings)
