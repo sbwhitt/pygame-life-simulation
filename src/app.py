@@ -7,6 +7,7 @@ from src.stats import Stats
 from src.metrics import Metrics
 from src.entity_manager import EntityManager
 from src.colony_manager import ColonyManager
+from src.mini_map import MiniMap
 
 '''
 x == width == rect.left
@@ -27,6 +28,7 @@ class App:
         self.keys = []
         self.stats = Stats(self.screen, self.window.width)
         self.metrics = Metrics()
+        self.minimap = MiniMap()
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])
@@ -49,6 +51,7 @@ class App:
     def on_loop(self) -> None:
         self._handle_keys_pressed()
         self._update_metrics()
+        self.minimap.update(self.window)
         if self.paused:
             return
         self.clock.tick(settings.CLOCK_RATE)
@@ -62,6 +65,7 @@ class App:
         self.c_man.render_colonies(self.window)
         self._update_stats()
         self._highlight_cursor()
+        self.minimap.render(self.screen)
         pygame.display.flip()
 
     def on_cleanup(self) -> None:
