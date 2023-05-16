@@ -41,7 +41,6 @@ class Entity:
         r = random.randint(0, 1+self.dna.amnt_offspring)
         spawn_loc = self._choose_spawn_location()
         if (self.dna.nourished or r == 1) and not self.dna.diseased and spawn_loc:
-            self.dna.nourished = False
             offspring = Entity(spawn_loc[0], spawn_loc[1])
             if random.randint(1, 100) == 1:
                 # chance to mutate diseased into a new random color
@@ -97,7 +96,8 @@ class Entity:
     def _degenerate(self) -> None:
         self.dna.nourished = False
         self.dna.amnt_offspring += 1
-        self.dna.age_limit -= 1
+        if random.randint(0, 1):
+            self.dna.age_limit -= 1
     
     def _broadcast(self, offspring) -> None:
         if not settings.IN_GAME_SETTINGS["LOGGING"]:
