@@ -22,9 +22,9 @@ class MiniMap:
         self._build_cursor_edges()
 
     def render(self, entities: list[Entity]) -> None:
+        self._render_small_entities(entities)
         self._render_map_border()
         self._render_cursor()
-        self._render_small_entities(entities)
     
     def _render_map_border(self) -> None:
         for l in self.map_edges:
@@ -37,7 +37,7 @@ class MiniMap:
     def _render_small_entities(self, entities: list[Entity]) -> None:
         for e in entities:
             copy = e.rect.copy()
-            adj_left_top = (copy.left * self.map_ratio + self.window.width, copy.top * self.map_ratio + (self.window.height - settings.STATS_WIDTH))
+            adj_left_top = (copy.left * self.map_ratio + self.window.width + 2, copy.top * self.map_ratio + (self.window.height - settings.STATS_WIDTH) + 2)
             copy.scale_by(self.map_ratio, self.map_ratio)
             copy.update(adj_left_top, (copy.width * self.map_ratio, copy.height * self.map_ratio))
             if e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
