@@ -35,7 +35,6 @@ class MiniMap:
             pygame.draw.lines(self.screen, colors.BLACK, True, l, 1)
     
     def _render_small_entities(self, entities: list[Entity]) -> None:
-        adjust = (self.map_ratio, self.map_ratio)
         for e in entities:
             copy = e.rect.copy()
             adj_left_top = (copy.left * self.map_ratio + self.window.width, copy.top * self.map_ratio + (self.window.height - settings.STATS_WIDTH))

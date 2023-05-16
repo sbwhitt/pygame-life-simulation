@@ -99,8 +99,8 @@ class App:
                             str(self.e_man.get_diseased_entities(self.e_man.entities)))
         self.stats.add_line("entities eaten: ", 
                             str(self.e_man.eaten))
-        self.stats.add_line("colonies: ",
-                            str(len(self.c_man.colonies)))
+        # self.stats.add_line("colonies: ",
+        #                     str(len(self.c_man.colonies)))
         self.stats.add_line("time elapsed: ", self.metrics.get_time_elapsed())
         self.stats.add_line("entities per minute: ", 
                             str(int(self.metrics.get_rate("created") - self.metrics.get_rate("destroyed"))), 
