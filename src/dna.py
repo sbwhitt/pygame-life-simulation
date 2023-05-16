@@ -49,9 +49,9 @@ class DNA:
         target.color = c
 
     def _compare_colors(self, color: pygame.Color) -> bool:
-        return ((self.color.r - color.r <= 10 or self.color.r - color.r >= -10) and
-                (self.color.g - color.g <= 10 or self.color.g - color.g >= -10) and
-                (self.color.b - color.b <= 10 or self.color.b - color.b >= -10))
+        return ((self.color.r - color.r <= 20 and self.color.r - color.r >= -20) and
+                (self.color.g - color.g <= 20 and self.color.g - color.g >= -20) and
+                (self.color.b - color.b <= 20 and self.color.b - color.b >= -20))
 
     def _determine_immunity(self) -> bool:
         return self.immune or (random.randint(0, 2) == 1) 

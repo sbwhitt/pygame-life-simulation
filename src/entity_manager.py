@@ -190,6 +190,9 @@ class EntityManager:
 
     def _handle_aging(self, e: Entity, clock_time: int) -> None:
         if e.dna.age_timer > settings.AGE_LENGTH:
+            if e.dna.diseased:
+                self._remove_entity(e)
+                return
             e.dna.age += 1
             if e.dna.age >= e.dna.age_limit:
                 self._remove_entity(e)

@@ -78,12 +78,13 @@ class Entity:
                         self.edges[i] = False
                         if random.randint(1, 4) == 1: self._bleed_edge(e)
                     else: self.edges[i] = True
-                    if e.dna.diseased and random.randint(1, 100) == 1: self.dna.diseased = True
+                    if e.dna.diseased and random.randint(1, 10) == 1: self.dna.diseased = True
             else:
                 self.edges[i] = True
     
     def _bleed_edge(self, e: "Entity") -> None:
-        self.dna.send_color(e.dna)
+        if self.bound:
+            self.dna.send_color(e.dna)
     
     def _choose_spawn_location(self) -> tuple|None:
         # up left down right
