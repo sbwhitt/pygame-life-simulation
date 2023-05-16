@@ -28,7 +28,7 @@ class App:
         self.keys = []
         self.stats = Stats(self.screen, self.window.width)
         self.metrics = Metrics()
-        self.minimap = MiniMap()
+        self.minimap = MiniMap(self.screen, self.window)
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])
@@ -51,7 +51,7 @@ class App:
     def on_loop(self) -> None:
         self._handle_keys_pressed()
         self._update_metrics()
-        self.minimap.update(self.window)
+        self.minimap.update()
         if self.paused:
             return
         self.clock.tick(settings.CLOCK_RATE)
@@ -65,7 +65,7 @@ class App:
         self.c_man.render_colonies(self.window)
         self._update_stats()
         self._highlight_cursor()
-        self.minimap.render(self.screen)
+        self.minimap.render(self.e_man.entities)
         pygame.display.flip()
 
     def on_cleanup(self) -> None:
