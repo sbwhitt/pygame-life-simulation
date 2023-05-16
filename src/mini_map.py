@@ -35,18 +35,18 @@ class MiniMap:
             pygame.draw.lines(self.screen, colors.BLACK, True, l, 1)
     
     def _render_small_entities(self, entities: list[Entity]) -> None:
-        # adj_x = -self.window.offset[0] * self.map_ratio
-        # adj_y = -self.window.offset[1] * self.map_ratio
-        # for e in entities:
-        #     copy = e.rect.copy().move(adj_x, adj_y)
-        #     # copy.update(self.map_ratio, self.map_ratio, self.map_ratio, self.map_ratio)
-        #     if e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
-        #         pygame.draw.rect(self.screen, colors.BLACK,
-        #                          copy, border_radius=0)
-        #     else:
-        #         pygame.draw.rect(self.screen, e.dna.color, 
-        #                          copy, border_radius=0)
-        pass
+        adjust = (self.map_ratio, self.map_ratio)
+        for e in entities:
+            copy = e.rect.copy()
+            adj_left_top = (copy.left * self.map_ratio + self.window.width, copy.top * self.map_ratio + (self.window.height - settings.STATS_WIDTH))
+            copy.scale_by(self.map_ratio, self.map_ratio)
+            copy.update(adj_left_top, (copy.width * self.map_ratio, copy.height * self.map_ratio))
+            if e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
+                pygame.draw.rect(self.screen, colors.BLACK,
+                                 copy, border_radius=0)
+            else:
+                pygame.draw.rect(self.screen, e.dna.color, 
+                                 copy, border_radius=0)
     
     def _build_map_edges(self) -> None:
         # up left down right line segments
