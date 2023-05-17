@@ -183,9 +183,6 @@ class App:
         # change colors to cyan
         elif key == pygame.K_6:
             self.e_man.update_all_colors((0, 255, 255))
-        # toggle info window
-        elif key == pygame.K_w:
-            pass
         # shift colors
         elif key == pygame.K_c:
             self.e_man.shift_colors()
