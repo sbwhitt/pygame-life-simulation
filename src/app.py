@@ -53,9 +53,9 @@ class App:
         self._handle_mouse_actions()
         self._update_metrics()
         self.minimap.update()
+        self.clock.tick(settings.CLOCK_RATE)
         if self.paused:
             return
-        self.clock.tick(settings.CLOCK_RATE)
         self.e_man.update_entities(self.clock.get_time(), self.c_man)
         self.e_man.build_entity_edges()
         self.c_man.update_colonies()
