@@ -34,7 +34,9 @@ class EntityManager:
                 self.m.grid[e.loc].append(e)
             elif e.bound:
                 neighbor = e.look_for_colony(surroundings)
-                if neighbor != None: c_man.bind(e, neighbor)
+                if neighbor != None:
+                    c_man.bind(e, neighbor)
+                    self._spread_characteristics(e, neighbor)
             self._handle_collisions(e)
             self._handle_aging(e, clock_time)
 
@@ -137,6 +139,19 @@ class EntityManager:
             e.colony = None
         self.destroyed += 1
         self._obituary(e)
+    
+    def _spread_characteristics(self, e1: Entity, e2: Entity) -> None:
+        e1.dna.send_color(e2.dna)
+        r = random.randint(1, 4)
+        if e1.dna.diseased or e2.dna.diseased:
+            self._spread_disease([e1, e2])
+            return
+        elif r == 1:
+            e1.dna.age_limit += 1
+            e2.dna.age_limit += 1
+        elif r == 2:
+            e1.nourished = True
+            e2.nourished = True
 
     def _spread_color(self, collisions: list[Entity]) -> None:
         r, g, b = 0, 0, 0
