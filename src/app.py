@@ -160,37 +160,40 @@ class App:
     
     def _handle_cmd(self, key: str) -> None:
         # cull half of entities
-        if key == pygame.K_x and not self.paused:
+        if key == pygame.K_x:
             self.e_man.cull()
         # randomize entity colors
-        elif key == pygame.K_r and not self.paused:
+        elif key == pygame.K_r:
             self.e_man.randomize_color()
         # change colors to red
-        elif key == pygame.K_1 and not self.paused:
+        elif key == pygame.K_1:
             self.e_man.update_all_colors((255, 0, 0))
         # change colors to green
-        elif key == pygame.K_2 and not self.paused:
+        elif key == pygame.K_2:
             self.e_man.update_all_colors((0, 255, 0))
         # change colors to blue
-        elif key == pygame.K_3 and not self.paused:
+        elif key == pygame.K_3:
             self.e_man.update_all_colors((0, 0, 255))
         # change colors to yellow
-        elif key == pygame.K_4 and not self.paused:
+        elif key == pygame.K_4:
             self.e_man.update_all_colors((255, 255, 0))
         # change colors to magenta
-        elif key == pygame.K_5 and not self.paused:
+        elif key == pygame.K_5:
             self.e_man.update_all_colors((255, 0, 255))
         # change colors to cyan
-        elif key == pygame.K_6 and not self.paused:
+        elif key == pygame.K_6:
             self.e_man.update_all_colors((0, 255, 255))
+        # toggle info window
+        elif key == pygame.K_w:
+            pass
         # shift colors
-        elif key == pygame.K_c and not self.paused:
+        elif key == pygame.K_c:
             self.e_man.shift_colors()
         # flip colors
-        elif key == pygame.K_f and not self.paused:
+        elif key == pygame.K_f:
             self.e_man.flip_colors()
         # add in start entities
-        elif key == pygame.K_e and not self.paused:
+        elif key == pygame.K_e:
             self.e_man.add_start_entities(self.window)
         elif key == pygame.K_d:
             self._toggle_setting("MARK_DISEASED")
