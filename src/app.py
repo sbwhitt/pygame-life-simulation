@@ -8,6 +8,7 @@ from src.metrics import Metrics
 from src.entity_manager import EntityManager
 from src.colony_manager import ColonyManager
 from src.mini_map import MiniMap
+from src.mouse import Mouse
 
 '''
 x == width == rect.left
@@ -26,6 +27,7 @@ class App:
         self.e_man = EntityManager(self.screen)
         self.c_man = ColonyManager(self.screen)
         self.keys = []
+        self.mouse = Mouse()
         self.stats = Stats(self.screen, self.window.width)
         self.metrics = Metrics()
         self.minimap = MiniMap(self.screen, self.window)
@@ -45,11 +47,10 @@ class App:
         if event.type == pygame.KEYDOWN:
             self._handle_cmd(event.key)
             self.keys.append(event.key)
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            self._handle_mouse_cmd(event.button)
 
     def on_loop(self) -> None:
         self._handle_keys_pressed()
+        self._handle_mouse_actions()
         self._update_metrics()
         self.minimap.update()
         if self.paused:
@@ -64,7 +65,7 @@ class App:
         self.e_man.render_entities(self.window)
         self.c_man.render_colonies(self.window)
         self._update_stats()
-        self._highlight_cursor()
+        self.mouse.highlight_cursor(self.screen)
         self.minimap.render(self.e_man.entities)
         pygame.display.flip()
 
@@ -144,18 +145,18 @@ class App:
     def _get_tile_pos(self, pos: tuple) -> tuple:
         loc = (pos[0]+self.window.offset[0], pos[1]+self.window.offset[1])
         return (loc[0]-(loc[0] % settings.ENT_WIDTH), loc[1]-(loc[1] % settings.ENT_WIDTH))
-
-    def _highlight_cursor(self) -> None:
-        pos = pygame.mouse.get_pos()
-        points = [(pos[0]-(pos[0] % settings.ENT_WIDTH), pos[1]-(pos[1] % settings.ENT_WIDTH)),
-                  (pos[0]+(settings.ENT_WIDTH - pos[0] % settings.ENT_WIDTH), pos[1]-(pos[1] % settings.ENT_WIDTH)),
-                  (pos[0]+(settings.ENT_WIDTH - pos[0] % settings.ENT_WIDTH), pos[1]+(settings.ENT_WIDTH - pos[1] % settings.ENT_WIDTH)),
-                  (pos[0]-(pos[0] % settings.ENT_WIDTH), pos[1]+(settings.ENT_WIDTH - pos[1] % settings.ENT_WIDTH))]
-        pygame.draw.lines(self.screen, colors.BLACK, True, points=points)
-
-    def _handle_mouse_cmd(self, button: int) -> None:
-        if button == 1 and not self.paused:
+    
+    def _handle_mouse_actions(self) -> None:
+        if pygame.mouse.get_pressed(3)[0]:
             self.e_man.place_entity(self._get_tile_pos(pygame.mouse.get_pos()))
+        if pygame.mouse.get_pressed(3)[1]:
+            pass
+        if pygame.mouse.get_pressed(3)[2]:
+            if not self.mouse.dragging:
+                self.mouse.dragging = True
+                self.mouse.drag_start = pygame.mouse.get_pos()
+            self.window.move(self.mouse.get_drag_dir())
+        else: self.mouse.dragging = False
     
     def _handle_cmd(self, key: str) -> None:
         # cull half of entities
