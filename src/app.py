@@ -57,7 +57,7 @@ class App:
         if self.paused:
             return
         self.e_man.update_entities(self.clock.get_time(), self.c_man)
-        self.e_man.build_entity_edges()
+        self.e_man.scan_entity_edges()
         self.c_man.update_colonies()
 
     def on_render(self) -> None:

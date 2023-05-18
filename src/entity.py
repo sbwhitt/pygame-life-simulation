@@ -21,6 +21,7 @@ class Entity:
                 10, 245), random.randint(10, 245), random.randint(10, 245)))
 
     def update(self, width: int, height: int, surroundings: list[list["Entity"] | None]) -> "Entity":
+        self.dna.genes += 2
         neighbor = self._choose_neighbor(surroundings)
         if neighbor != None:
             return neighbor
@@ -70,7 +71,7 @@ class Entity:
     #         return False
     #     return True
     
-    def build_edges(self, surroundings: list[list["Entity"] | None]) -> None:
+    def scan_edges(self, surroundings: list[list["Entity"] | None]) -> None:
         for i in range(len(surroundings)):
             if surroundings[i] != None and len(surroundings[i]) > 0:
                 for e in surroundings[i]:
