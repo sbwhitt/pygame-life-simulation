@@ -37,8 +37,8 @@ class MiniMap:
     def _render_small_entities(self, entities: list[Entity]) -> None:
         for e in entities:
             copy = e.rect.copy()
-            adj_left_top = (copy.left * self.map_ratio + self.window.width + 2, copy.top * self.map_ratio + (self.window.height - settings.STATS_WIDTH) + 2)
-            copy.scale_by(self.map_ratio, self.map_ratio)
+            adj_left_top = (copy.left * self.map_ratio + self.window.width , copy.top * self.map_ratio + (self.window.height - settings.STATS_WIDTH))
+            # copy.scale_by(self.map_ratio, self.map_ratio)
             copy.update(adj_left_top, (copy.width * self.map_ratio, copy.height * self.map_ratio))
             if e.dna.diseased and settings.IN_GAME_SETTINGS["MARK_DISEASED"]:
                 pygame.draw.rect(self.screen, colors.BLACK,

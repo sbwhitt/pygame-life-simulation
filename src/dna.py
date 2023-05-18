@@ -5,6 +5,8 @@ import static.settings as settings
 
 class DNA:
     def __init__(self, color):
+        self.color = color
+        self.genes = random.randint(3, 12)
         self.age = 0
         self.age_limit = random.randint(3, 6)
         self.age_timer = 0
@@ -17,7 +19,6 @@ class DNA:
         self.immune = False
         self.nourished = False
         self.eaten = False
-        self.color = color
     
     def inherit(self, parent: "DNA") -> None:
         self.color = self._mutate_color(parent.color)
@@ -38,15 +39,17 @@ class DNA:
         return False
     
     def send_color(self, target: "DNA") -> None:
-        c = pygame.Color(self.color.r, self.color.g, self.color.b)
-        c.r = c.r+random.randint(-1, 2) if c.r < 240 and c.r > 50 else c.r
-        c.g = c.g+random.randint(-1, 2) if c.g < 240 and c.g > 50 else c.g
-        c.b = c.b+random.randint(-1, 2) if c.b < 240 and c.b > 50 else c.b
-        c = pygame.color.Color(int((c.r + target.color.r)/2),
-                                int((c.g + target.color.g)/2),
-                                int((c.b + target.color.b)/2))
-        self.color = c
-        target.color = c
+        if self.genes > 0:
+            c = pygame.Color(self.color.r, self.color.g, self.color.b)
+            c.r = c.r+random.randint(-1, 2) if c.r < 240 and c.r > 50 else c.r
+            c.g = c.g+random.randint(-1, 2) if c.g < 240 and c.g > 50 else c.g
+            c.b = c.b+random.randint(-1, 2) if c.b < 240 and c.b > 50 else c.b
+            c = pygame.color.Color(int((c.r + target.color.r)/2),
+                                    int((c.g + target.color.g)/2),
+                                    int((c.b + target.color.b)/2))
+            self.color = c
+            target.color = c
+            self.genes -= 1
 
     def _compare_colors(self, color: pygame.Color) -> bool:
         return ((self.color.r - color.r <= 20 and self.color.r - color.r >= -20) and
