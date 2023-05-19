@@ -26,3 +26,6 @@ Simulates the life and behavior of small colored squares called entities. Entiti
 
 <b>Simulation example:</b></br>
 <img src="./imgs/example.PNG"/></br>
+</br>
+<b>Simulation example after a long time:</b></br>
+<img src="./imgs/exampleLONG.PNG"/></br>
