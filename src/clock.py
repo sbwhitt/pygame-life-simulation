@@ -10,3 +10,4 @@ class Clock:
     def tick(self) -> int:
         self.clock.tick(settings.CLOCK_RATE)
         self.tock = self.clock.get_time()
+        return self.tock
