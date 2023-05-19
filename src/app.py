@@ -9,6 +9,7 @@ from src.entity_manager import EntityManager
 from src.colony_manager import ColonyManager
 from src.mini_map import MiniMap
 from src.mouse import Mouse
+from src.clock import Clock
 
 '''
 x == width == rect.left
@@ -21,7 +22,7 @@ class App:
         self._running = True
         self.paused = False
         self.window = Window(0, 0)
-        self.clock = pygame.time.Clock()
+        self.clock = Clock()
         self.screen = pygame.display.set_mode(
             (self.window.width + settings.STATS_WIDTH, self.window.height), pygame.SCALED | pygame.RESIZABLE)
         self.e_man = EntityManager(self.screen)
@@ -53,11 +54,11 @@ class App:
         self._handle_mouse_actions()
         self._update_metrics()
         self.minimap.update()
-        self.clock.tick(settings.CLOCK_RATE)
+        self.clock.tick()
         if self.paused:
             return
-        self.e_man.update_entities(self.clock.get_time(), self.c_man)
-        self.e_man.build_entity_edges()
+        self.e_man.update_entities(self.clock.tock, self.c_man)
+        self.e_man.scan_entity_edges()
         self.c_man.update_colonies()
 
     def on_render(self) -> None:
@@ -150,7 +151,8 @@ class App:
         if pygame.mouse.get_pressed(3)[0]:
             self.e_man.place_entity(self._get_tile_pos(pygame.mouse.get_pos()))
         if pygame.mouse.get_pressed(3)[1]:
-            pass
+            self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.clock.tock)
+        else: self.mouse.stop_spawn()
         if pygame.mouse.get_pressed(3)[2]:
             if not self.mouse.dragging:
                 self.mouse.dragging = True

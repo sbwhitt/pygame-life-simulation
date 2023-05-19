@@ -38,6 +38,7 @@ class Entity:
             self.loc = (self.rect.left, self.rect.top)
 
     def reproduce(self) -> "Entity|None":
+        self.dna.genes += 1
         r = random.randint(0, 1+self.dna.amnt_offspring)
         spawn_loc = self._choose_spawn_location()
         if (self.dna.nourished or r == 1) and not self.dna.diseased and spawn_loc:
@@ -70,7 +71,7 @@ class Entity:
     #         return False
     #     return True
     
-    def build_edges(self, surroundings: list[list["Entity"] | None]) -> None:
+    def scan_edges(self, surroundings: list[list["Entity"] | None]) -> None:
         for i in range(len(surroundings)):
             if surroundings[i] != None and len(surroundings[i]) > 0:
                 for e in surroundings[i]:
