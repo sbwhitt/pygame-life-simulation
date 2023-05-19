@@ -21,7 +21,6 @@ class Entity:
                 10, 245), random.randint(10, 245), random.randint(10, 245)))
 
     def update(self, width: int, height: int, surroundings: list[list["Entity"] | None]) -> "Entity":
-        self.dna.genes += 2
         neighbor = self._choose_neighbor(surroundings)
         if neighbor != None:
             return neighbor
@@ -39,6 +38,7 @@ class Entity:
             self.loc = (self.rect.left, self.rect.top)
 
     def reproduce(self) -> "Entity|None":
+        self.dna.genes += 1
         r = random.randint(0, 1+self.dna.amnt_offspring)
         spawn_loc = self._choose_spawn_location()
         if (self.dna.nourished or r == 1) and not self.dna.diseased and spawn_loc:
