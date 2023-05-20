@@ -25,17 +25,7 @@ class Entity:
         if neighbor != None:
             return neighbor
         self.choice = self._choose_dir(surroundings)
-        if self.dna.move_timer > settings.MOVE_INTERVAL:
-            if self.choice == 0 and self.rect.top != 0:  # up
-                self.rect = self.rect.move(0, -settings.ENT_WIDTH)
-            elif self.choice == 1 and self.rect.left != 0:  # left
-                self.rect = self.rect.move(-settings.ENT_WIDTH, 0)
-            elif self.choice == 2 and self.rect.bottom != height:  # down
-                self.rect = self.rect.move(0, settings.ENT_WIDTH)
-            elif self.choice == 3 and self.rect.right != width:  # right
-                self.rect = self.rect.move(settings.ENT_WIDTH, 0)
-            self.dna.move_timer = 0
-            self.loc = (self.rect.left, self.rect.top)
+        self._move(width, height)
 
     def reproduce(self) -> "Entity|None":
         self.dna.genes += 1
@@ -43,7 +33,7 @@ class Entity:
         spawn_loc = self._choose_spawn_location()
         if (self.dna.nourished or r == 1) and not self.dna.diseased and spawn_loc:
             offspring = Entity(spawn_loc[0], spawn_loc[1])
-            if random.randint(1, 500) == 1:
+            if random.randint(1, 300) == 1:
                 # chance to mutate diseased into a new random color
                 offspring.dna.mutate()
             else:
@@ -82,6 +72,19 @@ class Entity:
                     if e.dna.diseased and random.randint(1, 10) == 1: self.dna.diseased = True
             else:
                 self.edges[i] = True
+    
+    def _move(self, width: int, height: int) -> None:
+        if self.dna.move_timer > settings.MOVE_INTERVAL:
+            if self.choice == 0 and self.rect.top != 0:  # up
+                self.rect = self.rect.move(0, -settings.ENT_WIDTH)
+            elif self.choice == 1 and self.rect.left != 0:  # left
+                self.rect = self.rect.move(-settings.ENT_WIDTH, 0)
+            elif self.choice == 2 and self.rect.bottom != height:  # down
+                self.rect = self.rect.move(0, settings.ENT_WIDTH)
+            elif self.choice == 3 and self.rect.right != width:  # right
+                self.rect = self.rect.move(settings.ENT_WIDTH, 0)
+            self.dna.move_timer = 0
+            self.loc = (self.rect.left, self.rect.top)
     
     def _bleed_edge(self, e: "Entity") -> None:
         if self.bound:
