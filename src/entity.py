@@ -1,5 +1,6 @@
 import pygame
 import random
+import src.utils as utils
 import static.settings as settings
 from src.dna import DNA
 
@@ -17,8 +18,7 @@ class Entity:
         if len(args) == 3:
             self.dna = DNA(args[2])
         else:
-            self.dna = DNA(pygame.Color(random.randint(
-                10, 245), random.randint(10, 245), random.randint(10, 245)))
+            self.dna = DNA(utils.get_random_color())
 
     def update(self, width: int, height: int, surroundings: list[list["Entity"] | None]) -> "Entity":
         neighbor = self._choose_neighbor(surroundings)
@@ -33,7 +33,7 @@ class Entity:
         spawn_loc = self._choose_spawn_location()
         if (self.dna.nourished or r == 1) and not self.dna.diseased and spawn_loc:
             offspring = Entity(spawn_loc[0], spawn_loc[1])
-            if random.randint(1, 300) == 1:
+            if random.randint(1, 10) == 1:
                 # chance to mutate diseased into a new random color
                 offspring.dna.mutate()
             else:

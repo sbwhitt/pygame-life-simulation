@@ -1,4 +1,5 @@
 import pygame
+import src.utils as utils
 import static.colors as colors
 import static.settings as settings
 from src.entity_manager import EntityManager
@@ -15,10 +16,11 @@ class Mouse:
 
     def spawn_outward(self, e_man: EntityManager, pos: tuple, elapsed) -> None:
         if self._increase(elapsed):
+            color = utils.get_random_color()
             for i in range(0, len(self.deltas)):
-                pos_i = ((pos[0] + self.deltas[i][0]*self.spawn_interval), 
-                         (pos[1] + self.deltas[i][1]*self.spawn_interval))
-                e_man.place_entity(pos_i)
+                d = utils.multiply_coord_by_constant(self.deltas[i], self.spawn_interval)
+                pos_i = (utils.add_coords(pos, d))
+                e_man.place_entity(pos_i, color)
 
     def stop_spawn(self) -> None:
         self.click_timer = 0

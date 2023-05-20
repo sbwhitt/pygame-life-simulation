@@ -92,8 +92,8 @@ class EntityManager:
         return pygame.Color(int(r/num_e), int(g/num_e), int(b/num_e))
 
     # mouse command function helpers
-    def place_entity(self, pos: tuple) -> None:
-        e = Entity(pos[0], pos[1])
+    def place_entity(self, pos: tuple, color: pygame.Color=None) -> None:
+        e = Entity(pos[0], pos[1], color) if color else Entity(pos[0], pos[1])
         self._add_entity(e)
 
     # key command function helpers
