@@ -5,8 +5,23 @@ import static.settings as settings
 from src.entity_manager import EntityManager
 
 
+class Cursor:
+    def __init__(self):
+        pass
+
+    def get_points(self) -> list[tuple]:
+        pos = pygame.mouse.get_pos()
+        return [(pos[0]-(pos[0] % settings.ENT_WIDTH), pos[1]-(pos[1] % settings.ENT_WIDTH)),
+                  (pos[0]+(settings.ENT_WIDTH - pos[0] % settings.ENT_WIDTH),
+                   pos[1]-(pos[1] % settings.ENT_WIDTH)),
+                  (pos[0]+(settings.ENT_WIDTH - pos[0] % settings.ENT_WIDTH),
+                   pos[1]+(settings.ENT_WIDTH - pos[1] % settings.ENT_WIDTH)),
+                  (pos[0]-(pos[0] % settings.ENT_WIDTH), pos[1]+(settings.ENT_WIDTH - pos[1] % settings.ENT_WIDTH))]
+
+
 class Mouse:
     def __init__(self):
+        self.cursor = Cursor()
         self.drag_start = (0, 0)
         self.dragging = False
         self.click_timer = 0
@@ -30,14 +45,7 @@ class Mouse:
         self.spawn_interval = False
 
     def highlight_cursor(self, screen: pygame.display) -> None:
-        pos = pygame.mouse.get_pos()
-        points = [(pos[0]-(pos[0] % settings.ENT_WIDTH), pos[1]-(pos[1] % settings.ENT_WIDTH)),
-                  (pos[0]+(settings.ENT_WIDTH - pos[0] % settings.ENT_WIDTH),
-                   pos[1]-(pos[1] % settings.ENT_WIDTH)),
-                  (pos[0]+(settings.ENT_WIDTH - pos[0] % settings.ENT_WIDTH),
-                   pos[1]+(settings.ENT_WIDTH - pos[1] % settings.ENT_WIDTH)),
-                  (pos[0]-(pos[0] % settings.ENT_WIDTH), pos[1]+(settings.ENT_WIDTH - pos[1] % settings.ENT_WIDTH))]
-        pygame.draw.lines(screen, colors.BLACK, True, points=points)
+        pygame.draw.lines(screen, colors.BLACK, True, points=self.cursor.get_points())
 
     def get_drag_dir(self) -> tuple:
         pos = pygame.mouse.get_pos()
