@@ -12,10 +12,13 @@ class Mouse:
         self.click_timer = 0
         self.spawn_modulus = 250
         self.spawn_interval = 0
-        self.deltas = [(settings.ENT_WIDTH, 0), (-settings.ENT_WIDTH, 0), (0, -settings.ENT_WIDTH), (0, settings.ENT_WIDTH)]
+        self.deltas = [(settings.ENT_WIDTH, 0), (-settings.ENT_WIDTH, 0),
+                       (0, -settings.ENT_WIDTH), (0, settings.ENT_WIDTH),
+                       (settings.ENT_WIDTH, settings.ENT_WIDTH), (-settings.ENT_WIDTH, settings.ENT_WIDTH),
+                       (settings.ENT_WIDTH, -settings.ENT_WIDTH), (-settings.ENT_WIDTH, -settings.ENT_WIDTH)]
 
     def spawn_outward(self, e_man: EntityManager, pos: tuple, elapsed) -> None:
-        if self._increase(elapsed):
+        if self._increase_spawn_interval(elapsed):
             color = utils.get_random_color()
             for i in range(0, len(self.deltas)):
                 d = utils.multiply_twople_by_constant(self.deltas[i], self.spawn_interval)
@@ -51,7 +54,7 @@ class Mouse:
 
         return (dirx, diry)
 
-    def _increase(self, elapsed) -> bool:
+    def _increase_spawn_interval(self, elapsed) -> bool:
         self.click_timer += elapsed
         if int(self.click_timer / self.spawn_modulus) + 1 > self.spawn_interval:
             self.spawn_interval = int(self.click_timer / self.spawn_modulus) + 1
