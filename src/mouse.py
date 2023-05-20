@@ -54,7 +54,13 @@ class Mouse:
 
     def highlight_cursor(self, screen: pygame.display) -> None:
         if self.dragging[LEFT_CLICK]:
-            pygame.draw.rect(screen, colors.BLACK, self.cursor.rect)
+            cursor_points = [
+                self.cursor.rect.topleft,
+                self.cursor.rect.topright,
+                self.cursor.rect.bottomright,
+                self.cursor.rect.bottomleft
+            ]
+            pygame.draw.lines(screen, colors.BLACK, True, points=cursor_points)
         else:
             pygame.draw.lines(screen, colors.BLACK, True, points=self.cursor.get_points())
     
@@ -63,7 +69,7 @@ class Mouse:
             self._start_drag(button)
         elif button == LEFT_CLICK:
             self.cursor.end = pygame.mouse.get_pos()
-            self._build_cursor_rect(self.window.offset)
+            self._build_cursor_rect()
     
     def stop_drag(self, button: int) -> None:
         self.dragging[button] = False
@@ -92,7 +98,7 @@ class Mouse:
             self.cursor.start = m_pos
             self.drag(LEFT_CLICK)
     
-    def _build_cursor_rect(self, offset: tuple) -> None:
+    def _build_cursor_rect(self) -> None:
         self.cursor.rect = utils.get_rect_from_twoples(self.cursor.start, self.cursor.end)
 
     def _increase_spawn_interval(self, elapsed) -> bool:

@@ -30,27 +30,29 @@ def get_random_color(start: int=-1, end: int=-1) -> pygame.Color:
             random.randint(10, 245)
         )
 
-def get_tile_pos(t1: tuple, offset: tuple=None, top_left: bool=False, top_right: bool=False, bottom_left: bool=False, bottom_right: bool=False) -> tuple:
+def get_tile_pos(t1: tuple, offset: tuple=None, top: bool=False, left: bool=False, bottom: bool=False, right: bool=False) -> tuple:
     '''
     Returns the tile start coordinates for the position given plus an optional offset.
     Returns top left point by default
     '''
     loc = add_twoples(t1, offset) if offset else t1
-    if top_left:
+    if top and left:
         return (loc[0]-(loc[0] % settings.ENT_WIDTH), loc[1]-(loc[1] % settings.ENT_WIDTH))
-    if top_right:
-        return (loc[0]+(loc[0] % settings.ENT_WIDTH), loc[1]-(loc[1] % settings.ENT_WIDTH))
-    if bottom_left:
-        return (loc[0]-(loc[0] % settings.ENT_WIDTH), loc[1]+(loc[1] % settings.ENT_WIDTH))
-    if bottom_right:
-        return (loc[0]+(loc[0] % settings.ENT_WIDTH), loc[1]+(loc[1] % settings.ENT_WIDTH))
+    if top and right:
+        return (loc[0]+settings.ENT_WIDTH-(loc[0] % settings.ENT_WIDTH), loc[1]-(loc[1] % settings.ENT_WIDTH))
+    if bottom and left:
+        return (loc[0]-(loc[0] % settings.ENT_WIDTH), loc[1]+settings.ENT_WIDTH-(loc[1] % settings.ENT_WIDTH))
+    if bottom and right:
+        return (loc[0]+settings.ENT_WIDTH-(loc[0] % settings.ENT_WIDTH), loc[1]+settings.ENT_WIDTH-(loc[1] % settings.ENT_WIDTH))
     return (loc[0]-(loc[0] % settings.ENT_WIDTH), loc[1]-(loc[1] % settings.ENT_WIDTH))
 
-def get_rect_from_twoples(t1: tuple, t2: tuple, offset: tuple=None) -> pygame.rect.Rect:
+def get_rect_from_twoples(t1: tuple, t2: tuple) -> pygame.rect.Rect:
     '''Returns a pygame rect with top left and bottom right corners t1 and/or t2'''
     # [t1, t2, (t1[0], t2[1]), (t2[0], t1[1])]
-    left = t1[0] if t1[0] < t2[0] else t2[0]
-    top = t1[1] if t1[1] < t2[1] else t2[1]
-    width = abs(t1[0] - t2[0])
-    height = abs(t1[1] - t2[1])
+    t1_tile_pos = get_tile_pos(t1, top=(t1[1] <= t2[1]), left=(t1[0] <= t2[0]), bottom=(t1[1] >= t2[1]), right=(t1[0] >= t2[0]))
+    t2_tile_pos = get_tile_pos(t2, top=(t2[1] <= t1[1]), left=(t2[0] <= t1[0]), bottom=(t2[1] >= t1[1]), right=(t2[0] >= t1[0]))
+    left = t1_tile_pos[0] if t1_tile_pos[0] < t2_tile_pos[0] else t2_tile_pos[0]
+    top = t1_tile_pos[1] if t1_tile_pos[1] < t2_tile_pos[1] else t2_tile_pos[1]
+    width = abs(t1_tile_pos[0] - t2_tile_pos[0])
+    height = abs(t1_tile_pos[1] - t2_tile_pos[1])
     return pygame.rect.Rect(left, top, width, height)
