@@ -56,3 +56,11 @@ def get_rect_from_twoples(t1: tuple, t2: tuple) -> pygame.rect.Rect:
     width = abs(t1_tile_pos[0] - t2_tile_pos[0])
     height = abs(t1_tile_pos[1] - t2_tile_pos[1])
     return pygame.rect.Rect(left, top, width, height)
+
+def get_rect_outline(rect: pygame.rect.Rect, offset: tuple=(0, 0)) -> list[tuple]:
+    return [
+        subtract_twoples(rect.topleft, offset),
+        subtract_twoples(rect.topright, offset),
+        subtract_twoples(rect.bottomright, offset),
+        subtract_twoples(rect.bottomleft, offset)
+    ]

@@ -70,6 +70,7 @@ class App:
         self.screen.fill(colors.WHITE)
         self.e_man.render_entities(self.window)
         self.c_man.render_colonies(self.window)
+        self.e_man.render_selected(self.window)
         self._update_stats()
         self.mouse.highlight_cursor(self.screen)
         self.minimap.render(self.e_man.entities)
@@ -159,7 +160,8 @@ class App:
             # pos = utils.get_tile_pos(pygame.mouse.get_pos(), self.window.offset)
             # self.e_man.place_entity(pos)
             self.mouse.drag(LEFT_CLICK)
-        else:
+        elif self.mouse.dragging[LEFT_CLICK]:
+            self.mouse.select(self.e_man)
             self.mouse.stop_drag(LEFT_CLICK)
         if buttons[MIDDLE_CLICK]:
             self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.clock.tock)
@@ -217,6 +219,9 @@ class App:
         # escape key, pause simulation
         elif key == pygame.K_ESCAPE:
             self.paused = not self.paused
+        # delete selected entities
+        elif key == pygame.K_DELETE:
+            self.e_man.delete_selected()
     
     def _handle_keys_pressed(self) -> None:
         if pygame.K_UP in self.keys:

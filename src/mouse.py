@@ -54,13 +54,7 @@ class Mouse:
 
     def highlight_cursor(self, screen: pygame.display) -> None:
         if self.dragging[LEFT_CLICK]:
-            cursor_points = [
-                self.cursor.rect.topleft,
-                self.cursor.rect.topright,
-                self.cursor.rect.bottomright,
-                self.cursor.rect.bottomleft
-            ]
-            pygame.draw.lines(screen, colors.BLACK, True, points=cursor_points)
+            pygame.draw.lines(screen, colors.BLACK, True, points=utils.get_rect_outline(self.cursor.rect))
         else:
             pygame.draw.lines(screen, colors.BLACK, True, points=self.cursor.get_points())
     
@@ -70,6 +64,17 @@ class Mouse:
         elif button == LEFT_CLICK:
             self.cursor.end = pygame.mouse.get_pos()
             self._build_cursor_rect()
+        
+    def select(self, e_man: EntityManager) -> None:
+        e_man.selected.clear()
+        x, y = self.cursor.rect.left, self.cursor.rect.top
+        while x < self.cursor.rect.right:
+            y = self.cursor.rect.top
+            while y < self.cursor.rect.bottom:
+                for e in e_man.m.grid[utils.add_twoples((x, y), self.window.offset)]:
+                    e_man.select_entity(e)
+                y += settings.ENT_WIDTH
+            x += settings.ENT_WIDTH
     
     def stop_drag(self, button: int) -> None:
         self.dragging[button] = False
