@@ -51,7 +51,7 @@ class EntityManager:
                 pygame.draw.rect(self.screen, colors.BLACK,
                                  e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
             else:
-                pygame.draw.rect(self.screen, e.dna.color, 
+                pygame.draw.rect(self.screen, e.dna.color,
                                  e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
 
     def add_start_entities(self, window: Window) -> None:
@@ -120,6 +120,15 @@ class EntityManager:
             r_cpy, g_cpy, b_cpy = e.dna.color.r, e.dna.color.g, e.dna.color.b
             e.dna.color.update(255-g_cpy, 255-b_cpy, 255-r_cpy)
 
+    def remove_entity(self, e: Entity) -> None:
+        self.m.grid[e.loc].remove(e)
+        self.entities.remove(e)
+        if e.bound:
+            e.colony.remove_member(e)
+            e.colony = None
+        self.destroyed += 1
+        self._obituary(e)
+
     # helpers
     def _add_entity(self, e: Entity) -> None:
         if self.m.grid.get(e.loc) == None: return
@@ -131,15 +140,6 @@ class EntityManager:
         # self.avg_color = self._tally_avg_color(
         #     self.find_avg_color())
 
-    def _remove_entity(self, e: Entity) -> None:
-        self.m.grid[e.loc].remove(e)
-        self.entities.remove(e)
-        if e.bound:
-            e.colony.remove_member(e)
-            e.colony = None
-        self.destroyed += 1
-        self._obituary(e)
-    
     def _spread_characteristics(self, e1: Entity, e2: Entity) -> None:
         e1.dna.send_color(e2.dna)
         r = random.randint(1, 4)
@@ -189,7 +189,7 @@ class EntityManager:
                 eater.dna.nourished = True
                 c.dna.eaten = True
                 self.eaten += 1
-                self._remove_entity(c)
+                self.remove_entity(c)
 
     def _handle_collisions(self, e: Entity) -> None:
         collisions = self.m.grid[e.loc]
@@ -206,11 +206,11 @@ class EntityManager:
     def _handle_aging(self, e: Entity, clock_time: int) -> None:
         if e.dna.age_timer > settings.AGE_LENGTH:
             if e.dna.diseased:
-                self._remove_entity(e)
+                self.remove_entity(e)
                 return
             e.dna.age += 1
             if e.dna.age >= e.dna.age_limit:
-                self._remove_entity(e)
+                self.remove_entity(e)
                 return
             if len(self.entities) < settings.ENTITY_LIMIT:
                 offspring = e.reproduce()

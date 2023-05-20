@@ -159,7 +159,8 @@ class App:
             # pos = utils.get_tile_pos(pygame.mouse.get_pos(), self.window.offset)
             # self.e_man.place_entity(pos)
             self.mouse.drag(LEFT_CLICK)
-        else:
+        elif self.mouse.dragging[LEFT_CLICK]:
+            self.mouse.select(self.e_man)
             self.mouse.stop_drag(LEFT_CLICK)
         if buttons[MIDDLE_CLICK]:
             self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.clock.tock)
