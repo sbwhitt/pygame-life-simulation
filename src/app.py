@@ -70,6 +70,7 @@ class App:
         self.screen.fill(colors.WHITE)
         self.e_man.render_entities(self.window)
         self.c_man.render_colonies(self.window)
+        self.e_man.render_selected(self.window)
         self._update_stats()
         self.mouse.highlight_cursor(self.screen)
         self.minimap.render(self.e_man.entities)
