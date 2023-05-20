@@ -1,5 +1,6 @@
 import pygame
 import asyncio
+import src.utils as utils
 import static.colors as colors
 import static.settings as settings
 from src.window import Window
@@ -16,6 +17,10 @@ x == width == rect.left
 y == height == rect.top
 '''
 
+LEFT_CLICK = 0
+MIDDLE_CLICK = 1
+RIGHT_CLICK = 2
+
 
 class App:
     def __init__(self):
@@ -28,7 +33,7 @@ class App:
         self.e_man = EntityManager(self.screen)
         self.c_man = ColonyManager(self.screen)
         self.keys = []
-        self.mouse = Mouse()
+        self.mouse = Mouse(self.window)
         self.stats = Stats(self.screen, self.window.width)
         self.metrics = Metrics()
         self.minimap = MiniMap(self.screen, self.window)
@@ -148,17 +153,23 @@ class App:
         return (loc[0]-(loc[0] % settings.ENT_WIDTH), loc[1]-(loc[1] % settings.ENT_WIDTH))
     
     def _handle_mouse_actions(self) -> None:
-        if pygame.mouse.get_pressed(3)[0]:
-            self.e_man.place_entity(self._get_tile_pos(pygame.mouse.get_pos()))
-        if pygame.mouse.get_pressed(3)[1]:
+        # mouse buttons: 0 == left, 1 == middle, 2 == right
+        buttons = pygame.mouse.get_pressed(3)
+        if buttons[LEFT_CLICK]:
+            # pos = utils.get_tile_pos(pygame.mouse.get_pos(), self.window.offset)
+            # self.e_man.place_entity(pos)
+            self.mouse.drag(LEFT_CLICK)
+        else:
+            self.mouse.stop_drag(LEFT_CLICK)
+        if buttons[MIDDLE_CLICK]:
             self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.clock.tock)
-        else: self.mouse.stop_spawn()
-        if pygame.mouse.get_pressed(3)[2]:
-            if not self.mouse.dragging:
-                self.mouse.dragging = True
-                self.mouse.drag_start = pygame.mouse.get_pos()
-            self.window.move(self.mouse.get_drag_dir())
-        else: self.mouse.dragging = False
+        else:
+            self.mouse.stop_spawn()
+        if buttons[RIGHT_CLICK]:
+            self.mouse.drag(RIGHT_CLICK)
+            self.window.move(self.mouse.get_drag_dir(RIGHT_CLICK))
+        else:
+            self.mouse.stop_drag(RIGHT_CLICK)
     
     def _handle_cmd(self, key: str) -> None:
         # cull half of entities
