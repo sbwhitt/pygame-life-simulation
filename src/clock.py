@@ -5,9 +5,18 @@ import static.settings as settings
 class Clock:
     def __init__(self):
         self.clock = pygame.time.Clock()
-        self.tock = 0
+        self.time = 0
+        self.metronome = False
+        self.metronome_counter = 0
     
-    def tick(self) -> int:
+    def step(self) -> int:
+        self._swing()
         self.clock.tick(settings.CLOCK_RATE)
-        self.tock = self.clock.get_time()
-        return self.tock
+        self.time = self.clock.get_time()
+        return self.time
+    
+    def _swing(self) -> None:
+        self.metronome_counter += 1
+        if self.metronome_counter == settings.METRONOME_RATE:
+            self.metronome = not self.metronome
+            self.metronome_counter = 0

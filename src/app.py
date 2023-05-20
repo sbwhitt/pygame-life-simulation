@@ -59,10 +59,10 @@ class App:
         self._handle_mouse_actions()
         self._update_metrics()
         self.minimap.update()
-        self.clock.tick()
+        self.clock.step()
         if self.paused:
             return
-        self.e_man.update_entities(self.clock.tock, self.c_man)
+        self.e_man.update_entities(self.clock.time, self.c_man)
         self.e_man.scan_entity_edges()
         self.c_man.update_colonies()
 
@@ -70,7 +70,7 @@ class App:
         self.screen.fill(colors.WHITE)
         self.e_man.render_entities(self.window)
         self.c_man.render_colonies(self.window)
-        self.e_man.render_selected(self.window)
+        self.e_man.render_selected(self.window, self.clock)
         self._update_stats()
         self.mouse.highlight_cursor(self.screen)
         self.minimap.render(self.e_man.entities)
@@ -164,7 +164,7 @@ class App:
             self.mouse.select(self.e_man)
             self.mouse.stop_drag(LEFT_CLICK)
         if buttons[MIDDLE_CLICK]:
-            self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.clock.tock)
+            self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.clock.time)
         else:
             self.mouse.stop_spawn()
         if buttons[RIGHT_CLICK]:

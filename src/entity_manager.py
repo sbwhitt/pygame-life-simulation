@@ -7,6 +7,7 @@ from src.entity import Entity
 from src.map import Map
 from src.window import Window
 from src.colony_manager import ColonyManager
+from src.clock import Clock
 
 
 class EntityManager:
@@ -57,9 +58,11 @@ class EntityManager:
                 pygame.draw.rect(self.screen, e.dna.color,
                                  e.rect.copy().move(-window.offset[0], -window.offset[1]), border_radius=0)
     
-    def render_selected(self, window: Window) -> None:
+    def render_selected(self, window: Window, clock: Clock) -> None:
+        if clock.metronome:
+            return
         for e in self.selected:
-            pygame.draw.lines(self.screen, utils.get_random_color(), True, utils.get_rect_outline(e.rect, window.offset))
+            pygame.draw.lines(self.screen, colors.GRAY, True, utils.get_rect_outline(e.rect, window.offset), 2)
 
     def add_start_entities(self, window: Window) -> None:
         for e in [
