@@ -18,8 +18,8 @@ class Mouse:
         if self._increase(elapsed):
             color = utils.get_random_color()
             for i in range(0, len(self.deltas)):
-                d = utils.multiply_coord_by_constant(self.deltas[i], self.spawn_interval)
-                pos_i = (utils.add_coords(pos, d))
+                d = utils.multiply_twople_by_constant(self.deltas[i], self.spawn_interval)
+                pos_i = (utils.add_twoples(pos, d))
                 e_man.place_entity(pos_i, color)
 
     def stop_spawn(self) -> None:
