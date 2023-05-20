@@ -120,7 +120,7 @@ class EntityManager:
     # key command function helpers
     def cull(self) -> None:
         for i in range(int(len(self.entities)/2)):
-            self._remove_entity(self.entities[i])
+            self.remove_entity(self.entities[i])
 
     def randomize_color(self) -> None:
         for e in self.entities:
@@ -140,6 +140,10 @@ class EntityManager:
         for e in self.entities:
             r_cpy, g_cpy, b_cpy = e.dna.color.r, e.dna.color.g, e.dna.color.b
             e.dna.color.update(255-g_cpy, 255-b_cpy, 255-r_cpy)
+    
+    def delete_selected(self) -> None:
+        while len(self.selected) > 0:
+            self.remove_entity(self.selected[len(self.selected)-1])
 
     # helpers
     def _add_entity(self, e: Entity) -> None:

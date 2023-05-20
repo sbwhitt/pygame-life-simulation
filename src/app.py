@@ -219,6 +219,9 @@ class App:
         # escape key, pause simulation
         elif key == pygame.K_ESCAPE:
             self.paused = not self.paused
+        # delete selected entities
+        elif key == pygame.K_DELETE:
+            self.e_man.delete_selected()
     
     def _handle_keys_pressed(self) -> None:
         if pygame.K_UP in self.keys:
