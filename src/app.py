@@ -11,15 +11,12 @@ from src.colony_manager import ColonyManager
 from src.mini_map import MiniMap
 from src.mouse import Mouse
 from src.clock import Clock
+from src.picker import Picker
 
 '''
 x == width == rect.left
 y == height == rect.top
 '''
-
-LEFT_CLICK = 0
-MIDDLE_CLICK = 1
-RIGHT_CLICK = 2
 
 
 class App:
@@ -37,6 +34,7 @@ class App:
         self.stats = Stats(self.screen, self.window.width)
         self.metrics = Metrics()
         self.minimap = MiniMap(self.screen, self.window)
+        self.picker = Picker(settings.PICKER_MENU_WIDTH, settings.PICKER_MENU_WIDTH, (0, 0))
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])
@@ -53,6 +51,8 @@ class App:
         if event.type == pygame.KEYDOWN:
             self._handle_cmd(event.key)
             self.keys.append(event.key)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            self._handle_click(event.button)
 
     def on_loop(self) -> None:
         self._handle_keys_pressed()
@@ -74,6 +74,7 @@ class App:
         self._update_stats()
         self.mouse.highlight_cursor(self.screen)
         self.minimap.render(self.e_man.entities)
+        self.picker.render(self.screen)
         pygame.display.flip()
 
     def on_cleanup(self) -> None:
@@ -153,25 +154,30 @@ class App:
         loc = (pos[0]+self.window.offset[0], pos[1]+self.window.offset[1])
         return (loc[0]-(loc[0] % settings.ENT_WIDTH), loc[1]-(loc[1] % settings.ENT_WIDTH))
     
+    def _handle_click(self, button) -> None:
+        if button-1 == settings.LEFT_CLICK and self.picker.contains_click(pygame.mouse.get_pos(), settings.LEFT_CLICK):
+            if not self.picker.menu_open: self.picker.open_pick_menu()
+            else: self.picker.close_pick_menu()
+    
     def _handle_mouse_actions(self) -> None:
         # mouse buttons: 0 == left, 1 == middle, 2 == right
         buttons = pygame.mouse.get_pressed(3)
-        if buttons[LEFT_CLICK]:
+        if buttons[settings.LEFT_CLICK]:
             # pos = utils.get_tile_pos(pygame.mouse.get_pos(), self.window.offset)
             # self.e_man.place_entity(pos)
-            self.mouse.drag(LEFT_CLICK)
-        elif self.mouse.dragging[LEFT_CLICK]:
+            self.mouse.drag(settings.LEFT_CLICK)
+        elif self.mouse.dragging[settings.LEFT_CLICK]:
             self.mouse.select(self.e_man, (pygame.K_LSHIFT in self.keys or pygame.K_RIGHT in self.keys))
-            self.mouse.stop_drag(LEFT_CLICK)
-        if buttons[MIDDLE_CLICK]:
+            self.mouse.stop_drag(settings.LEFT_CLICK)
+        if buttons[settings.MIDDLE_CLICK]:
             self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.clock.time)
         else:
             self.mouse.stop_spawn()
-        if buttons[RIGHT_CLICK]:
-            self.mouse.drag(RIGHT_CLICK)
-            self.window.move(self.mouse.get_drag_dir(RIGHT_CLICK))
+        if buttons[settings.RIGHT_CLICK]:
+            self.mouse.drag(settings.RIGHT_CLICK)
+            self.window.move(self.mouse.get_drag_dir(settings.RIGHT_CLICK))
         else:
-            self.mouse.stop_drag(RIGHT_CLICK)
+            self.mouse.stop_drag(settings.RIGHT_CLICK)
     
     def _handle_cmd(self, key: str) -> None:
         # cull half of entities

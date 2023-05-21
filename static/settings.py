@@ -9,6 +9,13 @@ WORLD_SIZE = 2000
 # ui settings
 STATS_WIDTH = 240
 FONT_SIZE = 20
+PICKER_MENU_WIDTH = 100
+PICKER_OPTION_SIZE = 80
+
+# input settings
+LEFT_CLICK = 0
+MIDDLE_CLICK = 1
+RIGHT_CLICK = 2
 
 # clock settings
 CLOCK_RATE = 30
