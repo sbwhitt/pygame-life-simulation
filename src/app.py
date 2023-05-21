@@ -34,7 +34,7 @@ class App:
         self.stats = Stats(self.screen, self.window.width)
         self.metrics = Metrics()
         self.minimap = MiniMap(self.screen, self.window)
-        self.picker = Picker(settings.PICKER_MENU_WIDTH, settings.PICKER_MENU_WIDTH, (0, 0))
+        self.picker = Picker(settings.PICKER_MENU_WIDTH, settings.PICKER_MENU_WIDTH, (20, 20))
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])
@@ -52,6 +52,7 @@ class App:
             self._handle_cmd(event.key)
             self.keys.append(event.key)
         if event.type == pygame.MOUSEBUTTONDOWN:
+            # event.button is 1 indexed...
             self._handle_click(event.button)
 
     def on_loop(self) -> None:
@@ -155,9 +156,16 @@ class App:
         return (loc[0]-(loc[0] % settings.ENT_WIDTH), loc[1]-(loc[1] % settings.ENT_WIDTH))
     
     def _handle_click(self, button) -> None:
-        if button-1 == settings.LEFT_CLICK and self.picker.contains_click(pygame.mouse.get_pos(), settings.LEFT_CLICK):
-            if not self.picker.menu_open: self.picker.open_pick_menu()
-            else: self.picker.close_pick_menu()
+        # why are event.button values different from pygame.mouse.get_pressed???
+        # left click is 1 here but 0 elsewhere
+        if button-1 == settings.LEFT_CLICK:
+            # left click picker menu
+            if self.picker.contains_click(pygame.mouse.get_pos(), settings.LEFT_CLICK):
+                if not self.picker.menu_open: self.picker.open_pick_menu()
+                else: self.picker.close_pick_menu()
+            # left click picker menu option
+            elif self.picker.menu_open and self.picker.contains_option_click(pygame.mouse.get_pos(), settings.LEFT_CLICK):
+                self.picker.close_pick_menu()
     
     def _handle_mouse_actions(self) -> None:
         # mouse buttons: 0 == left, 1 == middle, 2 == right
