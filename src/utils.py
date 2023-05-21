@@ -30,6 +30,11 @@ def get_random_color(start: int=-1, end: int=-1) -> pygame.Color:
             random.randint(10, 245)
         )
 
+def get_color_transparent(color: pygame.Color, transparency: int) -> pygame.Color:
+    '''Returns given color with transparency value applied'''
+    if not (transparency >= 0 and transparency <= 255): return color
+    return pygame.Color(color.r, color.g, color.b, transparency)
+
 def get_tile_pos(t1: tuple, offset: tuple=None, top: bool=False, left: bool=False, bottom: bool=False, right: bool=False) -> tuple:
     '''
     Returns the tile start coordinates for the position given plus an optional offset.
@@ -58,9 +63,16 @@ def get_rect_from_twoples(t1: tuple, t2: tuple) -> pygame.rect.Rect:
     return pygame.rect.Rect(left, top, width, height)
 
 def get_rect_outline(rect: pygame.rect.Rect, offset: tuple=(0, 0)) -> list[tuple]:
+    '''Returns pygame rect vertices minus offset for rendering outline'''
     return [
         subtract_twoples(rect.topleft, offset),
         subtract_twoples(rect.topright, offset),
         subtract_twoples(rect.bottomright, offset),
         subtract_twoples(rect.bottomleft, offset)
     ]
+
+# source: https://stackoverflow.com/questions/6339057/draw-a-transparent-rectangles-and-polygons-in-pygame
+def draw_rect_alpha(surface, color, rect, border_radius=-1):
+    shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
+    pygame.draw.rect(shape_surf, color, shape_surf.get_rect(), border_radius=border_radius)
+    surface.blit(shape_surf, rect)

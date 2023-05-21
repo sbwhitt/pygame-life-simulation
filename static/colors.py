@@ -1,8 +1,8 @@
 from pygame import Color
 
 WHITE = Color(255, 255, 255, 255)
-BLACK = (0, 0, 0)
-GRAY = (200, 200, 200)
+BLACK = Color(0, 0, 0)
+GRAY = Color(200, 200, 200)
 
 RED = Color(255, 0, 0, 255)
 GREEN = Color(0, 255, 0, 255)

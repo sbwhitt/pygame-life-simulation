@@ -13,9 +13,8 @@ class MenuOption:
         self.selected = False
     
     def render(self, screen: pygame.display, font: pygame.font.Font) -> None:
-        # p = utils.add_twoples(self.pos, ((self.buffer+self.width)*self.offset, 0))
         r = pygame.rect.Rect(self.pos[0], self.pos[1], self.width, self.height)
-        pygame.draw.rect(screen, colors.RED, r)
+        pygame.draw.rect(screen, colors.RED, r, border_radius=3)
         self._render_option_text(screen, font)
     
     def _render_option_text(self, screen: pygame.display, font: pygame.font.Font) -> None:
@@ -39,7 +38,12 @@ class Picker:
     
     def render(self, screen: pygame.display) -> None:
         r = pygame.rect.Rect(self.pos[0], self.pos[1], self.width, self.height)
-        pygame.draw.rect(screen, colors.BLUE, r)
+        color = colors.GRAY
+        if self._contains_mouse(pygame.mouse.get_pos()) or self.menu_open:
+            pygame.draw.rect(screen, color, r, border_radius=3)
+        else:
+            color = utils.get_color_transparent(colors.GRAY, 200)
+            utils.draw_rect_alpha(screen, color, r, 3)
         self._render_menu_text(screen)
         if self.menu_open:
             self._render_menu_options(screen)
@@ -100,3 +104,9 @@ class Picker:
 
     def _pick_option(self, option: MenuOption) -> None:
         self.selected_option = option
+    
+    def _contains_mouse(self, pos: tuple) -> bool:
+        return (pos[0] >= self.pos[0] and
+                pos[0] <= self.pos[0]+self.width and
+                pos[1] >= self.pos[1] and
+                pos[1] <= self.pos[1]+self.width)
