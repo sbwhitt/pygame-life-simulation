@@ -10,15 +10,28 @@ class MenuOption:
         self.width = width
         self.height = height
         self.pos = pos
+        self.rect = pygame.rect.Rect(self.pos[0], self.pos[1], self.width, self.height)
         self.selected = False
+        self.font = self._init_font()
     
-    def render(self, screen: pygame.display, font: pygame.font.Font) -> None:
-        r = pygame.rect.Rect(self.pos[0], self.pos[1], self.width, self.height)
-        pygame.draw.rect(screen, colors.RED, r, border_radius=3)
-        self._render_option_text(screen, font)
+    def render(self, screen: pygame.display) -> None:
+        if utils.within_rect(pygame.mouse.get_pos(), self.rect):
+            pygame.draw.rect(screen, colors.RED, self.rect)
+            pygame.draw.lines(screen, colors.BLACK, True, utils.get_rect_outline(self.rect), 2)
+        else:
+            utils.draw_rect_alpha(screen, utils.get_color_transparent(colors.RED, 200), self.rect)
+        self._render_option_text(screen)
     
-    def _render_option_text(self, screen: pygame.display, font: pygame.font.Font) -> None:
-        f = font.render(self.option, True, colors.BLACK)
+    # helpers
+    
+    def _init_font(self) -> pygame.font.Font:
+        pygame.init()
+        pygame.font.init()
+        return pygame.font.Font(
+            pygame.font.get_default_font(), settings.FONT_SIZE_SMALLER)
+
+    def _render_option_text(self, screen: pygame.display) -> None:
+        f = self.font.render(self.option, True, colors.BLACK)
         screen.blit(f, self.pos)
 
 
@@ -27,42 +40,37 @@ class Picker:
         self.width = width
         self.height = height
         self.pos = pos
+        self.rect = pygame.rect.Rect(self.pos[0], self.pos[1], self.width, self.height)
         self.options = []
         self.options_size = settings.PICKER_OPTION_SIZE
         self.menu_open = False
         self.margin = 20
         self.font = self._init_font()
         self.menu_title = "Actions"
-        self._build_options(["ONE", "TWO", "THREE"])
+        self._build_options(["Selection", "Other"])
         self.selected_option = None if len(self.options) < 1 else self.options[0]
     
     def render(self, screen: pygame.display) -> None:
-        r = pygame.rect.Rect(self.pos[0], self.pos[1], self.width, self.height)
         color = colors.GRAY
         if self._contains_mouse(pygame.mouse.get_pos()) or self.menu_open:
-            pygame.draw.rect(screen, color, r, border_radius=3)
+            pygame.draw.rect(screen, color, self.rect)
+            pygame.draw.lines(screen, colors.BLACK, True, utils.get_rect_outline(self.rect), 2)
         else:
             color = utils.get_color_transparent(colors.GRAY, 200)
-            utils.draw_rect_alpha(screen, color, r, 3)
+            utils.draw_rect_alpha(screen, color, self.rect, 3)
         self._render_menu_text(screen)
         if self.menu_open:
             self._render_menu_options(screen)
 
     def contains_click(self, pos: tuple, button: int) -> bool:
         if button == settings.LEFT_CLICK:
-            return (pos[0] >= self.pos[0] and
-                    pos[0] <= self.pos[0]+self.width and
-                    pos[1] >= self.pos[1] and
-                    pos[1] <= self.pos[1]+self.width)
+            return utils.within_rect(pos, self.rect)
     
     def contains_option_click(self, pos: tuple, button: int) -> bool:
         if button == settings.LEFT_CLICK:
             o: MenuOption
             for o in self.options:
-                if (pos[0] >= o.pos[0] and
-                    pos[0] <= o.pos[0]+o.width and
-                    pos[1] >= o.pos[1] and
-                    pos[1] <= o.pos[1]+o.width):
+                if utils.within_rect(pos, o.rect):
                     self._pick_option(o)
                     return True
         return False
@@ -84,8 +92,9 @@ class Picker:
     def _render_menu_options(self, screen: pygame.display) -> None:
         if not self.menu_open:
             return
+        o: MenuOption
         for o in self.options:
-            o.render(screen, self.font)
+            o.render(screen)
     
     def _render_menu_text(self, screen: pygame.display) -> None:
         f = self.font.render(self.menu_title, True, colors.BLACK)

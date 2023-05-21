@@ -71,6 +71,13 @@ def get_rect_outline(rect: pygame.rect.Rect, offset: tuple=(0, 0)) -> list[tuple
         subtract_twoples(rect.bottomleft, offset)
     ]
 
+def within_rect(pos: tuple, rect: pygame.rect.Rect) -> bool:
+    '''Returns whether or not the given position is within the given rect boundaries'''
+    return (pos[0] >= rect.left and
+            pos[0] <= rect.right and
+            pos[1] >= rect.top and
+            pos[1] <= rect.bottom)
+
 # source: https://stackoverflow.com/questions/6339057/draw-a-transparent-rectangles-and-polygons-in-pygame
 def draw_rect_alpha(surface, color, rect, border_radius=-1):
     shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
