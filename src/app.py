@@ -161,7 +161,7 @@ class App:
             # self.e_man.place_entity(pos)
             self.mouse.drag(LEFT_CLICK)
         elif self.mouse.dragging[LEFT_CLICK]:
-            self.mouse.select(self.e_man)
+            self.mouse.select(self.e_man, (pygame.K_LSHIFT in self.keys or pygame.K_RIGHT in self.keys))
             self.mouse.stop_drag(LEFT_CLICK)
         if buttons[MIDDLE_CLICK]:
             self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.clock.time)
@@ -225,10 +225,10 @@ class App:
     
     def _handle_keys_pressed(self) -> None:
         if pygame.K_UP in self.keys:
-            self.window.move((0, -settings.ENT_WIDTH*2))
+            self.window.move((0, -settings.WORLD_SIZE/100))
         if pygame.K_DOWN in self.keys:
-            self.window.move((0, settings.ENT_WIDTH*2))
+            self.window.move((0, settings.WORLD_SIZE/100))
         if pygame.K_LEFT in self.keys:
-            self.window.move((-settings.ENT_WIDTH*2, 0))
+            self.window.move((-settings.WORLD_SIZE/100, 0))
         if pygame.K_RIGHT in self.keys:
-            self.window.move((settings.ENT_WIDTH*2, 0))
+            self.window.move((settings.WORLD_SIZE/100, 0))

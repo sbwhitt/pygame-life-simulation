@@ -65,8 +65,8 @@ class Mouse:
             self.cursor.end = pygame.mouse.get_pos()
             self._build_cursor_rect()
         
-    def select(self, e_man: EntityManager) -> None:
-        e_man.selected.clear()
+    def select(self, e_man: EntityManager, shift: bool) -> None:
+        if not shift: e_man.selected.clear()
         x, y = self.cursor.rect.left, self.cursor.rect.top
         while x < self.cursor.rect.right:
             y = self.cursor.rect.top
@@ -85,13 +85,13 @@ class Mouse:
         diry = 0
         start = self.drag_start[button]
         if pos[0] > start[0]:
-            dirx = settings.ENT_WIDTH*2
+            dirx = settings.WORLD_SIZE/100
         elif pos[0] < start[0]:
-            dirx = -settings.ENT_WIDTH*2
+            dirx = -settings.WORLD_SIZE/100
         if pos[1] > start[1]:
-            diry = settings.ENT_WIDTH*2
+            diry = settings.WORLD_SIZE/100
         elif pos[1] < start[1]:
-            diry = -settings.ENT_WIDTH*2
+            diry = -settings.WORLD_SIZE/100
         return (dirx, diry)
 
     # helpers

@@ -49,6 +49,9 @@ class Entity:
             if surroundings[i] != None:
                 neighbor = self._check_neighbor(surroundings[i])
                 if neighbor != None and neighbor.bound and neighbor.colony != self.colony:
+                    if neighbor.dna.diseased and random.randint(1, settings.DISEASE_CHANCE) == 1:
+                        self.dna.diseased = True
+                        return None
                     return neighbor
         return None
 
@@ -69,7 +72,7 @@ class Entity:
                         self.edges[i] = False
                         if random.randint(1, 4) == 1: self._bleed_edge(e)
                     else: self.edges[i] = True
-                    if e.dna.diseased and random.randint(1, 10) == 1: self.dna.diseased = True
+                    # if e.dna.diseased and random.randint(1, 10) == 1: self.dna.diseased = True
             else:
                 self.edges[i] = True
     
@@ -130,6 +133,9 @@ class Entity:
     
     def _check_neighbor(self, collisions: list["Entity"]) -> "Entity":
         for c in collisions:
+            if c.dna.diseased and random.randint(1, settings.DISEASE_CHANCE) == 1:
+                self.dna.diseased = True
+                return None
             if self.dna.compatible(c.dna):
                 return c
         return None
