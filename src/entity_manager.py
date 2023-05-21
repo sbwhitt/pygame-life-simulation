@@ -118,7 +118,7 @@ class EntityManager:
         self._add_entity(e)
     
     def select_entity(self, e: Entity) -> None:
-        self.selected.append(e)
+        if e not in self.selected: self.selected.append(e)
 
     # key command function helpers
     def cull(self) -> None:
