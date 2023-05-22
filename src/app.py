@@ -3,7 +3,7 @@ import asyncio
 import src.utils.utils as utils
 import static.colors as colors
 import static.settings as settings
-from src.window import Window
+from src.interface.window import Window
 from src.interface.stats import Stats
 from src.metrics import Metrics
 from src.entities.entity_manager import EntityManager

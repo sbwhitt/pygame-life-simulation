@@ -3,7 +3,7 @@ import static.colors as colors
 import static.settings as settings
 from src.colonies.colony import Colony
 from src.entities.entity import Entity
-from src.window import Window
+from src.interface.window import Window
 
 
 class ColonyManager:

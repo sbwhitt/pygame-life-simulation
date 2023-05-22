@@ -3,7 +3,7 @@ import src.utils.utils as utils
 import static.colors as colors
 import static.settings as settings
 from src.entities.entity_manager import EntityManager
-from src.window import Window
+from src.interface.window import Window
 
 LEFT_CLICK = 0
 MIDDLE_CLICK = 1

@@ -1,7 +1,7 @@
 import pygame
 import static.colors as colors
 import static.settings as settings
-from src.window import Window
+from src.interface.window import Window
 from src.entities.entity import Entity
 
 
