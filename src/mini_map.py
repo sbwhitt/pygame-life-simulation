@@ -2,7 +2,7 @@ import pygame
 import static.colors as colors
 import static.settings as settings
 from src.window import Window
-from src.entity import Entity
+from src.entities.entity import Entity
 
 
 class MiniMap:

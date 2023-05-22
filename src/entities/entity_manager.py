@@ -3,7 +3,7 @@ import random
 import src.utils as utils
 import static.colors as colors
 import static.settings as settings
-from src.entity import Entity
+from src.entities.entity import Entity
 from src.map import Map
 from src.window import Window
 from src.colony_manager import ColonyManager

@@ -2,7 +2,7 @@ import pygame
 import src.utils as utils
 import static.colors as colors
 import static.settings as settings
-from src.entity_manager import EntityManager
+from src.entities.entity_manager import EntityManager
 from src.window import Window
 
 LEFT_CLICK = 0

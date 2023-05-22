@@ -1,4 +1,4 @@
-from src.entity import Entity
+from src.entities.entity import Entity
 
 
 class Colony:

@@ -2,7 +2,7 @@ import pygame
 import random
 import src.utils as utils
 import static.settings as settings
-from src.dna import DNA
+from src.entities.dna import DNA
 
 
 class Entity:
