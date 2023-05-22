@@ -1,4 +1,4 @@
-import src.utils as utils
+import src.utils.utils as utils
 import static.settings as settings
 
 

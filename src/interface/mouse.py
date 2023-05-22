@@ -1,5 +1,5 @@
 import pygame
-import src.utils as utils
+import src.utils.utils as utils
 import static.colors as colors
 import static.settings as settings
 from src.entities.entity_manager import EntityManager
