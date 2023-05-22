@@ -6,7 +6,7 @@ import static.settings as settings
 from src.entities.entity import Entity
 from src.map import Map
 from src.window import Window
-from src.colony_manager import ColonyManager
+from src.colonies.colony_manager import ColonyManager
 from src.clock import Clock
 
 

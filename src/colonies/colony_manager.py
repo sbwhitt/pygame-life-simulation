@@ -1,8 +1,7 @@
 import pygame
-import random
 import static.colors as colors
 import static.settings as settings
-from src.colony import Colony
+from src.colonies.colony import Colony
 from src.entities.entity import Entity
 from src.window import Window
 

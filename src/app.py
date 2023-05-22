@@ -7,7 +7,7 @@ from src.window import Window
 from src.stats import Stats
 from src.metrics import Metrics
 from src.entities.entity_manager import EntityManager
-from src.colony_manager import ColonyManager
+from src.colonies.colony_manager import ColonyManager
 from src.mini_map import MiniMap
 from src.mouse import Mouse
 from src.clock import Clock
