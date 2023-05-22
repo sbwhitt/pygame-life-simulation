@@ -2,6 +2,7 @@ import pygame
 import src.utils.utils as utils
 import static.colors as colors
 import static.settings as settings
+from src.interface.text import Text
 
 
 class MenuOption:
@@ -12,27 +13,23 @@ class MenuOption:
         self.pos = pos
         self.rect = pygame.rect.Rect(self.pos[0], self.pos[1], self.width, self.height)
         self.selected = False
-        self.font = self._init_font()
+        self.text = Text(settings.FONT_SIZE_SMALLER)
     
     def render(self, screen: pygame.display) -> None:
         if utils.within_rect(pygame.mouse.get_pos(), self.rect):
-            pygame.draw.rect(screen, colors.RED, self.rect)
-            pygame.draw.lines(screen, colors.BLACK, True, utils.get_rect_outline(self.rect), 2)
+            self._render_hover(screen)
         else:
             utils.draw_rect_alpha(screen, utils.get_color_transparent(colors.RED, 200), self.rect)
         self._render_option_text(screen)
     
     # helpers
-    
-    def _init_font(self) -> pygame.font.Font:
-        pygame.init()
-        pygame.font.init()
-        return pygame.font.Font(
-            pygame.font.get_default_font(), settings.FONT_SIZE_SMALLER)
+
+    def _render_hover(self, screen: pygame.display) -> None:
+        pygame.draw.rect(screen, colors.RED, self.rect)
+        pygame.draw.lines(screen, colors.BLACK, True, utils.get_rect_outline(self.rect), 2)
 
     def _render_option_text(self, screen: pygame.display) -> None:
-        f = self.font.render(self.option, True, colors.BLACK)
-        screen.blit(f, self.pos)
+        self.text.render(screen, self.option, self.pos)
 
 
 class Picker:
@@ -45,12 +42,12 @@ class Picker:
         self.options_size = settings.PICKER_OPTION_SIZE
         self.menu_open = False
         self.margin = 20
-        self.font = self._init_font()
-        self.menu_title = "Actions"
         self._build_options([settings.ACTION_MENU_OPTIONS[0],
                              settings.ACTION_MENU_OPTIONS[1],
                              settings.ACTION_MENU_OPTIONS[2]])
         self.selected_option = None if len(self.options) < 1 else self.options[0]
+        self.title_text = Text(settings.FONT_SIZE)
+        self.action_text = Text(settings.FONT_SIZE_SMALLER)
     
     def render(self, screen: pygame.display) -> None:
         color = colors.GRAY
@@ -84,12 +81,6 @@ class Picker:
         self.menu_open = False
 
     # helpers
-
-    def _init_font(self) -> pygame.font.Font:
-        pygame.init()
-        pygame.font.init()
-        return pygame.font.Font(
-            pygame.font.get_default_font(), settings.FONT_SIZE)
     
     def _render_menu_options(self, screen: pygame.display) -> None:
         if not self.menu_open:
@@ -99,10 +90,8 @@ class Picker:
             o.render(screen)
     
     def _render_menu_text(self, screen: pygame.display) -> None:
-        f = self.font.render(self.menu_title, True, colors.BLACK)
-        screen.blit(f, self.pos)
-        f = self.font.render(self.selected_option.option, True, colors.BLACK)
-        screen.blit(f, utils.add_twoples(self.pos, (0, settings.FONT_SIZE)))
+        self.title_text.render(screen, "Actions", self.pos)
+        self.action_text.render(screen, self.selected_option.option, utils.add_twoples(self.pos, (0, settings.FONT_SIZE)))
 
     def _build_options(self, options: list[str]) -> list[MenuOption]:
         for i in range(len(options)):
