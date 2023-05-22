@@ -16,13 +16,16 @@ class MenuOption:
         self.text = Text(settings.FONT_SIZE_SMALLER)
     
     def render(self, screen: pygame.display) -> None:
-        if utils.within_rect(pygame.mouse.get_pos(), self.rect):
+        if self._hovering():
             self._render_hover(screen)
         else:
             utils.draw_rect_alpha(screen, utils.get_color_transparent(colors.RED, 200), self.rect)
         self._render_option_text(screen)
     
     # helpers
+
+    def _hovering(self) -> bool:
+        return utils.within_rect(pygame.mouse.get_pos(), self.rect)
 
     def _render_hover(self, screen: pygame.display) -> None:
         pygame.draw.rect(screen, colors.RED, self.rect)
@@ -51,7 +54,7 @@ class Picker:
     
     def render(self, screen: pygame.display) -> None:
         color = colors.GRAY
-        if self._contains_mouse(pygame.mouse.get_pos()) or self.menu_open:
+        if self._hovering() or self.menu_open:
             pygame.draw.rect(screen, color, self.rect)
             pygame.draw.lines(screen, colors.BLACK, True, utils.get_rect_outline(self.rect), 2)
         else:
@@ -105,8 +108,5 @@ class Picker:
     def _pick_option(self, option: MenuOption) -> None:
         self.selected_option = option
     
-    def _contains_mouse(self, pos: tuple) -> bool:
-        return (pos[0] >= self.pos[0] and
-                pos[0] <= self.pos[0]+self.width and
-                pos[1] >= self.pos[1] and
-                pos[1] <= self.pos[1]+self.width)
+    def _hovering(self) -> bool:
+        return utils.within_rect(pygame.mouse.get_pos(), self.rect)
