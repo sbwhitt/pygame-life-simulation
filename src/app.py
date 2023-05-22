@@ -4,15 +4,15 @@ import src.utils as utils
 import static.colors as colors
 import static.settings as settings
 from src.window import Window
-from src.stats import Stats
+from src.interface.stats import Stats
 from src.metrics import Metrics
 from src.entities.entity_manager import EntityManager
 from src.colonies.colony_manager import ColonyManager
-from src.mini_map import MiniMap
-from src.mouse import Mouse
+from src.interface.mini_map import MiniMap
+from src.interface.mouse import Mouse
 from src.clock import Clock
-from src.picker import Picker
-from src.picker import MenuOption
+from src.interface.picker import Picker
+from src.interface.picker import MenuOption
 
 '''
 x == width == rect.left
