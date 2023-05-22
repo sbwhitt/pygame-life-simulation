@@ -120,33 +120,41 @@ class EntityManager:
     def select_entity(self, e: Entity) -> None:
         if e not in self.selected: self.selected.append(e)
 
+    def clear_selected(self) -> None:
+        self.selected.clear()
+
     # key command function helpers
     def cull(self) -> None:
         for i in range(int(len(self.entities)/2)):
             self.remove_entity(self.entities[i])
 
     def randomize_color(self) -> None:
-        for e in self.entities:
+        for e in self.selected:
             e.dna.color = pygame.Color(random.randint(
                 10, 245), random.randint(10, 245), random.randint(10, 245))
+        self.clear_selected()
 
     def update_all_colors(self, color) -> None:
-        for e in self.entities:
+        for e in self.selected:
             e.dna.color.update(color)
+        self.clear_selected()
 
     def shift_colors(self) -> None:
-        for e in self.entities:
+        for e in self.selected:
             r_cpy, g_cpy, b_cpy = e.dna.color.r, e.dna.color.g, e.dna.color.b
             e.dna.color.update(g_cpy, b_cpy, r_cpy)
+        self.clear_selected()
 
     def flip_colors(self) -> None:
-        for e in self.entities:
+        for e in self.selected:
             r_cpy, g_cpy, b_cpy = e.dna.color.r, e.dna.color.g, e.dna.color.b
             e.dna.color.update(255-g_cpy, 255-b_cpy, 255-r_cpy)
+        self.clear_selected()
     
     def delete_selected(self) -> None:
         while len(self.selected) > 0:
             self.remove_entity(self.selected[len(self.selected)-1])
+        self.clear_selected()
 
     # helpers
     def _add_entity(self, e: Entity) -> None:

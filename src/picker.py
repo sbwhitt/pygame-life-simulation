@@ -47,7 +47,9 @@ class Picker:
         self.margin = 20
         self.font = self._init_font()
         self.menu_title = "Actions"
-        self._build_options(["Selection", "Other"])
+        self._build_options([settings.ACTION_MENU_OPTIONS[0],
+                             settings.ACTION_MENU_OPTIONS[1],
+                             settings.ACTION_MENU_OPTIONS[2]])
         self.selected_option = None if len(self.options) < 1 else self.options[0]
     
     def render(self, screen: pygame.display) -> None:

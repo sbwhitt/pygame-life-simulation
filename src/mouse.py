@@ -66,13 +66,32 @@ class Mouse:
             self._build_cursor_rect()
         
     def select(self, e_man: EntityManager, shift: bool) -> None:
-        if not shift: e_man.selected.clear()
+        if not shift: e_man.clear_selected()
         x, y = self.cursor.rect.left, self.cursor.rect.top
         while x < self.cursor.rect.right:
             y = self.cursor.rect.top
             while y < self.cursor.rect.bottom:
                 for e in e_man.m.grid[utils.add_twoples((x, y), self.window.offset)]:
                     e_man.select_entity(e)
+                y += settings.ENT_WIDTH
+            x += settings.ENT_WIDTH
+    
+    def place_selected(self, e_man: EntityManager) -> None:
+        x, y = self.cursor.rect.left, self.cursor.rect.top
+        while x < self.cursor.rect.right:
+            y = self.cursor.rect.top
+            while y < self.cursor.rect.bottom:
+                e_man.place_entity(utils.add_twoples((x, y), self.window.offset), utils.get_random_color())
+                y += settings.ENT_WIDTH
+            x += settings.ENT_WIDTH
+
+    def delete_selected(self, e_man: EntityManager) -> None:
+        x, y = self.cursor.rect.left, self.cursor.rect.top
+        while x < self.cursor.rect.right:
+            y = self.cursor.rect.top
+            while y < self.cursor.rect.bottom:
+                for e in e_man.m.grid[utils.add_twoples((x, y), self.window.offset)]:
+                    e_man.remove_entity(e)
                 y += settings.ENT_WIDTH
             x += settings.ENT_WIDTH
     

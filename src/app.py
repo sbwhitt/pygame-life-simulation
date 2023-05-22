@@ -12,6 +12,7 @@ from src.mini_map import MiniMap
 from src.mouse import Mouse
 from src.clock import Clock
 from src.picker import Picker
+from src.picker import MenuOption
 
 '''
 x == width == rect.left
@@ -175,8 +176,7 @@ class App:
             # self.e_man.place_entity(pos)
             self.mouse.drag(settings.LEFT_CLICK)
         elif self.mouse.dragging[settings.LEFT_CLICK]:
-            self.mouse.select(self.e_man, (pygame.K_LSHIFT in self.keys or pygame.K_RIGHT in self.keys))
-            self.mouse.stop_drag(settings.LEFT_CLICK)
+            self._execute_mouse_action(self.picker.selected_option, settings.LEFT_CLICK)
         if buttons[settings.MIDDLE_CLICK]:
             self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.clock.time)
         else:
@@ -187,6 +187,18 @@ class App:
         else:
             self.mouse.stop_drag(settings.RIGHT_CLICK)
     
+    def _execute_mouse_action(self, menu_option: MenuOption, button: int) -> None:
+        # selection
+        if menu_option.option == settings.ACTION_MENU_OPTIONS[0]:
+            self.mouse.select(self.e_man, (pygame.K_LSHIFT in self.keys or pygame.K_RIGHT in self.keys))
+        # creation
+        elif menu_option.option == settings.ACTION_MENU_OPTIONS[1]:
+            self.mouse.place_selected(self.e_man)
+        # deletion
+        elif menu_option.option == settings.ACTION_MENU_OPTIONS[2]:
+            self.mouse.delete_selected(self.e_man)
+        self.mouse.stop_drag(settings.LEFT_CLICK)
+
     def _handle_cmd(self, key: str) -> None:
         # cull half of entities
         if key == pygame.K_x:

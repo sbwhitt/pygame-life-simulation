@@ -14,6 +14,9 @@ FONT_SIZE_SMALLER = 16
 PICKER_MENU_WIDTH = 100
 PICKER_OPTION_SIZE = 80
 
+# menu options
+ACTION_MENU_OPTIONS = {0: "Selection", 1: "Creation", 2: "Deletion"}
+
 # input settings
 LEFT_CLICK = 0
 MIDDLE_CLICK = 1
