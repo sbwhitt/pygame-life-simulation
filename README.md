@@ -14,11 +14,11 @@ Simulates the life and behavior of small colored squares called entities. Entiti
 <b>left click</b>: drag to select entities</br>
 <b>middle click</b>: place entities of random color extending outward</br>
 <b>right click</b>: drag screen</br>
-<b>1, 2, 3, 4, 5, 6</b>: change all entities to Red, Green, Blue, Yellow, Purple, or Cyan respectively</br>
-<b>r</b>: randomize all entity colors</br>
-<b>c</b>: shift entity colors by one position (red values become green value, green becomes blue...)</br>
-<b>f</b>: invert all entity colors</br>
-<b>e</b>: add starting entities to screen at their original positions</br>
+<b>1, 2, 3, 4, 5, 6</b>: change selected entities to Red, Green, Blue, Yellow, Purple, or Cyan respectively</br>
+<b>r</b>: randomize selected entity colors</br>
+<b>c</b>: shift selected entity colors by one position (red values become green value, green becomes blue...)</br>
+<b>f</b>: invert selected entity colors</br>
+<b>e</b>: add six entities of each color to edges of screen</br>
 <b>d</b>: toggle whether diseased entities will be marked or not</br>
 <b>l</b>: toggle logging</br>
 <b>h</b>: toggle colony highlighting</br>
