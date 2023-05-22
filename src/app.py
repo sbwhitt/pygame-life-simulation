@@ -5,12 +5,12 @@ import static.colors as colors
 import static.settings as settings
 from src.interface.window import Window
 from src.interface.stats import Stats
-from src.metrics import Metrics
+from src.tracking.metrics import Metrics
 from src.entities.entity_manager import EntityManager
 from src.colonies.colony_manager import ColonyManager
 from src.interface.mini_map import MiniMap
 from src.interface.mouse import Mouse
-from src.clock import Clock
+from src.utils.clock import Clock
 from src.interface.picker import Picker
 from src.interface.picker import MenuOption
 
