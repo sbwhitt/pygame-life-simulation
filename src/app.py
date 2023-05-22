@@ -32,7 +32,7 @@ class App:
         self.c_man = ColonyManager(self.screen)
         self.keys = []
         self.mouse = Mouse(self.window)
-        self.stats = Stats(self.screen, self.window.width)
+        self.stats = Stats(self.window.width)
         self.metrics = Metrics()
         self.minimap = MiniMap(self.screen, self.window)
         self.picker = Picker(settings.PICKER_MENU_WIDTH, settings.PICKER_MENU_WIDTH, (20, 20))
@@ -102,33 +102,33 @@ class App:
     # helpers
     def _update_stats(self) -> None:
         self.stats.clear()
-        self.stats.add_line("entities: ", 
+        self.stats.add_stat("entities: ", 
                             str(len(self.e_man.entities)))
-        self.stats.add_line("entities all time: ", 
+        self.stats.add_stat("entities all time: ", 
                             str(self.e_man.created))
-        self.stats.add_line("diseased entities: ", 
+        self.stats.add_stat("diseased entities: ", 
                             str(self.e_man.get_diseased_entities(self.e_man.entities)))
-        self.stats.add_line("entities eaten: ", 
+        self.stats.add_stat("entities eaten: ", 
                             str(self.e_man.eaten))
-        # self.stats.add_line("colonies: ",
+        # self.stats.add_stat("colonies: ",
         #                     str(len(self.c_man.colonies)))
-        self.stats.add_line("time elapsed: ", self.metrics.get_time_elapsed())
-        self.stats.add_line("entities per minute: ", 
+        self.stats.add_stat("time elapsed: ", self.metrics.get_time_elapsed())
+        self.stats.add_stat("entities per minute: ", 
                             str(int(self.metrics.get_rate("created") - self.metrics.get_rate("destroyed"))), 
                             color=colors.GREEN)
-        self.stats.add_line("created per minute: ", 
+        self.stats.add_stat("created per minute: ", 
                             str(int(self.metrics.get_rate("created"))), 
                             color=colors.BLUE)
-        self.stats.add_line("destroyed per minute: ", 
+        self.stats.add_stat("destroyed per minute: ", 
                             str(int(self.metrics.get_rate("destroyed"))), 
                             color=colors.RED)
-        self.stats.add_line("diseased per minute: ", 
+        self.stats.add_stat("diseased per minute: ", 
                             str(int(self.metrics.get_rate("diseased"))), 
                             colors.BROWN)
-        self.stats.add_line("eaten per minute: ", 
+        self.stats.add_stat("eaten per minute: ", 
                             str(int(self.metrics.get_rate("eaten"))), 
                             colors.ORANGE)
-        self.stats.draw_lines()
+        self.stats.draw_stats(self.screen)
         pygame.draw.line(self.screen, colors.BLACK,
                          (self.window.width, 0), (self.window.width, self.window.height))
 

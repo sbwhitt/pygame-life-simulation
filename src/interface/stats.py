@@ -1,28 +1,34 @@
 import pygame
+import src.utils.utils as utils
 import static.colors as colors
 import static.settings as settings
+from src.interface.text import Text
+
+
+class Stat:
+    def __init__(self, title: str, value: str, pos: tuple, color: pygame.Color):
+        self.title = title
+        self.value = value
+        self.pos = pos
+        self.color = color
+    
+    def render(self, screen: pygame.display) -> None:
+        Text(color=self.color).render(screen, self.title, self.pos)
+        Text(color=self.color).render(screen, self.value, utils.add_twoples(self.pos, (0, settings.FONT_SIZE)))
 
 
 class Stats:
-    def __init__(self, screen, width):
-        pygame.init()
-        pygame.font.init()
-        self.font = pygame.font.Font(
-            pygame.font.get_default_font(), settings.FONT_SIZE)
-        self.screen = screen
+    def __init__(self, width):
         self.width = width
-        self.lines = []
+        self.stats = []
+    
+    def add_stat(self, title: str, value: str, color: pygame.Color=colors.BLACK) -> None:
+        self.stats.append(Stat(title, value, (self.width+10, 2*settings.FONT_SIZE*len(self.stats)), color))
 
-    def add_line(self, title: str, value: str, color: pygame.Color = colors.BLACK) -> None:
-        self.lines.append(pygame.font.Font.render(
-            self.font, title, True, color))
-        self.lines.append(pygame.font.Font.render(
-            self.font, value, True, color))
-
-    def draw_lines(self) -> None:
-        for i in range(len(self.lines)):
-            self.screen.blit(
-                self.lines[i], (self.width+10, i*settings.FONT_SIZE))
-
+    def draw_stats(self, screen: pygame.display) -> None:
+        s: Stat
+        for s in self.stats:
+            s.render(screen)
+    
     def clear(self) -> None:
-        self.lines = []
+        self.stats.clear()
