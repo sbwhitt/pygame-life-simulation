@@ -1,5 +1,4 @@
 import pygame
-import src.utils.utils as utils
 import static.settings as settings
 import static.colors as colors
 
@@ -16,6 +15,5 @@ class Text:
     # helpers
 
     def _init_font(self) -> pygame.font.Font:
-        # pygame.init()
         pygame.font.init()
         return pygame.font.Font(pygame.font.get_default_font(), self.font_size)
