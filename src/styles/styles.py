@@ -13,7 +13,7 @@ class Style:
     ALPHA = 200
 
 @dataclass
-class MenuOptionStyle(Style):
+class PickerMenuOptionStyle(Style):
     WIDTH = 80
     HEIGHT = 80
     COLOR = colors.RED

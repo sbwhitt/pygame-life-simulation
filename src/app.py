@@ -11,8 +11,8 @@ from src.colonies.colony_manager import ColonyManager
 from src.interface.mini_map import MiniMap
 from src.interface.mouse import Mouse
 from src.utils.clock import Clock
-from src.interface.picker import Picker
-from src.interface.picker import MenuOption
+from src.interface.picker_menu import PickerMenu
+from src.interface.picker_menu import PickerMenuOption
 
 '''
 x == width == rect.left
@@ -35,7 +35,7 @@ class App:
         self.stats = Stats(self.window.width)
         self.metrics = Metrics()
         self.minimap = MiniMap(self.screen, self.window)
-        self.picker = Picker((20, 20))
+        self.picker = PickerMenu((20, 20))
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])
@@ -187,7 +187,7 @@ class App:
         else:
             self.mouse.stop_drag(settings.RIGHT_CLICK)
     
-    def _execute_mouse_action(self, menu_option: MenuOption, button: int) -> None:
+    def _execute_mouse_action(self, menu_option: PickerMenuOption, button: int) -> None:
         # selection
         if menu_option.option == settings.ACTION_MENU_OPTIONS[0]:
             self.mouse.select(self.e_man, (pygame.K_LSHIFT in self.keys or pygame.K_RIGHT in self.keys))

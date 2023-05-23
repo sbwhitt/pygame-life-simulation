@@ -4,13 +4,13 @@ import static.colors as colors
 import static.settings as settings
 from src.interface.text import Text
 from src.interface.interface_element import InterfaceElement
-from src.styles.styles import MenuOptionStyle
+from src.styles.styles import PickerMenuOptionStyle
 from src.styles.styles import PickerMenuStyle
 
 
-class MenuOption(InterfaceElement):
+class PickerMenuOption(InterfaceElement):
     def __init__(self, option: str, pos: tuple):
-        InterfaceElement.__init__(self, MenuOptionStyle(), pos)
+        InterfaceElement.__init__(self, PickerMenuOptionStyle(), pos)
         self.option = option
         self.selected = False
         self.text = Text(settings.FONT_SIZE_SMALLER)
@@ -28,7 +28,7 @@ class MenuOption(InterfaceElement):
         self.text.render(screen, self.option, self.pos)
 
 
-class Picker(InterfaceElement):
+class PickerMenu(InterfaceElement):
     def __init__(self, pos: tuple):
         InterfaceElement.__init__(self, PickerMenuStyle(), pos)
         self.options = []
@@ -55,7 +55,7 @@ class Picker(InterfaceElement):
     
     def contains_option_click(self, pos: tuple, button: int) -> bool:
         if button == settings.LEFT_CLICK:
-            o: MenuOption
+            o: PickerMenuOption
             for o in self.options:
                 if utils.within_rect(pos, o.rect):
                     self._pick_option(o)
@@ -73,7 +73,7 @@ class Picker(InterfaceElement):
     def _render_menu_options(self, screen: pygame.display) -> None:
         if not self.menu_open:
             return
-        o: MenuOption
+        o: PickerMenuOption
         for o in self.options:
             o.render(screen)
     
@@ -81,14 +81,14 @@ class Picker(InterfaceElement):
         self.title_text.render(screen, "Actions", self.pos)
         self.action_text.render(screen, self.selected_option.option, utils.add_twoples(self.pos, (0, settings.FONT_SIZE)))
 
-    def _build_options(self, options: list[str]) -> list[MenuOption]:
+    def _build_options(self, options: list[str]) -> list[PickerMenuOption]:
         for i in range(len(options)):
             self.options.append(self._build_option(options[i], i))
     
-    def _build_option(self, option: str, offset: int) -> MenuOption:
+    def _build_option(self, option: str, offset: int) -> PickerMenuOption:
         x_off = self.style.WIDTH+(self.style.WIDTH*offset)
         p_adj = utils.add_twoples(self.pos, (x_off, 0))
-        return MenuOption(option, p_adj)
+        return PickerMenuOption(option, p_adj)
 
-    def _pick_option(self, option: MenuOption) -> None:
+    def _pick_option(self, option: PickerMenuOption) -> None:
         self.selected_option = option
