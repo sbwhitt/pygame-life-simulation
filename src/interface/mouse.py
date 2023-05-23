@@ -5,10 +5,6 @@ import static.settings as settings
 from src.entities.entity_manager import EntityManager
 from src.interface.window import Window
 
-LEFT_CLICK = 0
-MIDDLE_CLICK = 1
-RIGHT_CLICK = 2
-
 
 class Cursor:
     def __init__(self):
@@ -53,7 +49,7 @@ class Mouse:
         self.spawn_interval = False
 
     def highlight_cursor(self, screen: pygame.display) -> None:
-        if self.dragging[LEFT_CLICK]:
+        if self.dragging[settings.LEFT_CLICK]:
             pygame.draw.lines(screen, colors.BLACK, True, points=utils.get_rect_outline(self.cursor.rect))
         else:
             pygame.draw.lines(screen, colors.BLACK, True, points=self.cursor.get_points())
@@ -61,9 +57,11 @@ class Mouse:
     def drag(self, button: int) -> None:
         if not self.dragging[button]:
             self._start_drag(button)
-        elif button == LEFT_CLICK:
+        elif button == settings.LEFT_CLICK:
             self.cursor.end = pygame.mouse.get_pos()
             self._build_cursor_rect()
+        elif button == settings.RIGHT_CLICK:
+            self.window.move(self._get_drag_dir(settings.RIGHT_CLICK))
         
     def select(self, e_man: EntityManager, shift: bool) -> None:
         if not shift: e_man.clear_selected()
@@ -98,29 +96,29 @@ class Mouse:
     def stop_drag(self, button: int) -> None:
         self.dragging[button] = False
 
-    def get_drag_dir(self, button: int) -> tuple:
-        pos = pygame.mouse.get_pos()
-        dirx = 0
-        diry = 0
-        start = self.drag_start[button]
-        if pos[0] > start[0]:
-            dirx = settings.WORLD_SIZE/100
-        elif pos[0] < start[0]:
-            dirx = -settings.WORLD_SIZE/100
-        if pos[1] > start[1]:
-            diry = settings.WORLD_SIZE/100
-        elif pos[1] < start[1]:
-            diry = -settings.WORLD_SIZE/100
-        return (dirx, diry)
-
     # helpers
     def _start_drag(self, button: int) -> None:
         self.dragging[button] = True
         m_pos = pygame.mouse.get_pos()
         self.drag_start[button] = m_pos
-        if button == LEFT_CLICK:
+        if button == settings.LEFT_CLICK:
             self.cursor.start = m_pos
-            self.drag(LEFT_CLICK)
+            self.drag(settings.LEFT_CLICK)
+    
+    def _get_drag_dir(self, button: int) -> tuple:
+        pos = pygame.mouse.get_pos()
+        dirx = 0
+        diry = 0
+        start = self.drag_start[button]
+        if pos[0] > start[0]:
+            dirx = settings.WORLD_SIZE/50
+        elif pos[0] < start[0]:
+            dirx = -settings.WORLD_SIZE/50
+        if pos[1] > start[1]:
+            diry = settings.WORLD_SIZE/50
+        elif pos[1] < start[1]:
+            diry = -settings.WORLD_SIZE/50
+        return (dirx, diry)
     
     def _build_cursor_rect(self) -> None:
         self.cursor.rect = utils.get_rect_from_twoples(self.cursor.start, self.cursor.end)

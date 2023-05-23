@@ -183,7 +183,6 @@ class App:
             self.mouse.stop_spawn()
         if buttons[settings.RIGHT_CLICK]:
             self.mouse.drag(settings.RIGHT_CLICK)
-            self.window.move(self.mouse.get_drag_dir(settings.RIGHT_CLICK))
         else:
             self.mouse.stop_drag(settings.RIGHT_CLICK)
     
