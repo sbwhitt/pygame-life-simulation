@@ -4,7 +4,7 @@ import src.utils.utils as utils
 import static.colors as colors
 import static.settings as settings
 from src.entities.entity import Entity
-from src.interface.map import Map
+from src.utils.map import Map
 from src.interface.window import Window
 from src.colonies.colony_manager import ColonyManager
 from src.utils.clock import Clock
