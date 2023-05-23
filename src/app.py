@@ -102,6 +102,8 @@ class App:
     # helpers
     def _update_stats(self) -> None:
         self.stats.clear()
+        self.stats.add_stat("fps: ",
+                            str(int(pygame.time.Clock.get_fps(self.clock.clock))))
         self.stats.add_stat("entities: ", 
                             str(len(self.e_man.entities)))
         self.stats.add_stat("entities all time: ", 
@@ -125,9 +127,9 @@ class App:
         self.stats.add_stat("diseased per minute: ", 
                             str(int(self.metrics.get_rate("diseased"))), 
                             colors.BROWN)
-        self.stats.add_stat("eaten per minute: ", 
-                            str(int(self.metrics.get_rate("eaten"))), 
-                            colors.ORANGE)
+        # self.stats.add_stat("eaten per minute: ", 
+        #                     str(int(self.metrics.get_rate("eaten"))), 
+        #                     colors.ORANGE)
         self.stats.draw_stats(self.screen)
         pygame.draw.line(self.screen, colors.BLACK,
                          (self.window.width, 0), (self.window.width, self.window.height))
