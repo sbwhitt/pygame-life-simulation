@@ -35,7 +35,7 @@ class App:
         self.stats = Stats(self.window.width)
         self.metrics = Metrics()
         self.minimap = MiniMap(self.screen, self.window)
-        self.picker = Picker(settings.PICKER_MENU_WIDTH, settings.PICKER_MENU_WIDTH, (20, 20))
+        self.picker = Picker((20, 20))
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])

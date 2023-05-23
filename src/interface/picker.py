@@ -3,48 +3,36 @@ import src.utils.utils as utils
 import static.colors as colors
 import static.settings as settings
 from src.interface.text import Text
+from src.interface.interface_element import InterfaceElement
+from src.styles.styles import MenuOptionStyle
+from src.styles.styles import PickerMenuStyle
 
 
-class MenuOption:
-    def __init__(self, option: str, width: int, height: int, pos: tuple):
+class MenuOption(InterfaceElement):
+    def __init__(self, option: str, pos: tuple):
+        InterfaceElement.__init__(self, MenuOptionStyle(), pos)
         self.option = option
-        self.width = width
-        self.height = height
-        self.pos = pos
-        self.rect = pygame.rect.Rect(self.pos[0], self.pos[1], self.width, self.height)
         self.selected = False
         self.text = Text(settings.FONT_SIZE_SMALLER)
     
     def render(self, screen: pygame.display) -> None:
-        if self._hovering():
-            self._render_hover(screen)
+        if self.hovering():
+            self.render_hover(screen)
         else:
-            utils.draw_rect_alpha(screen, utils.get_color_transparent(colors.RED, 200), self.rect)
+            self.render_transparent(screen)
         self._render_option_text(screen)
     
     # helpers
-
-    def _hovering(self) -> bool:
-        return utils.within_rect(pygame.mouse.get_pos(), self.rect)
-
-    def _render_hover(self, screen: pygame.display) -> None:
-        pygame.draw.rect(screen, colors.RED, self.rect)
-        pygame.draw.lines(screen, colors.BLACK, True, utils.get_rect_outline(self.rect), 2)
 
     def _render_option_text(self, screen: pygame.display) -> None:
         self.text.render(screen, self.option, self.pos)
 
 
-class Picker:
-    def __init__(self, width: int, height: int, pos: tuple):
-        self.width = width
-        self.height = height
-        self.pos = pos
-        self.rect = pygame.rect.Rect(self.pos[0], self.pos[1], self.width, self.height)
+class Picker(InterfaceElement):
+    def __init__(self, pos: tuple):
+        InterfaceElement.__init__(self, PickerMenuStyle(), pos)
         self.options = []
-        self.options_size = settings.PICKER_OPTION_SIZE
         self.menu_open = False
-        self.margin = 20
         self._build_options([settings.ACTION_MENU_OPTIONS[0],
                              settings.ACTION_MENU_OPTIONS[1],
                              settings.ACTION_MENU_OPTIONS[2]])
@@ -53,13 +41,10 @@ class Picker:
         self.action_text = Text(settings.FONT_SIZE_SMALLER)
     
     def render(self, screen: pygame.display) -> None:
-        color = colors.GRAY
-        if self._hovering() or self.menu_open:
-            pygame.draw.rect(screen, color, self.rect)
-            pygame.draw.lines(screen, colors.BLACK, True, utils.get_rect_outline(self.rect), 2)
+        if self.hovering() or self.menu_open:
+            self.render_hover(screen)
         else:
-            color = utils.get_color_transparent(colors.GRAY, 200)
-            utils.draw_rect_alpha(screen, color, self.rect, 3)
+            self.render_transparent(screen)
         self._render_menu_text(screen)
         if self.menu_open:
             self._render_menu_options(screen)
@@ -98,15 +83,12 @@ class Picker:
 
     def _build_options(self, options: list[str]) -> list[MenuOption]:
         for i in range(len(options)):
-            self.options.append(self._build_option(options[i], self.options_size, self.options_size, i))
+            self.options.append(self._build_option(options[i], i))
     
-    def _build_option(self, option: str, width: int, height: int, offset: int) -> MenuOption:
-        p1 = utils.add_twoples(self.pos, (self.width+self.margin, int(self.margin/2)))
-        pos = utils.add_twoples(p1, ((self.margin+self.width)*offset, 0))
-        return MenuOption(option, width, height, pos)
+    def _build_option(self, option: str, offset: int) -> MenuOption:
+        x_off = self.style.WIDTH+(self.style.WIDTH*offset)
+        p_adj = utils.add_twoples(self.pos, (x_off, 0))
+        return MenuOption(option, p_adj)
 
     def _pick_option(self, option: MenuOption) -> None:
         self.selected_option = option
-    
-    def _hovering(self) -> bool:
-        return utils.within_rect(pygame.mouse.get_pos(), self.rect)
