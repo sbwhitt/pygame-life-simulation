@@ -32,7 +32,7 @@ class App:
         self.c_man = ColonyManager(self.screen)
         self.keys = []
         self.mouse = Mouse(self.window)
-        self.stats = Stats(self.window.width)
+        self.stats = Stats()
         self.metrics = Metrics()
         self.minimap = MiniMap(self.screen, self.window)
         self.picker = PickerMenu((20, 20))
@@ -60,7 +60,7 @@ class App:
         self._handle_keys_pressed()
         self._handle_mouse_actions()
         self._update_metrics()
-        self.minimap.update()
+        self._update_stats()
         self.clock.step()
         if self.paused:
             return
@@ -73,9 +73,9 @@ class App:
         self.e_man.render_entities(self.window)
         self.c_man.render_colonies(self.window)
         self.e_man.render_selected(self.window, self.clock)
-        self._update_stats()
+        self.stats.render(self.screen)
         self.mouse.highlight_cursor(self.screen)
-        self.minimap.render(self.e_man.entities)
+        self.minimap.render(self.screen, self.e_man.entities)
         self.picker.render(self.screen)
         pygame.display.flip()
 
@@ -130,9 +130,6 @@ class App:
         # self.stats.add_stat("eaten per minute: ", 
         #                     str(int(self.metrics.get_rate("eaten"))), 
         #                     colors.ORANGE)
-        self.stats.draw_stats(self.screen)
-        pygame.draw.line(self.screen, colors.BLACK,
-                         (self.window.width, 0), (self.window.width, self.window.height))
 
     def _create_metrics(self) -> None:
         self.metrics.create_tracker("created")

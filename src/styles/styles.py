@@ -1,16 +1,23 @@
 from dataclasses import dataclass
-from pygame import Color
 import static.colors as colors
+import static.settings as settings
 
 @dataclass
 class Style:
     WIDTH = 0
     HEIGHT = 0
-    COLOR = colors.BLACK
+    COLOR = colors.WHITE
+    FONT_COLOR = colors.BLACK
     BORDER_COLOR = colors.BLACK
     BORDER_WIDTH = 2
     MARGIN = (0, 0)
     ALPHA = 200
+
+@dataclass
+class StatsPanelStyle(Style):
+    WIDTH = 240
+    HEIGHT = settings.WINDOW_HEIGHT
+    COLOR = colors.GRAY
 
 @dataclass
 class PickerMenuOptionStyle(Style):
@@ -25,3 +32,14 @@ class PickerMenuStyle(Style):
     HEIGHT = 100
     COLOR = colors.GRAY
     MARGIN = (0, 0)
+
+@dataclass
+class MiniMapStyle(Style):
+    WIDTH = 240
+    HEIGHT = 240
+    COLOR = colors.WHITE
+
+@dataclass
+class MiniMapCursorStyle(Style):
+    BORDER_WIDTH = 1
+    ALPHA = 10
