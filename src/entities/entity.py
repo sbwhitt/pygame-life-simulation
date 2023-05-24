@@ -60,7 +60,8 @@ class Entity:
         for i in range(len(surroundings)):
             if surroundings[i] and surroundings[i].bound:
                     self.edges[i] = False
-                    if random.randint(1, 4) == 1: self._bleed_edge(surroundings[i])
+                    if self.bound and random.randint(1, 4) == 1:
+                        self.dna.send_color(surroundings[i].dna)
             else: self.edges[i] = True
     
     def _move(self, width: int, height: int, choice: int) -> None:
@@ -83,10 +84,6 @@ class Entity:
             if not s: choices += 1
         if choices > 0:
             self._move(width, height, random.randint(0, choices))
-    
-    def _bleed_edge(self, e: "Entity") -> None:
-        if self.bound:
-            self.dna.send_color(e.dna)
     
     def _choose_spawn_location(self) -> tuple|None:
         # up left down right

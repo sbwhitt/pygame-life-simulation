@@ -6,7 +6,7 @@ import static.settings as settings
 class DNA:
     def __init__(self, color):
         self.color = color
-        self.genes = random.randint(3, 12)
+        self.genes = random.randint(6, 24)
         self.age = 0
         self.age_limit = random.randint(3, 6)
         self.age_timer = 0
