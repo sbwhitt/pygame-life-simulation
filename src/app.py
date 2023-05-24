@@ -170,11 +170,10 @@ class App:
         # mouse buttons: 0 == left, 1 == middle, 2 == right
         buttons = pygame.mouse.get_pressed(3)
         if buttons[settings.LEFT_CLICK]:
-            # pos = utils.get_tile_pos(pygame.mouse.get_pos(), self.window.offset)
-            # self.e_man.place_entity(pos)
             self.mouse.drag(settings.LEFT_CLICK)
         elif self.mouse.dragging[settings.LEFT_CLICK]:
-            self._execute_mouse_action(self.picker.selected_option, settings.LEFT_CLICK)
+            shift = (pygame.K_LSHIFT in self.keys or pygame.K_RIGHT in self.keys)
+            self.mouse.execute_left_click(self.picker.selected_option, self.e_man, shift)
         if buttons[settings.MIDDLE_CLICK]:
             self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.clock.time)
         else:
@@ -183,18 +182,6 @@ class App:
             self.mouse.drag(settings.RIGHT_CLICK)
         else:
             self.mouse.stop_drag(settings.RIGHT_CLICK)
-    
-    def _execute_mouse_action(self, menu_option: PickerMenuOption, button: int) -> None:
-        # selection
-        if menu_option.option == settings.ACTION_MENU_OPTIONS[0]:
-            self.mouse.select(self.e_man, (pygame.K_LSHIFT in self.keys or pygame.K_RIGHT in self.keys))
-        # creation
-        elif menu_option.option == settings.ACTION_MENU_OPTIONS[1]:
-            self.mouse.place_selected(self.e_man)
-        # deletion
-        elif menu_option.option == settings.ACTION_MENU_OPTIONS[2]:
-            self.mouse.delete_selected(self.e_man)
-        self.mouse.stop_drag(settings.LEFT_CLICK)
 
     def _handle_cmd(self, key: str) -> None:
         # cull half of entities

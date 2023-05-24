@@ -4,6 +4,7 @@ import static.colors as colors
 import static.settings as settings
 from src.entities.entity_manager import EntityManager
 from src.interface.window import Window
+from src.interface.picker_menu import PickerMenuOption
 
 
 class Cursor:
@@ -62,6 +63,18 @@ class Mouse:
             self._build_cursor_rect()
         elif button == settings.RIGHT_CLICK:
             self.window.move(self._get_drag_dir(settings.RIGHT_CLICK))
+
+    def execute_left_click(self, menu_option: PickerMenuOption, e_man: EntityManager, shift: bool=False) -> None:
+        # selection
+        if menu_option.option == settings.ACTION_MENU_OPTIONS[0]:
+            self.select(e_man, shift)
+        # creation
+        elif menu_option.option == settings.ACTION_MENU_OPTIONS[1]:
+            self.place_selected(e_man)
+        # deletion
+        elif menu_option.option == settings.ACTION_MENU_OPTIONS[2]:
+            self.delete_selected(e_man)
+        self.stop_drag(settings.LEFT_CLICK)
         
     def select(self, e_man: EntityManager, shift: bool) -> None:
         if not shift: e_man.clear_selected()
