@@ -33,7 +33,7 @@ class Entity:
         spawn_loc = self._choose_spawn_location()
         if (self.dna.nourished or r == 1) and not self.dna.diseased and spawn_loc:
             offspring = Entity(spawn_loc[0], spawn_loc[1])
-            if random.randint(1, 200) == 1:
+            if random.randint(1, settings.DISEASE_MUTATE_CHANCE) == 1:
                 # chance to mutate diseased into a new random color
                 offspring.dna.mutate()
             else:
@@ -49,7 +49,7 @@ class Entity:
             if surroundings[i] != None:
                 neighbor = self._check_neighbor(surroundings[i])
                 if neighbor != None and neighbor.bound and neighbor.colony != self.colony:
-                    if neighbor.dna.diseased and random.randint(1, settings.DISEASE_CHANCE) == 1:
+                    if neighbor.dna.diseased and random.randint(1, settings.DISEASE_SPREAD_CHANCE) == 1:
                         self.dna.diseased = True
                         return None
                     return neighbor
@@ -133,7 +133,7 @@ class Entity:
     
     def _check_neighbor(self, collisions: list["Entity"]) -> "Entity":
         for c in collisions:
-            if c.dna.diseased and random.randint(1, settings.DISEASE_CHANCE) == 1:
+            if c.dna.diseased and random.randint(1, settings.DISEASE_SPREAD_CHANCE) == 1:
                 self.dna.diseased = True
                 return None
             if self.dna.compatible(c.dna):

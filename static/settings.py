@@ -28,8 +28,9 @@ METRONOME_RATE = 3
 AGE_LENGTH = 2000
 MOVE_INTERVAL = 50
 DIR_INTERVAL = 700
-# chance to spread disease is 1/vvv
-DISEASE_CHANCE = 5
+# chances are 1/<value>
+DISEASE_MUTATE_CHANCE = 200
+DISEASE_SPREAD_CHANCE = 5
 ENTITY_LIMIT = 10000
 # must divide evenly into window height and width (5, 10, 20, 40...)
 ENT_WIDTH = 20
