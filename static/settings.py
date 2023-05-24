@@ -1,7 +1,7 @@
 # window settings
 # both settings have to be divisible by 20
-WINDOW_WIDTH = 1080
-WINDOW_HEIGHT = 720
+WINDOW_WIDTH = 1440
+WINDOW_HEIGHT = 900
 
 # world settings
 WORLD_SIZE = 2000
@@ -29,7 +29,7 @@ AGE_LENGTH = 2000
 MOVE_INTERVAL = 50
 DIR_INTERVAL = 700
 # chances are 1/<value>
-DISEASE_MUTATE_CHANCE = 200
+MUTATE_CHANCE = 200
 DISEASE_SPREAD_CHANCE = 5
 ENTITY_LIMIT = 10000
 # must divide evenly into window height and width (5, 10, 20, 40...)
