@@ -42,6 +42,7 @@ class EntityManager:
                     self._spread_characteristics(e, neighbor)
             self._handle_collisions(e)
             self._handle_aging(e, clock_time)
+            e.scan_edges(self.m.get_surroundings(e.loc))
 
     def render_entities(self, window: Window) -> None:
         e: Entity
@@ -86,10 +87,6 @@ class EntityManager:
             self.selected.remove(e)
         self.destroyed += 1
         self._obituary(e)
-
-    def scan_entity_edges(self) -> None:
-        for e in self.entities:
-            e.scan_edges(self.m.get_surroundings(e.loc))
 
     def build_entities(self, window: Window) -> None:
         self.add_start_entities(window)
