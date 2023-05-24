@@ -127,8 +127,7 @@ class EntityManager:
 
     def randomize_color(self) -> None:
         for e in self.selected:
-            e.dna.color = pygame.Color(random.randint(
-                10, 245), random.randint(10, 245), random.randint(10, 245))
+            e.dna.color = utils.get_random_color(10, 245)
         self.clear_selected()
 
     def update_all_colors(self, color) -> None:
