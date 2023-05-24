@@ -55,15 +55,6 @@ class Entity:
                         return None
                     return neighbor
         return None
-
-    # def surrounded(self, surroundings: list["Entity"]) -> bool:
-    #     for i in range(len(surroundings)):
-    #         if surroundings[i] != None:
-    #             neighbor = self._check_neighbor(surroundings[i])
-    #             if neighbor != None and neighbor.bound:
-    #                 continue
-    #         return False
-    #     return True
     
     def scan_edges(self, surroundings: list["Entity"]) -> None:
         for i in range(len(surroundings)):
@@ -71,7 +62,6 @@ class Entity:
                     self.edges[i] = False
                     if random.randint(1, 4) == 1: self._bleed_edge(surroundings[i])
             else: self.edges[i] = True
-            # if e.dna.diseased and random.randint(1, 10) == 1: self.dna.diseased = True
     
     def _move(self, width: int, height: int, choice: int) -> None:
         if self.dna.move_timer > settings.MOVE_INTERVAL:
@@ -124,17 +114,6 @@ class Entity:
         else:
             print("an entity of generation " +
                     str(self.dna.generation) + " has reproduced")
-
-    # def _is_safe(self, target: list["Entity"]) -> bool:
-    #     for e in target:
-    #         if e.dna.diseased:
-    #             return False
-    #     return True
-
-    # def _is_empty(self, target: list["Entity"]) -> bool:
-    #     if len(target) > 0:
-    #         return False
-    #     return True
     
     def _check_neighbor(self, collision: "Entity") -> "Entity":
         if collision.dna.diseased and random.randint(1, settings.DISEASE_SPREAD_CHANCE) == 1:
