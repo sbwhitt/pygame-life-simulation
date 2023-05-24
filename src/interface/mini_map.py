@@ -36,7 +36,7 @@ class MiniMap(InterfaceElement):
             utils.add_twoples(self.pos, (2, 2)))
 
     def render(self, screen: pygame.display, entities: list[Entity]) -> None:
-        self.render_transparent(screen)
+        # self.render_transparent(screen)
         self.render_border(screen)
         self._render_small_entities(screen, entities)
         self._render_cursor(screen)
