@@ -1,3 +1,4 @@
+import src.utils.utils as utils
 import static.settings as settings
 from src.entities.entity import Entity
 
@@ -7,19 +8,18 @@ class Map:
         self.width = w
         self.height = h
         self.grid = {}
+        self.dirs = [(0, -settings.ENT_WIDTH),
+                       (-settings.ENT_WIDTH, 0),
+                       (0, settings.ENT_WIDTH),
+                       (settings.ENT_WIDTH, 0)]
         self._build_grid()
 
-    def get_surroundings(self, pos: tuple) -> list[list[Entity] | None]:
+    def get_surroundings(self, pos: tuple) -> list[Entity]:
         surroundings = [None, None, None, None]
-        for i in range(0, 4):
-            if i == 0 and self.grid.get((pos[0], pos[1]-settings.ENT_WIDTH)) != None:  # up
-                surroundings[0] = self.grid.get((pos[0], pos[1]-settings.ENT_WIDTH))
-            if i == 1 and self.grid.get((pos[0]-settings.ENT_WIDTH, pos[1])) != None:  # left
-                surroundings[1] = self.grid.get((pos[0]-settings.ENT_WIDTH, pos[1]))
-            if i == 2 and self.grid.get((pos[0], pos[1]+settings.ENT_WIDTH)) != None:  # down
-                surroundings[2] = self.grid.get((pos[0], pos[1]+settings.ENT_WIDTH))
-            if i == 3 and self.grid.get((pos[0]+settings.ENT_WIDTH, pos[1])) != None:  # right
-                surroundings[3] = self.grid.get((pos[0]+settings.ENT_WIDTH, pos[1]))
+        for i in range(0, len(surroundings)):
+            tile = self.grid.get(utils.add_twoples(pos, self.dirs[i]))
+            if tile and len(tile) > 0:
+                surroundings[i] = tile[0]
         return surroundings
 
     def _build_grid(self) -> None:

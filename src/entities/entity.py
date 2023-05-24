@@ -20,12 +20,13 @@ class Entity:
         else:
             self.dna = DNA(utils.get_random_color())
 
-    def update(self, width: int, height: int, surroundings: list[list["Entity"] | None]) -> "Entity":
+    def update(self, width: int, height: int, surroundings: list["Entity"]) -> "Entity":
         neighbor = self._choose_neighbor(surroundings)
         if neighbor != None:
             return neighbor
-        self.choice = self._choose_dir(surroundings)
-        self._move(width, height)
+        if (not self.bound and self.dna.dir_timer > settings.DIR_INTERVAL):
+            self._choose_dir(surroundings, width, height)
+        return None
 
     def reproduce(self) -> "Entity|None":
         self.dna.genes += 1
@@ -44,18 +45,18 @@ class Entity:
             return offspring
         return None
     
-    def look_for_colony(self, surroundings: list[list["Entity"] | None]) -> "Entity":
-        for i in range(len(surroundings)):
-            if surroundings[i] != None:
-                neighbor = self._check_neighbor(surroundings[i])
-                if neighbor != None and neighbor.bound and neighbor.colony != self.colony:
+    def look_for_colony(self, surroundings: list["Entity"]) -> "Entity":
+        for s in surroundings:
+            if s: 
+                neighbor = self._check_neighbor(s)
+                if neighbor != None and neighbor.colony != self.colony and neighbor.bound:
                     if neighbor.dna.diseased and random.randint(1, settings.DISEASE_SPREAD_CHANCE) == 1:
                         self.dna.diseased = True
                         return None
                     return neighbor
         return None
 
-    # def surrounded(self, surroundings: list[list["Entity"] | None]) -> bool:
+    # def surrounded(self, surroundings: list["Entity"]) -> bool:
     #     for i in range(len(surroundings)):
     #         if surroundings[i] != None:
     #             neighbor = self._check_neighbor(surroundings[i])
@@ -64,27 +65,23 @@ class Entity:
     #         return False
     #     return True
     
-    def scan_edges(self, surroundings: list[list["Entity"] | None]) -> None:
+    def scan_edges(self, surroundings: list["Entity"]) -> None:
         for i in range(len(surroundings)):
-            if surroundings[i] != None and len(surroundings[i]) > 0:
-                for e in surroundings[i]:
-                    if e.bound:
-                        self.edges[i] = False
-                        if random.randint(1, 4) == 1: self._bleed_edge(e)
-                    else: self.edges[i] = True
-                    # if e.dna.diseased and random.randint(1, 10) == 1: self.dna.diseased = True
-            else:
-                self.edges[i] = True
+            if surroundings[i] and surroundings[i].bound:
+                    self.edges[i] = False
+                    if random.randint(1, 4) == 1: self._bleed_edge(surroundings[i])
+            else: self.edges[i] = True
+            # if e.dna.diseased and random.randint(1, 10) == 1: self.dna.diseased = True
     
-    def _move(self, width: int, height: int) -> None:
+    def _move(self, width: int, height: int, choice: int) -> None:
         if self.dna.move_timer > settings.MOVE_INTERVAL:
-            if self.choice == 0 and self.rect.top != 0:  # up
+            if choice == 0 and self.rect.top != 0:  # up
                 self.rect = self.rect.move(0, -settings.ENT_WIDTH)
-            elif self.choice == 1 and self.rect.left != 0:  # left
+            elif choice == 1 and self.rect.left != 0:  # left
                 self.rect = self.rect.move(-settings.ENT_WIDTH, 0)
-            elif self.choice == 2 and self.rect.bottom != height:  # down
+            elif choice == 2 and self.rect.bottom != height:  # down
                 self.rect = self.rect.move(0, settings.ENT_WIDTH)
-            elif self.choice == 3 and self.rect.right != width:  # right
+            elif choice == 3 and self.rect.right != width:  # right
                 self.rect = self.rect.move(settings.ENT_WIDTH, 0)
             self.dna.move_timer = 0
             self.loc = (self.rect.left, self.rect.top)
@@ -126,21 +123,19 @@ class Entity:
     #             return False
     #     return True
 
-    def _is_empty(self, target: list["Entity"]) -> bool:
-        if len(target) > 0:
-            return False
-        return True
+    # def _is_empty(self, target: list["Entity"]) -> bool:
+    #     if len(target) > 0:
+    #         return False
+    #     return True
     
-    def _check_neighbor(self, collisions: list["Entity"]) -> "Entity":
-        for c in collisions:
-            if c.dna.diseased and random.randint(1, settings.DISEASE_SPREAD_CHANCE) == 1:
-                self.dna.diseased = True
-                return None
-            if self.dna.compatible(c.dna):
-                return c
-        return None
+    def _check_neighbor(self, collision: "Entity") -> "Entity":
+        if collision.dna.diseased and random.randint(1, settings.DISEASE_SPREAD_CHANCE) == 1:
+            self.dna.diseased = True
+            return None
+        if self.dna.compatible(collision.dna):
+            return collision
     
-    def _choose_neighbor(self, surroundings: list[list["Entity"] | None]) -> "Entity":
+    def _choose_neighbor(self, surroundings: list["Entity"]) -> "Entity":
         for i in range(len(surroundings)):
             if random.randint(1, 10) == 1 and surroundings[i] != None:
                 neighbor = self._check_neighbor(surroundings[i])
@@ -148,15 +143,10 @@ class Entity:
                     return neighbor
         return None
 
-    def _choose_dir(self, surroundings: list[list["Entity"] | None]) -> int:
-        if (not self.bound and self.dna.dir_timer > settings.DIR_INTERVAL):
-            self.dna.dir_timer = 0
-            choices = []
-            for i in range(len(surroundings)):
-                if surroundings[i] != None and self._is_empty(surroundings[i]):
-                    choices.append(i)
-            if choices:
-                c = choices[random.randint(0, len(choices)-1)]
-                return c
-            else:
-                return -1
+    def _choose_dir(self, surroundings: list["Entity"], width: int, height: int) -> int:
+        self.dna.dir_timer = 0
+        choices = -1
+        for s in surroundings:
+            if not s: choices += 1
+        if choices > 0:
+            self._move(width, height, random.randint(0, choices))
