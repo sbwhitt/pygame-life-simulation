@@ -34,9 +34,7 @@ class DNA:
         self.curve = random.randint(0, int(settings.ENT_WIDTH/2))
     
     def compatible(self, candidate: "DNA") -> bool:
-        if self._compare_colors(candidate.color):
-            return True
-        return False
+        return self._compare_colors(candidate.color)
     
     def send_color(self, target: "DNA") -> None:
         if self.genes > 0:
@@ -52,9 +50,10 @@ class DNA:
             self.genes -= 1
 
     def _compare_colors(self, color: pygame.Color) -> bool:
-        return ((self.color.r - color.r <= 20 and self.color.r - color.r >= -20) and
-                (self.color.g - color.g <= 20 and self.color.g - color.g >= -20) and
-                (self.color.b - color.b <= 20 and self.color.b - color.b >= -20))
+        threshold = 15
+        return (abs(self.color.r - color.r) <= threshold and
+                abs(self.color.g - color.g) <= threshold and
+                abs(self.color.b - color.b) <= threshold)
 
     def _determine_immunity(self) -> bool:
         return self.immune or (random.randint(0, 2) == 1) 
