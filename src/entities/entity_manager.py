@@ -195,20 +195,11 @@ class EntityManager:
                 e.dna.diseased = True
                 self.diseased += 1
 
-    def _spread_curve(self, collisions: list[Entity]) -> None:
-        c = 0
-        for e in collisions:
-            c += e.dna.curve
-        c = int(c/len(collisions))
-        for e in collisions:
-            e.dna.curve = c
-
     def _cannibalize(self, eater: Entity, collisions: list[Entity]) -> None:
         for c in collisions:
             if c != eater and random.randint(0, 1) == 1:
                 self._spread_color([eater, c])
                 eater.dna.age_limit += 1
-                eater.dna.curve = int( (eater.dna.curve + c.dna.curve)/2 )
                 eater.dna.nourished = True
                 c.dna.eaten = True
                 self.eaten += 1
