@@ -79,12 +79,20 @@ class Entity:
                 self.rect = self.rect.move(0, -settings.ENT_WIDTH)
             elif choice == 1 and self.rect.left != 0:  # left
                 self.rect = self.rect.move(-settings.ENT_WIDTH, 0)
-            elif choice == 2 and self.rect.bottom != height:  # down
+            elif choice == 2 and self.rect.bottom <= height:  # down
                 self.rect = self.rect.move(0, settings.ENT_WIDTH)
-            elif choice == 3 and self.rect.right != width:  # right
+            elif choice == 3 and self.rect.right < width:  # right
                 self.rect = self.rect.move(settings.ENT_WIDTH, 0)
             self.dna.move_timer = 0
             self.loc = (self.rect.left, self.rect.top)
+    
+    def _choose_dir(self, surroundings: list["Entity"], width: int, height: int) -> int:
+        self.dna.dir_timer = 0
+        choices = -1
+        for s in surroundings:
+            if not s: choices += 1
+        if choices > 0:
+            self._move(width, height, random.randint(0, choices))
     
     def _bleed_edge(self, e: "Entity") -> None:
         if self.bound:
@@ -142,11 +150,3 @@ class Entity:
                 if neighbor != None:
                     return neighbor
         return None
-
-    def _choose_dir(self, surroundings: list["Entity"], width: int, height: int) -> int:
-        self.dna.dir_timer = 0
-        choices = -1
-        for s in surroundings:
-            if not s: choices += 1
-        if choices > 0:
-            self._move(width, height, random.randint(0, choices))
