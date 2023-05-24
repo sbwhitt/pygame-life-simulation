@@ -111,13 +111,13 @@ class Mouse:
         diry = 0
         start = self.drag_start[button]
         if pos[0] > start[0]:
-            dirx = settings.WORLD_SIZE/50
+            dirx = int(settings.WORLD_SIZE/100)
         elif pos[0] < start[0]:
-            dirx = -settings.WORLD_SIZE/50
+            dirx = -int(settings.WORLD_SIZE/100)
         if pos[1] > start[1]:
-            diry = settings.WORLD_SIZE/50
+            diry = int(settings.WORLD_SIZE/100)
         elif pos[1] < start[1]:
-            diry = -settings.WORLD_SIZE/50
+            diry = -int(settings.WORLD_SIZE/100)
         return (dirx, diry)
     
     def _build_cursor_rect(self) -> None:

@@ -17,7 +17,7 @@ class Style:
 class StatsPanelStyle(Style):
     WIDTH = 240
     HEIGHT = settings.WINDOW_HEIGHT
-    COLOR = colors.GRAY
+    COLOR = colors.WHITE
 
 @dataclass
 class PickerMenuOptionStyle(Style):
