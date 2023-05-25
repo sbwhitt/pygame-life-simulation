@@ -11,8 +11,8 @@ from src.colonies.colony_manager import ColonyManager
 from src.interface.mini_map import MiniMap
 from src.interface.mouse import Mouse
 from src.utils.clock import Clock
+from src.utils.interface_map import InterfaceMap
 from src.interface.picker_menu import PickerMenu
-from src.interface.picker_menu import PickerMenuOption
 
 '''
 x == width == rect.left
@@ -28,6 +28,7 @@ class App:
         self.clock = Clock()
         self.screen = pygame.display.set_mode(
             (self.window.width + settings.STATS_WIDTH, self.window.height), pygame.SCALED | pygame.RESIZABLE)
+        self.i_map = InterfaceMap()
         self.e_man = EntityManager(self.screen)
         self.c_man = ColonyManager(self.screen)
         self.keys = []
@@ -41,6 +42,7 @@ class App:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])
         self._create_metrics()
         self._update_metrics()
+        self._init_interface_map()
         # self.e_man.build_entities(self.window)
         self._running = True
 
@@ -61,6 +63,7 @@ class App:
         self._handle_mouse_actions()
         self._update_metrics()
         self._update_stats()
+        self._check_interface_map()
         self.clock.step()
         if self.paused:
             return
@@ -135,6 +138,18 @@ class App:
         self.metrics.create_tracker("destroyed")
         self.metrics.create_tracker("diseased")
         self.metrics.create_tracker("eaten")
+    
+    def _init_interface_map(self) -> None:
+        self.i_map.add_element(self.picker)
+        for o in self.picker.options:
+            self.i_map.add_element(o)
+        self.i_map.add_element(self.minimap)
+    
+    def _check_interface_map(self) -> None:
+        if self.i_map.within_element(pygame.mouse.get_pos()):
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+        else:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
     def _update_metrics(self) -> None:
         self.metrics.update("created", self.e_man.created, self.paused)
