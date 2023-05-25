@@ -21,6 +21,13 @@ class MouseCursorStyle(Style):
     ALPHA = 0
 
 @dataclass
+class SidePanelStyle(Style):
+    WIDTH = 240
+    HEIGHT = settings.WINDOW_HEIGHT
+    BORDER_WIDTH = 0
+    ALPHA = 0
+
+@dataclass
 class StatsPanelStyle(Style):
     WIDTH = 240
     HEIGHT = settings.WINDOW_HEIGHT
