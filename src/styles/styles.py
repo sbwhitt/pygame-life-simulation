@@ -30,9 +30,10 @@ class SidePanelStyle(Style):
 @dataclass
 class SidePanelButtonStyle(Style):
     WIDTH = 40
-    HEIGHT = 60
+    HEIGHT = 40
     COLOR = colors.RED
     BORDER_WIDTH = 2
+    ALPHA = 100
 
 @dataclass
 class StatsPanelStyle(Style):

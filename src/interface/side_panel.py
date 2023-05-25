@@ -25,6 +25,7 @@ class SidePanelButton(InterfaceElement):
             self.style.COLOR = colors.RED if panel_open else colors.GREEN
             self.render_hover(screen)
         else:
+            self.render_transparent(screen)
             self.render_border(screen)
         # self._render_carat(screen, panel_open)
     
@@ -47,8 +48,14 @@ class SidePanel(InterfaceElement):
     
     def render(self, screen: pygame.display, entities: list[Entity]) -> None:
         self.panel_button.render(screen, self.panel_open)
-        self.stats.render(screen)
-        self.minimap.render(screen, entities)
+        if self.panel_open:
+            self.stats.render(screen)
+            self.minimap.render(screen, entities)
+
+    def handle_click(self, button: int) -> None:
+        if self.panel_button.hovering():
+            if button == settings.LEFT_CLICK:
+                self._toggle_panel()
 
     def update_stats(self, clock: Clock, e_man: EntityManager, metrics: Metrics) -> None:
         self.stats.clear()
@@ -80,3 +87,16 @@ class SidePanel(InterfaceElement):
         # self.stats.add_stat("eaten per minute: ", 
         #                     str(int(metrics.get_rate("eaten"))), 
         #                     colors.ORANGE)
+
+    # helpers
+
+    def _toggle_panel(self) -> None:
+        self.panel_open = not self.panel_open
+        if self.panel_open:
+            self.panel_button.pos = utils.subtract_twoples(self.pos, (self.panel_button.style.WIDTH, 0))
+            self.stats.hidden = False
+            self.minimap.hidden = False
+        else:
+            self.panel_button.pos = (settings.WINDOW_WIDTH-self.panel_button.style.WIDTH, 0)
+            self.stats.hidden = True
+            self.minimap.hidden = True

@@ -142,13 +142,8 @@ class App:
         # why are event.button values different from pygame.mouse.get_pressed???
         # left click is 1 here but 0 elsewhere
         if button-1 == settings.LEFT_CLICK:
-            # left click picker menu
-            if self.picker.contains_click(pygame.mouse.get_pos(), settings.LEFT_CLICK):
-                if not self.picker.menu_open: self.picker.open_pick_menu()
-                else: self.picker.close_pick_menu()
-            # left click picker menu option
-            elif self.picker.menu_open and self.picker.contains_option_click(pygame.mouse.get_pos(), settings.LEFT_CLICK):
-                self.picker.close_pick_menu()
+            self.picker.handle_click(settings.LEFT_CLICK)
+            self.side_panel.handle_click(settings.LEFT_CLICK)
     
     def _handle_mouse_actions(self) -> None:
         # mouse buttons: 0 == left, 1 == middle, 2 == right

@@ -49,19 +49,15 @@ class PickerMenu(InterfaceElement):
         self._render_menu_text(screen)
         if self.menu_open:
             self._render_menu_options(screen)
-
-    def contains_click(self, pos: tuple, button: int) -> bool:
-        if button == settings.LEFT_CLICK:
-            return utils.within_rect(pos, self.rect)
     
-    def contains_option_click(self, pos: tuple, button: int) -> bool:
-        if button == settings.LEFT_CLICK:
-            o: PickerMenuOption
-            for o in self.options:
-                if utils.within_rect(pos, o.rect):
-                    self._pick_option(o)
-                    return True
-        return False
+    def handle_click(self, button: int) -> None:
+        # left click picker menu
+            if self._contains_click(button):
+                if not self.menu_open: self.open_pick_menu()
+                else: self.close_pick_menu()
+            # left click picker menu option
+            elif self.menu_open and self._contains_option_click(button):
+                self.close_pick_menu()
 
     def open_pick_menu(self) -> None:
         self.menu_open = True
@@ -74,6 +70,19 @@ class PickerMenu(InterfaceElement):
         for o in self.options: o.hidden = True
 
     # helpers
+
+    def _contains_click(self, button: int) -> bool:
+        if button == settings.LEFT_CLICK:
+            return self.hovering()
+    
+    def _contains_option_click(self, button: int) -> bool:
+        if button == settings.LEFT_CLICK:
+            o: PickerMenuOption
+            for o in self.options:
+                if o.hovering():
+                    self._pick_option(o)
+                    return True
+        return False
     
     def _render_menu_options(self, screen: pygame.display) -> None:
         if not self.menu_open:
