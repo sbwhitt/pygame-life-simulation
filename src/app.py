@@ -1,6 +1,5 @@
 import pygame
 import asyncio
-import src.utils.utils as utils
 import static.colors as colors
 import static.settings as settings
 from src.interface.window import Window
