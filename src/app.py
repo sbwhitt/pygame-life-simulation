@@ -73,7 +73,7 @@ class App:
         self.c_man.render_colonies(self.window)
         self.e_man.render_selected(self.window, self.clock)
         self.stats.render(self.screen)
-        self.mouse.highlight_cursor(self.screen)
+        self.mouse.render_cursor(self.screen)
         self.minimap.render(self.screen, self.e_man.entities)
         self.picker.render(self.screen)
         pygame.display.flip()

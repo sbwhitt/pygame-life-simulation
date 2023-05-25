@@ -2,25 +2,32 @@ import pygame
 import src.utils.utils as utils
 import static.colors as colors
 import static.settings as settings
+from src.interface.interface_element import InterfaceElement
+from src.styles.styles import MouseCursorStyle
 from src.entities.entity_manager import EntityManager
 from src.interface.window import Window
 from src.interface.picker_menu import PickerMenuOption
 
 
-class Cursor:
+class Cursor(InterfaceElement):
     def __init__(self):
+        InterfaceElement.__init__(self, MouseCursorStyle(), (0, 0))
         self.start = (0, 0)
         self.end = (0, 0)
-        self.rect = None
 
-    def get_points(self) -> list[tuple]:
-        pos = pygame.mouse.get_pos()
-        return [(pos[0]-(pos[0] % settings.ENT_WIDTH), pos[1]-(pos[1] % settings.ENT_WIDTH)),
-                  (pos[0]+(settings.ENT_WIDTH - pos[0] % settings.ENT_WIDTH),
-                   pos[1]-(pos[1] % settings.ENT_WIDTH)),
-                  (pos[0]+(settings.ENT_WIDTH - pos[0] % settings.ENT_WIDTH),
-                   pos[1]+(settings.ENT_WIDTH - pos[1] % settings.ENT_WIDTH)),
-                  (pos[0]-(pos[0] % settings.ENT_WIDTH), pos[1]+(settings.ENT_WIDTH - pos[1] % settings.ENT_WIDTH))]
+    def update(self, dragging: bool) -> None:
+        if dragging:
+            r = utils.get_rect_from_twoples(self.start, self.end)
+            self.pos = r.topleft
+            self.style.WIDTH = r.width
+            self.style.HEIGHT = r.height
+        else:
+            self.pos = utils.get_tile_pos(pygame.mouse.get_pos())
+            self.style.WIDTH = settings.ENT_WIDTH
+            self.style.HEIGHT = settings.ENT_WIDTH
+    
+    def render(self, screen: pygame.display) -> None:
+        self.render_border(screen)
 
 
 class Mouse:
@@ -37,6 +44,10 @@ class Mouse:
                        (settings.ENT_WIDTH, settings.ENT_WIDTH), (-settings.ENT_WIDTH, settings.ENT_WIDTH),
                        (settings.ENT_WIDTH, -settings.ENT_WIDTH), (-settings.ENT_WIDTH, -settings.ENT_WIDTH)]
 
+    def render_cursor(self, screen: pygame.display) -> None:
+        self.cursor.update(self.dragging[settings.LEFT_CLICK])
+        self.cursor.render(screen)
+
     def spawn_outward(self, e_man: EntityManager, pos: tuple, elapsed) -> None:
         if self._increase_spawn_interval(elapsed):
             color = utils.get_random_color()
@@ -48,12 +59,6 @@ class Mouse:
     def stop_spawn(self) -> None:
         self.click_timer = 0
         self.spawn_interval = False
-
-    def highlight_cursor(self, screen: pygame.display) -> None:
-        if self.dragging[settings.LEFT_CLICK]:
-            pygame.draw.lines(screen, colors.BLACK, True, points=utils.get_rect_outline(self.cursor.rect))
-        else:
-            pygame.draw.lines(screen, colors.BLACK, True, points=self.cursor.get_points())
     
     def drag(self, button: int) -> None:
         if not self.dragging[button]:

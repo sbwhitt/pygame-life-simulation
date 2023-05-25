@@ -14,6 +14,13 @@ class Style:
     ALPHA = 200
 
 @dataclass
+class MouseCursorStyle(Style):
+    WIDTH = settings.ENT_WIDTH
+    HEIGHT = settings.ENT_WIDTH
+    BORDER_WIDTH = 1
+    ALPHA = 0
+
+@dataclass
 class StatsPanelStyle(Style):
     WIDTH = 240
     HEIGHT = settings.WINDOW_HEIGHT
