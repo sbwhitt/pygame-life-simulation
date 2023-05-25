@@ -28,6 +28,13 @@ class SidePanelStyle(Style):
     ALPHA = 0
 
 @dataclass
+class SidePanelButtonStyle(Style):
+    WIDTH = 40
+    HEIGHT = 60
+    COLOR = colors.RED
+    BORDER_WIDTH = 2
+
+@dataclass
 class StatsPanelStyle(Style):
     WIDTH = 240
     HEIGHT = settings.WINDOW_HEIGHT
@@ -45,7 +52,7 @@ class PickerMenuStyle(Style):
     WIDTH = 100
     HEIGHT = 100
     COLOR = colors.GRAY
-    MARGIN = (0, 0)
+    MARGIN = (10, 10)
 
 @dataclass
 class MiniMapStyle(Style):

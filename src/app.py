@@ -34,7 +34,7 @@ class App:
         self.mouse = Mouse(self.window)
         self.metrics = Metrics()
         self.side_panel = SidePanel(self.window)
-        self.picker = PickerMenu((20, 20))
+        self.picker = PickerMenu((0, 0))
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])
@@ -111,6 +111,7 @@ class App:
         self.i_map.add_element(self.picker)
         for o in self.picker.options:
             self.i_map.add_element(o)
+        self.i_map.add_element(self.side_panel.panel_button)
         self.i_map.add_element(self.side_panel.minimap)
     
     def _check_interface_map(self) -> None:
