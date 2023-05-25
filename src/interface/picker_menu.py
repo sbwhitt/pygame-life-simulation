@@ -12,6 +12,7 @@ class PickerMenuOption(InterfaceElement):
     def __init__(self, option: str, pos: tuple):
         InterfaceElement.__init__(self, PickerMenuOptionStyle(), pos)
         self.option = option
+        self.hidden = True
         self.selected = False
         self.text = Text(settings.FONT_SIZE_SMALLER)
     
@@ -64,9 +65,13 @@ class PickerMenu(InterfaceElement):
 
     def open_pick_menu(self) -> None:
         self.menu_open = True
+        o: PickerMenuOption
+        for o in self.options: o.hidden = False
     
     def close_pick_menu(self) -> None:
         self.menu_open = False
+        o: PickerMenuOption
+        for o in self.options: o.hidden = True
 
     # helpers
     
