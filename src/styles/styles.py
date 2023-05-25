@@ -21,6 +21,21 @@ class MouseCursorStyle(Style):
     ALPHA = 0
 
 @dataclass
+class SidePanelStyle(Style):
+    WIDTH = 240
+    HEIGHT = settings.WINDOW_HEIGHT
+    BORDER_WIDTH = 0
+    ALPHA = 0
+
+@dataclass
+class SidePanelButtonStyle(Style):
+    WIDTH = 40
+    HEIGHT = 40
+    COLOR = colors.RED
+    BORDER_WIDTH = 2
+    ALPHA = 100
+
+@dataclass
 class StatsPanelStyle(Style):
     WIDTH = 240
     HEIGHT = settings.WINDOW_HEIGHT
@@ -38,7 +53,7 @@ class PickerMenuStyle(Style):
     WIDTH = 100
     HEIGHT = 100
     COLOR = colors.GRAY
-    MARGIN = (0, 0)
+    MARGIN = (10, 10)
 
 @dataclass
 class MiniMapStyle(Style):

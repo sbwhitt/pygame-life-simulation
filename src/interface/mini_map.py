@@ -24,10 +24,9 @@ class MiniMapCursor(InterfaceElement):
 
 
 class MiniMap(InterfaceElement):
-    def __init__(self, screen: pygame.display, window: Window):
+    def __init__(self, window: Window):
         style = MiniMapStyle()
         InterfaceElement.__init__(self, style, (window.width-style.WIDTH, window.height-style.HEIGHT))
-        self.screen = screen
         self.window = window
         self.map_ratio = (self.style.WIDTH / settings.WORLD_SIZE)
         self.cursor = MiniMapCursor(
@@ -62,5 +61,5 @@ class MiniMap(InterfaceElement):
                 pygame.draw.rect(screen, colors.BLACK,
                                  copy, border_radius=0)
             else:
-                pygame.draw.rect(self.screen, e.dna.color, 
+                pygame.draw.rect(screen, e.dna.color, 
                                  copy, border_radius=0)

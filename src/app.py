@@ -3,13 +3,12 @@ import asyncio
 import static.colors as colors
 import static.settings as settings
 from src.interface.window import Window
-from src.interface.stats import Stats
 from src.tracking.metrics import Metrics
 from src.entities.entity_manager import EntityManager
 from src.colonies.colony_manager import ColonyManager
-from src.interface.mini_map import MiniMap
 from src.interface.mouse import Mouse
 from src.utils.clock import Clock
+from src.interface.side_panel import SidePanel
 from src.utils.interface_map import InterfaceMap
 from src.interface.picker_menu import PickerMenu
 
@@ -33,10 +32,9 @@ class App:
         self.c_man = ColonyManager(self.screen)
         self.keys = []
         self.mouse = Mouse(self.window)
-        self.stats = Stats()
         self.metrics = Metrics()
-        self.minimap = MiniMap(self.screen, self.window)
-        self.picker = PickerMenu((20, 20))
+        self.side_panel = SidePanel(self.window)
+        self.picker = PickerMenu((0, 0))
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])
@@ -62,7 +60,7 @@ class App:
         self._handle_keys_pressed()
         self._handle_mouse_actions()
         self._update_metrics()
-        self._update_stats()
+        self.side_panel.update_stats(self.clock, self.e_man, self.metrics)
         self._check_interface_map()
         self.clock.step()
         if self.paused:
@@ -75,9 +73,8 @@ class App:
         self.e_man.render_entities(self.window)
         self.c_man.render_colonies(self.window)
         self.e_man.render_selected(self.window, self.clock)
-        self.stats.render(self.screen)
         self.mouse.render_cursor(self.screen)
-        self.minimap.render(self.screen, self.e_man.entities)
+        self.side_panel.render(self.screen, self.e_man.entities)
         self.picker.render(self.screen)
         pygame.display.flip()
 
@@ -102,36 +99,7 @@ class App:
         self.on_cleanup()
 
     # helpers
-    def _update_stats(self) -> None:
-        self.stats.clear()
-        self.stats.add_stat("fps: ",
-                            str(int(pygame.time.Clock.get_fps(self.clock.clock))))
-        self.stats.add_stat("entities: ", 
-                            str(len(self.e_man.entities)))
-        self.stats.add_stat("entities all time: ", 
-                            str(self.e_man.created))
-        self.stats.add_stat("diseased entities: ", 
-                            str(self.e_man.get_diseased_entities(self.e_man.entities)))
-        self.stats.add_stat("entities eaten: ", 
-                            str(self.e_man.eaten))
-        # self.stats.add_stat("colonies: ",
-        #                     str(len(self.c_man.colonies)))
-        self.stats.add_stat("time elapsed: ", self.metrics.get_time_elapsed())
-        self.stats.add_stat("entities per minute: ", 
-                            str(int(self.metrics.get_rate("created") - self.metrics.get_rate("destroyed"))), 
-                            color=colors.GREEN)
-        self.stats.add_stat("created per minute: ", 
-                            str(int(self.metrics.get_rate("created"))), 
-                            color=colors.BLUE)
-        self.stats.add_stat("destroyed per minute: ", 
-                            str(int(self.metrics.get_rate("destroyed"))), 
-                            color=colors.RED)
-        self.stats.add_stat("diseased per minute: ", 
-                            str(int(self.metrics.get_rate("diseased"))), 
-                            colors.BROWN)
-        # self.stats.add_stat("eaten per minute: ", 
-        #                     str(int(self.metrics.get_rate("eaten"))), 
-        #                     colors.ORANGE)
+    
 
     def _create_metrics(self) -> None:
         self.metrics.create_tracker("created")
@@ -143,7 +111,8 @@ class App:
         self.i_map.add_element(self.picker)
         for o in self.picker.options:
             self.i_map.add_element(o)
-        self.i_map.add_element(self.minimap)
+        self.i_map.add_element(self.side_panel.panel_button)
+        self.i_map.add_element(self.side_panel.minimap)
     
     def _check_interface_map(self) -> None:
         if self.i_map.within_element(pygame.mouse.get_pos()):
@@ -173,13 +142,8 @@ class App:
         # why are event.button values different from pygame.mouse.get_pressed???
         # left click is 1 here but 0 elsewhere
         if button-1 == settings.LEFT_CLICK:
-            # left click picker menu
-            if self.picker.contains_click(pygame.mouse.get_pos(), settings.LEFT_CLICK):
-                if not self.picker.menu_open: self.picker.open_pick_menu()
-                else: self.picker.close_pick_menu()
-            # left click picker menu option
-            elif self.picker.menu_open and self.picker.contains_option_click(pygame.mouse.get_pos(), settings.LEFT_CLICK):
-                self.picker.close_pick_menu()
+            self.picker.handle_click(settings.LEFT_CLICK)
+            self.side_panel.handle_click(settings.LEFT_CLICK)
     
     def _handle_mouse_actions(self) -> None:
         # mouse buttons: 0 == left, 1 == middle, 2 == right
