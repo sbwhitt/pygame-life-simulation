@@ -8,6 +8,7 @@ class InterfaceElement:
         self.style = style
         self.pos = utils.add_twoples(pos, self.style.MARGIN)
         self.rect = self._build_rect()
+        self.hidden = False
 
     def render_hover(self, screen: pygame.display) -> None:
         self.rect = self._build_rect()

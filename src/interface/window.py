@@ -22,6 +22,6 @@ class Window:
     
     def under_stats(self, point: tuple) -> bool:
         return (point[0] >= self.offset[0] + self.width and 
-            point[0] < self.width + settings.STATS_WIDTH + self.offset[0] and 
+            point[0] < self.width + self.offset[0] and 
             point[1] >= self.offset[1] and 
             point[1] < self.height + self.offset[1])
