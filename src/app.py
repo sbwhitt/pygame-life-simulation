@@ -27,7 +27,7 @@ class App:
         self.window = Window(0, 0)
         self.clock = Clock()
         self.screen = pygame.display.set_mode(
-            (self.window.width + settings.STATS_WIDTH, self.window.height), pygame.SCALED | pygame.RESIZABLE)
+            (self.window.width, self.window.height), pygame.SCALED | pygame.RESIZABLE)
         self.i_map = InterfaceMap()
         self.e_man = EntityManager(self.screen)
         self.c_man = ColonyManager(self.screen)

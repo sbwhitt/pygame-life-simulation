@@ -26,7 +26,7 @@ class MiniMapCursor(InterfaceElement):
 class MiniMap(InterfaceElement):
     def __init__(self, screen: pygame.display, window: Window):
         style = MiniMapStyle()
-        InterfaceElement.__init__(self, style, (window.width, window.height-style.HEIGHT))
+        InterfaceElement.__init__(self, style, (window.width-style.WIDTH, window.height-style.HEIGHT))
         self.screen = screen
         self.window = window
         self.map_ratio = (self.style.WIDTH / settings.WORLD_SIZE)

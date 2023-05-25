@@ -22,7 +22,7 @@ class Stat:
 class Stats(InterfaceElement):
     def __init__(self):
         style = StatsPanelStyle()
-        pos = (settings.WINDOW_WIDTH, 0)
+        pos = (settings.WINDOW_WIDTH-style.WIDTH, 0)
         InterfaceElement.__init__(self, style, pos)
         self.stats = []
     
