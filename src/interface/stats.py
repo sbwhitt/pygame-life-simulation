@@ -19,6 +19,7 @@ class Stat:
         Text(color=self.color).render(screen, self.value, utils.add_twoples(self.pos, (0, settings.FONT_SIZE)))
 
 
+# TODO: optimize text rendering to bring up framerate
 class Stats(InterfaceElement):
     def __init__(self):
         style = StatsPanelStyle()

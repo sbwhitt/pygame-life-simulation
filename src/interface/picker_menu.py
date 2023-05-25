@@ -29,6 +29,7 @@ class PickerMenuOption(InterfaceElement):
         self.text.render(screen, self.option, self.pos)
 
 
+# TODO: make this look better
 class PickerMenu(InterfaceElement):
     def __init__(self, pos: tuple):
         InterfaceElement.__init__(self, PickerMenuStyle(), pos)

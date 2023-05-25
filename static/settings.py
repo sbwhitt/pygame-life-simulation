@@ -20,7 +20,7 @@ MIDDLE_CLICK = 1
 RIGHT_CLICK = 2
 
 # clock settings
-CLOCK_RATE = 60
+CLOCK_RATE = 30
 METRONOME_RATE = 3
 
 # entity settings
