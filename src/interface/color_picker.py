@@ -33,14 +33,15 @@ class ColorPicker(InterfaceElement):
         self.color_picker_option = ColorPickerOption(option_pos)
     
     def render(self, screen: pygame.display, clock: Clock) -> None:
-        if self.hovering():
+        if self.menu_open:
+            self.render_hover(screen)
+            self.color_picker_option.update(clock)
+            self.color_picker_option.render(screen)
+        elif self.hovering():
             self.render_hover(screen)
         else:
             self.render_transparent(screen)
             self.render_border(screen)
-        if self.menu_open:
-            self.color_picker_option.update(clock)
-            self.color_picker_option.render(screen)
 
     def handle_click(self, button: int) -> None:
         if self._contains_click(button):
