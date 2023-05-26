@@ -49,9 +49,8 @@ class Mouse:
             self.cursor.update(self.dragging[settings.LEFT_CLICK])
             self.cursor.render(screen)
 
-    def spawn_outward(self, e_man: EntityManager, pos: tuple, elapsed) -> None:
+    def spawn_outward(self, e_man: EntityManager, pos: tuple, color: pygame.Color, elapsed) -> None:
         if self._increase_spawn_interval(elapsed):
-            color = utils.get_random_color()
             for i in range(0, len(self.deltas)):
                 d = utils.multiply_twople_by_constant(self.deltas[i], self.spawn_interval)
                 pos_i = (utils.add_twoples(pos, d))

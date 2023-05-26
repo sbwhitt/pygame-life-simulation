@@ -11,8 +11,8 @@ Simulates the life and behavior of small colored squares called entities. Entiti
 <b>q</b>: quit and exit the program</br>
 <b>esc</b>: pause program</br>
 <b>del</b>: delete selected entities</br>
-<b>left click</b>: drag to select entities</br>
-<b>middle click</b>: place entities of random color extending outward</br>
+<b>left click</b>: drag to select, create, or delete entities</br>
+<b>middle click</b>: place entities of selected color extending outward</br>
 <b>right click</b>: drag screen</br>
 <b>1, 2, 3, 4, 5, 6</b>: change selected entities to Red, Green, Blue, Yellow, Purple, or Cyan respectively</br>
 <b>r</b>: randomize selected entity colors</br>

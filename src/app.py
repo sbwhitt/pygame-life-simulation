@@ -169,7 +169,7 @@ class App:
                                           self.color_picker.current_color,
                                           shift)
         if buttons[settings.MIDDLE_CLICK]:
-            self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.clock.time)
+            self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.color_picker.current_color, self.clock.time)
         else:
             self.mouse.stop_spawn()
         if buttons[settings.RIGHT_CLICK]:
