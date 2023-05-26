@@ -33,8 +33,13 @@ Then simply clone and run:
 
 <h2>Screenshots</h2>
 
-<b>Simulation example:</b></br>
-<img src="./imgs/example.PNG"/></br>
+<b>Example screenshots:</b></br>
+<img src="./imgs/current.PNG"/></br>
 </br>
-<b>Simulation example after a long time:</b></br>
+<b>Old example screenshots:</b></br>
+<img src="./imgs/exampleOLD.PNG"/></br>
+</br>
+<img src="./imgs/example2OLD.PNG"/></br>
+</br>
+<b>Old simulation example after a long time:</b></br>
 <img src="./imgs/exampleLONG.PNG"/></br>
