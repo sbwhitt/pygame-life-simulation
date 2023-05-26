@@ -216,6 +216,9 @@ class App:
             self._toggle_setting("LOGGING")
         elif key == pygame.K_h:
             self._toggle_setting("HIGHLIGHT")
+        # toggle side panel
+        elif key == pygame.K_p:
+            self.side_panel.toggle_panel()
         # quit
         elif key == pygame.K_q:
             self._running = False

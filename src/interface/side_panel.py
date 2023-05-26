@@ -21,8 +21,8 @@ class SidePanelButton(InterfaceElement):
         InterfaceElement.__init__(self, style, pos)
 
     def render(self, screen: pygame.display, panel_open: bool) -> None:
+        self.style.COLOR = colors.RED if panel_open else colors.GREEN
         if self.hovering():
-            self.style.COLOR = colors.RED if panel_open else colors.GREEN
             self.render_hover(screen)
         else:
             self.render_transparent(screen)
@@ -55,7 +55,18 @@ class SidePanel(InterfaceElement):
     def handle_click(self, button: int) -> None:
         if self.panel_button.hovering():
             if button == settings.LEFT_CLICK:
-                self._toggle_panel()
+                self.toggle_panel()
+    
+    def toggle_panel(self) -> None:
+        self.panel_open = not self.panel_open
+        if self.panel_open:
+            self.panel_button.pos = utils.subtract_twoples(self.pos, (self.panel_button.style.WIDTH, 0))
+            self.stats.hidden = False
+            self.minimap.hidden = False
+        else:
+            self.panel_button.pos = (settings.WINDOW_WIDTH-self.panel_button.style.WIDTH, 0)
+            self.stats.hidden = True
+            self.minimap.hidden = True
 
     def update_stats(self, clock: Clock, e_man: EntityManager, metrics: Metrics) -> None:
         self.stats.clear()
@@ -89,14 +100,3 @@ class SidePanel(InterfaceElement):
         #                     colors.ORANGE)
 
     # helpers
-
-    def _toggle_panel(self) -> None:
-        self.panel_open = not self.panel_open
-        if self.panel_open:
-            self.panel_button.pos = utils.subtract_twoples(self.pos, (self.panel_button.style.WIDTH, 0))
-            self.stats.hidden = False
-            self.minimap.hidden = False
-        else:
-            self.panel_button.pos = (settings.WINDOW_WIDTH-self.panel_button.style.WIDTH, 0)
-            self.stats.hidden = True
-            self.minimap.hidden = True
