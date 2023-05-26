@@ -44,9 +44,10 @@ class Mouse:
                        (settings.ENT_WIDTH, settings.ENT_WIDTH), (-settings.ENT_WIDTH, settings.ENT_WIDTH),
                        (settings.ENT_WIDTH, -settings.ENT_WIDTH), (-settings.ENT_WIDTH, -settings.ENT_WIDTH)]
 
-    def render_cursor(self, screen: pygame.display) -> None:
-        self.cursor.update(self.dragging[settings.LEFT_CLICK])
-        self.cursor.render(screen)
+    def render_cursor(self, screen: pygame.display, i_map_active: bool) -> None:
+        if not i_map_active:
+            self.cursor.update(self.dragging[settings.LEFT_CLICK])
+            self.cursor.render(screen)
 
     def spawn_outward(self, e_man: EntityManager, pos: tuple, elapsed) -> None:
         if self._increase_spawn_interval(elapsed):

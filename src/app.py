@@ -75,7 +75,7 @@ class App:
         self.e_man.render_entities(self.window)
         self.c_man.render_colonies(self.window)
         self.e_man.render_selected(self.window, self.clock)
-        self.mouse.render_cursor(self.screen)
+        self.mouse.render_cursor(self.screen, self.i_map.active)
         self.side_panel.render(self.screen, self.e_man.entities)
         self.picker.render(self.screen)
         self.color_picker.render(self.screen, self.clock)
@@ -149,7 +149,7 @@ class App:
     def _handle_click(self, button) -> None:
         # why are event.button values different from pygame.mouse.get_pressed???
         # left click is 1 here but 0 elsewhere
-        if button-1 == settings.LEFT_CLICK:
+        if self.i_map.active and button-1 == settings.LEFT_CLICK:
             self.picker.handle_click(settings.LEFT_CLICK)
             self.color_picker.handle_click(settings.LEFT_CLICK)
             self.side_panel.handle_click(settings.LEFT_CLICK)
@@ -157,6 +157,8 @@ class App:
     def _handle_mouse_actions(self) -> None:
         # mouse buttons: 0 == left, 1 == middle, 2 == right
         buttons = pygame.mouse.get_pressed(3)
+        if self.i_map.active:
+            return
         if buttons[settings.LEFT_CLICK]:
             self.mouse.drag(settings.LEFT_CLICK)
         elif self.mouse.dragging[settings.LEFT_CLICK]:

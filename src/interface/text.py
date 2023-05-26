@@ -3,7 +3,6 @@ import static.settings as settings
 import static.colors as colors
 
 
-# TODO: create font objects at program start and pass to Text objects as param to avoid creating new font objects every time
 class Text:
     def __init__(self, font_size: int=settings.FONT_SIZE, color: pygame.Color=colors.BLACK):
         self.font_size = font_size
