@@ -117,6 +117,9 @@ class EntityManager:
     def select_entity(self, e: Entity) -> None:
         if e not in self.selected: self.selected.append(e)
 
+    def select_all_entities(self) -> None:
+        self.selected = self.entities.copy()
+
     def clear_selected(self) -> None:
         self.selected.clear()
 

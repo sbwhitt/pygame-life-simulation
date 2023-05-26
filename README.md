@@ -17,6 +17,7 @@ Simulates the life and behavior of small colored squares called entities. Entiti
 <b>1, 2, 3, 4, 5, 6</b>: change selected entities to Red, Green, Blue, Yellow, Purple, or Cyan respectively</br>
 <b>r</b>: randomize selected entity colors</br>
 <b>c</b>: shift selected entity colors by one position (red values become green value, green becomes blue...)</br>
+<b>ctrl+a</b>: select all entities</br>
 <b>f</b>: invert selected entity colors</br>
 <b>e</b>: add six entities of each color to edges of screen</br>
 <b>d</b>: toggle whether diseased entities will be marked or not</br>

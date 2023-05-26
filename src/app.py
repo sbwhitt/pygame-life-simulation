@@ -202,6 +202,8 @@ class App:
         # change colors to cyan
         elif key == pygame.K_6:
             self.e_man.update_all_colors((0, 255, 255))
+        elif (pygame.K_LCTRL in self.keys or pygame.K_RCTRL in self.keys) and key == pygame.K_a:
+            self.e_man.select_all_entities()
         # shift colors
         elif key == pygame.K_c:
             self.e_man.shift_colors()
