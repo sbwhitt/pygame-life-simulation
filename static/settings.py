@@ -1,7 +1,7 @@
 # window settings
 # both settings have to be divisible by 20
-WINDOW_WIDTH = 1440
-WINDOW_HEIGHT = 900
+WINDOW_WIDTH = 1400
+WINDOW_HEIGHT = 800
 
 # world settings
 WORLD_SIZE = 2000
@@ -13,6 +13,7 @@ FONT_SIZE_SMALLER = 16
 
 # menu options
 ACTION_MENU_OPTIONS = {0: "Selection", 1: "Creation", 2: "Deletion"}
+COLOR_PICKER_OPTIONS = {0: "Red", 1: "Green", 2: "Blue"}
 
 # input settings
 LEFT_CLICK = 0
@@ -21,7 +22,7 @@ RIGHT_CLICK = 2
 
 # clock settings
 CLOCK_RATE = 60
-METRONOME_RATE = 12
+METRONOME_RATE = 6
 
 # entity settings
 AGE_LENGTH = 2000

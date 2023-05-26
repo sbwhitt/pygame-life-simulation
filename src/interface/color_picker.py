@@ -36,8 +36,8 @@ class ColorPicker(InterfaceElement):
         self.options = self._build_options([settings.COLOR_PICKER_OPTIONS[0],
                              settings.COLOR_PICKER_OPTIONS[1],
                              settings.COLOR_PICKER_OPTIONS[2]])
-        self.style.COLOR = utils.get_random_color()
-        self.current_color = self.style.COLOR
+        self.style.COLOR = self._build_current_color()
+        self.current_color = self._build_current_color()
     
     def render(self, screen: pygame.display) -> None:
         if self.menu_open:
