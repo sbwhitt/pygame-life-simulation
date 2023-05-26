@@ -35,8 +35,14 @@ class InterfaceElement:
                           utils.get_rect_outline(self.rect),
                           self.style.BORDER_WIDTH)
     
+    def handle_click(self) -> None:
+        if self.hovering():
+            pass
+    
     def hovering(self) -> bool:
         return utils.within_rect(pygame.mouse.get_pos(), self.rect)
+
+    # helpers
     
     def _build_rect(self) -> pygame.Rect:
         return pygame.rect.Rect(self.pos[0],

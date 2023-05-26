@@ -37,9 +37,19 @@ class MiniMap(InterfaceElement):
 
     def render(self, screen: pygame.display, entities: list[Entity]) -> None:
         # self.render_transparent(screen)
+        if self.hovering():
+            self.style.BORDER_WIDTH = 3
+        else:
+            self.style.BORDER_WIDTH = 2
         self.render_border(screen)
         self._render_small_entities(screen, entities)
         self._render_cursor(screen)
+
+    def handle_click(self, pos: tuple) -> None:
+        new_off = self._calculate_window_offset(pos)
+        self.window.set_offset(new_off)
+
+    # helpers
     
     def _render_cursor(self, screen: pygame.display) -> None:
         offset_x_adj = int(self.window.offset[0] * self.map_ratio)
@@ -64,3 +74,8 @@ class MiniMap(InterfaceElement):
             else:
                 pygame.draw.rect(screen, e.dna.color, 
                                  copy, border_radius=0)
+
+    def _calculate_window_offset(self, pos: tuple) -> tuple:
+        p = utils.subtract_twoples(pos, self.pos)
+        pos_adj = (int(p[0]/self.map_ratio), int(p[1]/self.map_ratio))
+        return utils.subtract_twoples(pos_adj, (int(self.window.width/2), int(self.window.height/2)))

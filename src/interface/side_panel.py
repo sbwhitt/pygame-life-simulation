@@ -56,6 +56,9 @@ class SidePanel(InterfaceElement):
         if self.panel_button.hovering():
             if button == settings.LEFT_CLICK:
                 self.toggle_panel()
+        elif self.minimap.hovering():
+            if button == settings.LEFT_CLICK:
+                self.minimap.handle_click(pygame.mouse.get_pos())
     
     def toggle_panel(self) -> None:
         self.panel_open = not self.panel_open
