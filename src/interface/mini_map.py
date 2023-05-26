@@ -23,7 +23,6 @@ class MiniMapCursor(InterfaceElement):
         self.render_border(screen)
 
 
-# TODO: add minimap click to move window
 class MiniMap(InterfaceElement):
     def __init__(self, window: Window):
         style = MiniMapStyle()
