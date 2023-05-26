@@ -42,6 +42,17 @@ class StatsPanelStyle(Style):
     COLOR = colors.WHITE
 
 @dataclass
+class MiniMapStyle(Style):
+    WIDTH = 240
+    HEIGHT = 240
+    COLOR = colors.WHITE
+
+@dataclass
+class MiniMapCursorStyle(Style):
+    BORDER_WIDTH = 1
+    ALPHA = 10
+
+@dataclass
 class PickerMenuOptionStyle(Style):
     WIDTH = 80
     HEIGHT = 80
@@ -56,12 +67,14 @@ class PickerMenuStyle(Style):
     MARGIN = (10, 10)
 
 @dataclass
-class MiniMapStyle(Style):
-    WIDTH = 240
-    HEIGHT = 240
-    COLOR = colors.WHITE
+class ColorPickerStyle(Style):
+    WIDTH = 100
+    HEIGHT = 100
+    MARGIN = (30, 10)
 
 @dataclass
-class MiniMapCursorStyle(Style):
-    BORDER_WIDTH = 1
-    ALPHA = 10
+class ColorPickerOptionStyle(Style):
+    WIDTH = 100
+    HEIGHT = 100
+    COLOR = colors.BLACK
+    MARGIN = (0, 10)

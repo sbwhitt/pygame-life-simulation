@@ -69,13 +69,13 @@ class Mouse:
         elif button == settings.RIGHT_CLICK:
             self.window.move(self._get_drag_dir(settings.RIGHT_CLICK))
 
-    def execute_left_click(self, menu_option: PickerMenuOption, e_man: EntityManager, shift: bool=False) -> None:
+    def execute_left_click(self, menu_option: PickerMenuOption, e_man: EntityManager, color: pygame.Color, shift: bool=False) -> None:
         # selection
         if menu_option.option == settings.ACTION_MENU_OPTIONS[0]:
             self.select(e_man, shift)
         # creation
         elif menu_option.option == settings.ACTION_MENU_OPTIONS[1]:
-            self.place_selected(e_man)
+            self.place_selected(e_man, color)
         # deletion
         elif menu_option.option == settings.ACTION_MENU_OPTIONS[2]:
             self.delete_selected(e_man)
@@ -92,12 +92,12 @@ class Mouse:
                 y += settings.ENT_WIDTH
             x += settings.ENT_WIDTH
     
-    def place_selected(self, e_man: EntityManager) -> None:
+    def place_selected(self, e_man: EntityManager, color: pygame.Color) -> None:
         x, y = self.cursor.rect.left, self.cursor.rect.top
         while x < self.cursor.rect.right:
             y = self.cursor.rect.top
             while y < self.cursor.rect.bottom:
-                e_man.place_entity(utils.add_twoples((x, y), self.window.offset), utils.get_random_color())
+                e_man.place_entity(utils.add_twoples((x, y), self.window.offset), color)
                 y += settings.ENT_WIDTH
             x += settings.ENT_WIDTH
 
