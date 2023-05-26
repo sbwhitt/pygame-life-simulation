@@ -46,7 +46,7 @@ class PickerMenuOptionStyle(Style):
     WIDTH = 80
     HEIGHT = 80
     COLOR = colors.RED
-    MARGIN = (20, 10)
+    MARGIN = (10, 10)
 
 @dataclass
 class PickerMenuStyle(Style):

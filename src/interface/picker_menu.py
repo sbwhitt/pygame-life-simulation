@@ -101,8 +101,8 @@ class PickerMenu(InterfaceElement):
             self.options.append(self._build_option(options[i], i))
     
     def _build_option(self, option: str, offset: int) -> PickerMenuOption:
-        x_off = self.style.WIDTH+(self.style.WIDTH*offset)
-        p_adj = utils.add_twoples(self.pos, (x_off, 0))
+        y_off = self.style.WIDTH+(self.style.WIDTH*offset)
+        p_adj = utils.add_twoples(self.pos, (0, y_off))
         return PickerMenuOption(option, p_adj)
 
     def _pick_option(self, option: PickerMenuOption) -> None:
