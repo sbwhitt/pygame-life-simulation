@@ -58,6 +58,7 @@ class PickerMenuOptionStyle(Style):
     HEIGHT = 80
     COLOR = colors.RED
     MARGIN = (10, 10)
+    ALPHA = 100
 
 @dataclass
 class PickerMenuStyle(Style):
@@ -65,12 +66,14 @@ class PickerMenuStyle(Style):
     HEIGHT = 100
     COLOR = colors.GRAY
     MARGIN = (10, 10)
+    ALPHA = 100
 
 @dataclass
 class ColorPickerStyle(Style):
     WIDTH = 100
     HEIGHT = 100
     MARGIN = (30, 10)
+    ALPHA = 100
 
 @dataclass
 class ColorPickerOptionStyle(Style):
@@ -78,3 +81,4 @@ class ColorPickerOptionStyle(Style):
     HEIGHT = 100
     COLOR = colors.BLACK
     MARGIN = (0, 10)
+    ALPHA = 100

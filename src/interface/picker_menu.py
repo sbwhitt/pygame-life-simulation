@@ -9,8 +9,10 @@ from src.styles.styles import PickerMenuStyle
 
 
 class PickerMenuOption(InterfaceElement):
-    def __init__(self, option: str, pos: tuple):
-        InterfaceElement.__init__(self, PickerMenuOptionStyle(), pos)
+    def __init__(self, option: str, pos: tuple, color: pygame.color):
+        style = PickerMenuOptionStyle()
+        style.COLOR = color
+        InterfaceElement.__init__(self, style, pos)
         self.option = option
         self.hidden = True
         self.selected = False
@@ -43,10 +45,12 @@ class PickerMenu(InterfaceElement):
         self.action_text = Text(settings.FONT_SIZE_SMALLER)
     
     def render(self, screen: pygame.display) -> None:
+        self.style.COLOR = self.selected_option.style.COLOR
         if self.hovering() or self.menu_open:
             self.render_hover(screen)
         else:
             self.render_transparent(screen)
+            self.render_border(screen)
         self._render_menu_text(screen)
         if self.menu_open:
             self._render_menu_options(screen)
@@ -98,12 +102,17 @@ class PickerMenu(InterfaceElement):
 
     def _build_options(self, options: list[str]) -> list[PickerMenuOption]:
         for i in range(len(options)):
-            self.options.append(self._build_option(options[i], i))
+            if settings.ACTION_MENU_OPTIONS[i] == "Selection":
+                self.options.append(self._build_option(options[i], i, colors.CYAN))
+            if settings.ACTION_MENU_OPTIONS[i] == "Creation":
+                self.options.append(self._build_option(options[i], i, colors.GREEN))
+            if settings.ACTION_MENU_OPTIONS[i] == "Deletion":
+                self.options.append(self._build_option(options[i], i, colors.RED))
     
-    def _build_option(self, option: str, offset: int) -> PickerMenuOption:
+    def _build_option(self, option: str, offset: int, color: pygame.Color) -> PickerMenuOption:
         y_off = self.style.WIDTH+(self.style.WIDTH*offset)
         p_adj = utils.add_twoples(self.pos, (0, y_off))
-        return PickerMenuOption(option, p_adj)
+        return PickerMenuOption(option, p_adj, color)
 
     def _pick_option(self, option: PickerMenuOption) -> None:
         self.selected_option = option

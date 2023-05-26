@@ -37,6 +37,7 @@ class ColorPicker(InterfaceElement):
             self.render_hover(screen)
         else:
             self.render_transparent(screen)
+            self.render_border(screen)
         if self.menu_open:
             self.color_picker_option.update(clock)
             self.color_picker_option.render(screen)
