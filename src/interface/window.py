@@ -25,3 +25,23 @@ class Window:
             point[0] < self.width + self.offset[0] and 
             point[1] >= self.offset[1] and 
             point[1] < self.height + self.offset[1])
+
+    def set_offset(self, pos: tuple) -> None:
+        new_x, new_y = self.offset[0], self.offset[1]
+        if pos[0] >= 0 and pos[0]+self.width <= settings.WORLD_SIZE:
+            new_x = pos[0]
+        elif pos[0]+self.width > settings.WORLD_SIZE:
+            new_x = settings.WORLD_SIZE-self.width
+        elif pos[0] < 0:
+            new_x = 0
+
+        if pos[1] >= 0 and pos[1]+self.height <= settings.WORLD_SIZE:
+            new_y = pos[1]
+        elif pos[1]+self.height > settings.WORLD_SIZE:
+            new_y = settings.WORLD_SIZE-self.height
+        elif pos[1] < 0:
+            new_y = 0
+
+        # correcting new offset tuple to be aligned with entity grid
+        corrected = utils.subtract_twoples((new_x, new_y), (new_x % settings.ENT_WIDTH, new_y % settings.ENT_WIDTH))
+        self.offset = corrected
