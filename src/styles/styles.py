@@ -78,7 +78,7 @@ class ColorPickerStyle(Style):
 @dataclass
 class ColorPickerOptionStyle(Style):
     WIDTH = 100
-    HEIGHT = 100
+    HEIGHT = 40
     COLOR = colors.BLACK
     MARGIN = (0, 10)
     ALPHA = 100

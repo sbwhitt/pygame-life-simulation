@@ -21,6 +21,10 @@ class InterfaceElement:
         pygame.draw.rect(screen, self.style.COLOR, self.rect)
         self.render_border(screen)
     
+    def render_opaque(self, screen: pygame.display) -> None:
+        self.rect = self._build_rect()
+        pygame.draw.rect(screen, self.style.COLOR, self.rect)
+    
     def render_transparent(self, screen: pygame.display) -> None:
         self.rect = self._build_rect()
         utils.draw_rect_alpha(screen,

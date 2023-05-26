@@ -35,6 +35,12 @@ def get_color_transparent(color: pygame.Color, transparency: int) -> pygame.Colo
     if not (transparency >= 0 and transparency <= 255): return color
     return pygame.Color(color.r, color.g, color.b, transparency)
 
+def multiply_color(color: pygame.Color, ratio: float) -> pygame.Color:
+    '''Returns given pygame color with all values multiplied by given ratio (0.0 - 1.0)'''
+    return pygame.Color(int(color.r*ratio),
+                        int(color.g*ratio),
+                        int(color.b*ratio))
+
 def get_tile_pos(t1: tuple, offset: tuple=None, top: bool=False, left: bool=False, bottom: bool=False, right: bool=False) -> tuple:
     '''
     Returns the tile start coordinates for the position given plus an optional offset.

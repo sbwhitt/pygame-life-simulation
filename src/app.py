@@ -78,7 +78,7 @@ class App:
         self.mouse.render_cursor(self.screen, self.i_map.active)
         self.side_panel.render(self.screen, self.e_man.entities)
         self.picker.render(self.screen)
-        self.color_picker.render(self.screen, self.clock)
+        self.color_picker.render(self.screen)
         pygame.display.flip()
 
     def on_cleanup(self) -> None:
@@ -116,7 +116,8 @@ class App:
             self.i_map.add_element(o)
         # adding color picker menu
         self.i_map.add_element(self.color_picker)
-        self.i_map.add_element(self.color_picker.color_picker_option)
+        for o in self.color_picker.options:
+            self.i_map.add_element(o)
         # adding side panel toggle button
         self.i_map.add_element(self.side_panel.panel_button)
         # adding minimap

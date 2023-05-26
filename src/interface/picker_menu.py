@@ -36,9 +36,8 @@ class PickerMenuOption(InterfaceElement):
 class PickerMenu(InterfaceElement):
     def __init__(self, pos: tuple):
         InterfaceElement.__init__(self, PickerMenuStyle(), pos)
-        self.options = []
         self.menu_open = False
-        self._build_options([settings.ACTION_MENU_OPTIONS[0],
+        self.options = self._build_options([settings.ACTION_MENU_OPTIONS[0],
                              settings.ACTION_MENU_OPTIONS[1],
                              settings.ACTION_MENU_OPTIONS[2]])
         self.selected_option = None if len(self.options) < 1 else self.options[0]
@@ -59,18 +58,18 @@ class PickerMenu(InterfaceElement):
     def handle_click(self, button: int) -> None:
         # left click picker menu
             if self._contains_click(button):
-                if not self.menu_open: self.open_pick_menu()
-                else: self.close_pick_menu()
+                if not self.menu_open: self.open_menu()
+                else: self.close_menu()
             # left click picker menu option
             elif self.menu_open and self._contains_option_click(button):
-                self.close_pick_menu()
+                self.close_menu()
 
-    def open_pick_menu(self) -> None:
+    def open_menu(self) -> None:
         self.menu_open = True
         o: PickerMenuOption
         for o in self.options: o.hidden = False
     
-    def close_pick_menu(self) -> None:
+    def close_menu(self) -> None:
         self.menu_open = False
         o: PickerMenuOption
         for o in self.options: o.hidden = True
@@ -102,16 +101,18 @@ class PickerMenu(InterfaceElement):
         self.action_text.render(screen, self.selected_option.option, utils.add_twoples(self.pos, (0, settings.FONT_SIZE)))
 
     def _build_options(self, options: list[str]) -> list[PickerMenuOption]:
+        ops = []
         for i in range(len(options)):
             if settings.ACTION_MENU_OPTIONS[i] == "Selection":
-                self.options.append(self._build_option(options[i], i, colors.CYAN))
+                ops.append(self._build_option(options[i], i, colors.CYAN))
             if settings.ACTION_MENU_OPTIONS[i] == "Creation":
-                self.options.append(self._build_option(options[i], i, colors.GREEN))
+                ops.append(self._build_option(options[i], i, colors.GREEN))
             if settings.ACTION_MENU_OPTIONS[i] == "Deletion":
-                self.options.append(self._build_option(options[i], i, colors.RED))
+                ops.append(self._build_option(options[i], i, colors.RED))
+        return ops
     
     def _build_option(self, option: str, offset: int, color: pygame.Color) -> PickerMenuOption:
-        y_off = self.style.WIDTH+(self.style.WIDTH*offset)
+        y_off = self.style.HEIGHT + (self.style.WIDTH*offset)
         p_adj = utils.add_twoples(self.pos, (0, y_off))
         return PickerMenuOption(option, p_adj, color)
 
