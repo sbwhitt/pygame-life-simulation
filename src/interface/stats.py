@@ -8,24 +8,26 @@ from src.interface.text import Text
 
 
 class Stat:
-    def __init__(self, title: str, value: str, pos: tuple, color: pygame.Color):
+    def __init__(self, text: Text, title: str, value: str, pos: tuple, color: pygame.Color):
+        self.text = text
         self.title = title
         self.value = value
         self.pos = pos
         self.color = color
     
     def render(self, screen: pygame.display) -> None:
-        Text(color=self.color).render(screen, self.title, self.pos)
-        Text(color=self.color).render(screen, self.value, utils.add_twoples(self.pos, (0, settings.FONT_SIZE)))
+        self.text.color = self.color
+        self.text.render(screen, self.title, self.pos)
+        self.text.render(screen, self.value, utils.add_twoples(self.pos, (0, settings.FONT_SIZE)))
 
 
-# TODO: optimize text rendering to bring up framerate
 class Stats(InterfaceElement):
     def __init__(self):
         style = StatsPanelStyle()
         pos = (settings.WINDOW_WIDTH-style.WIDTH, 0)
         InterfaceElement.__init__(self, style, pos)
         self.stats = []
+        self.stat_text = Text()
     
     def render(self, screen: pygame.display) -> None:
         self.render_transparent(screen)
@@ -34,7 +36,7 @@ class Stats(InterfaceElement):
     
     def add_stat(self, title: str, value: str, color: pygame.Color=colors.BLACK) -> None:
         p = (self.pos[0]+10, 10+(2*settings.FONT_SIZE*len(self.stats)))
-        self.stats.append(Stat(title, value, p, color))
+        self.stats.append(Stat(self.stat_text, title, value, p, color))
     
     def clear(self) -> None:
         self.stats.clear()
