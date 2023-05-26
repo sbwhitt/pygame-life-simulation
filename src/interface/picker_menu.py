@@ -23,6 +23,7 @@ class PickerMenuOption(InterfaceElement):
             self.render_hover(screen)
         else:
             self.render_transparent(screen)
+            self.render_border(screen)
         self._render_option_text(screen)
     
     # helpers
