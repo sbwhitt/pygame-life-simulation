@@ -191,7 +191,7 @@ class EntityManager:
 
     def _spread_disease(self, collisions: list[Entity]) -> None:
         for e in collisions:
-            if not e.dna.diseased and not e.dna.immune and random.randint(0, 1) == 1:
+            if not e.dna.diseased and not e.dna.immune:
                 e.dna.diseased = True
                 self.diseased += 1
 

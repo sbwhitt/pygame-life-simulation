@@ -21,6 +21,8 @@ class Entity:
             self.dna = DNA(utils.get_random_color())
 
     def update(self, width: int, height: int, surroundings: list["Entity"]) -> "Entity":
+        if self.dna.diseased:
+            self.dna.recover()
         neighbor = self._choose_neighbor(surroundings)
         if neighbor != None:
             return neighbor
@@ -63,6 +65,8 @@ class Entity:
                     if self.bound and random.randint(1, 4) == 1:
                         self.dna.send_color(surroundings[i].dna)
             else: self.edges[i] = True
+
+    # helpers
     
     def _move(self, width: int, height: int, choice: int) -> None:
         if self.dna.move_timer > settings.MOVE_INTERVAL:

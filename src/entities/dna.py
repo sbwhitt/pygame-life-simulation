@@ -30,6 +30,10 @@ class DNA:
         self.color = pygame.Color(random.randint(
             10, 200), random.randint(10, 200), random.randint(10, 200))
     
+    def recover(self) -> None:
+        if random.randint(1, settings.DISEASE_SPREAD_CHANCE) == 1:
+            self.diseased = False
+    
     def compatible(self, candidate: "DNA") -> bool:
         return self._compare_colors(candidate.color)
     
