@@ -92,9 +92,13 @@ class Entity:
     def _choose_spawn_location(self) -> tuple|None:
         # up left down right
         dirs = [(0, -settings.ENT_WIDTH), (-settings.ENT_WIDTH, 0), (0, settings.ENT_WIDTH), (settings.ENT_WIDTH, 0)]
+        choices = []
         for i in range(len(self.edges)):
             if self.edges[i]:
-                return (self.loc[0] + dirs[i][0], self.loc[1] + dirs[i][1])
+                choices.append(i)
+        if len(choices) > 0:
+            choice = random.randint(0, len(choices)-1)
+            return utils.add_twoples(self.loc, dirs[choice])
         return None
 
     def _degenerate(self) -> None:
