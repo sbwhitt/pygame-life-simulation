@@ -30,7 +30,7 @@ MOVE_INTERVAL = 50
 DIR_INTERVAL = 700
 # chances are 1/<value>
 MUTATE_CHANCE = 100
-DISEASE_SPREAD_CHANCE = 20
+DISEASE_SPREAD_CHANCE = 15
 ENTITY_LIMIT = 10000
 # must divide evenly into window height and width (5, 10, 20, 40...)
 ENT_WIDTH = 20
