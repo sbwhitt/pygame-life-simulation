@@ -19,15 +19,16 @@ class Entity:
             self.dna = DNA(args[2])
         else:
             self.dna = DNA(utils.get_random_color())
+        self.dirs = [(0, -settings.ENT_WIDTH), (-settings.ENT_WIDTH, 0), (0, settings.ENT_WIDTH), (settings.ENT_WIDTH, 0)]
 
-    def update(self, width: int, height: int, surroundings: list["Entity"]) -> "Entity":
+    def update(self, surroundings: list["Entity"]) -> "Entity":
         if self.dna.diseased:
             self.dna.recover()
         neighbor = self._choose_neighbor(surroundings)
         if neighbor != None:
             return neighbor
         if (not self.bound and self.dna.dir_timer > settings.DIR_INTERVAL):
-            self._choose_dir(surroundings, width, height)
+            self._move(self._choose_dir(surroundings))
         return None
 
     def reproduce(self) -> "Entity|None":
@@ -68,37 +69,37 @@ class Entity:
 
     # helpers
     
-    def _move(self, width: int, height: int, choice: int) -> None:
+    def _move(self, choice: int) -> None:
         if self.dna.move_timer > settings.MOVE_INTERVAL:
             if choice == 0 and self.rect.top != 0:  # up
                 self.rect = self.rect.move(0, -settings.ENT_WIDTH)
             elif choice == 1 and self.rect.left != 0:  # left
                 self.rect = self.rect.move(-settings.ENT_WIDTH, 0)
-            elif choice == 2 and self.rect.bottom <= height:  # down
+            elif choice == 2 and self.rect.bottom <= settings.WORLD_SIZE:  # down
                 self.rect = self.rect.move(0, settings.ENT_WIDTH)
-            elif choice == 3 and self.rect.right < width:  # right
+            elif choice == 3 and self.rect.right < settings.WORLD_SIZE:  # right
                 self.rect = self.rect.move(settings.ENT_WIDTH, 0)
             self.dna.move_timer = 0
             self.loc = (self.rect.left, self.rect.top)
     
-    def _choose_dir(self, surroundings: list["Entity"], width: int, height: int) -> int:
+    def _choose_dir(self, surroundings: list["Entity"]) -> int:
         self.dna.dir_timer = 0
-        choices = -1
-        for s in surroundings:
-            if not s: choices += 1
-        if choices > 0:
-            self._move(width, height, random.randint(0, choices))
+        choices = []
+        for i in range(len(surroundings)):
+            if not surroundings[i]: choices.append(i)
+        if len(choices) > 0:
+            return choices[random.randint(0, len(choices)-1)]
+        return -1
     
     def _choose_spawn_location(self) -> tuple|None:
-        # up left down right
-        dirs = [(0, -settings.ENT_WIDTH), (-settings.ENT_WIDTH, 0), (0, settings.ENT_WIDTH), (settings.ENT_WIDTH, 0)]
+        # up left down right        
         choices = []
         for i in range(len(self.edges)):
             if self.edges[i]:
                 choices.append(i)
         if len(choices) > 0:
             choice = random.randint(0, len(choices)-1)
-            return utils.add_twoples(self.loc, dirs[choice])
+            return utils.add_twoples(self.loc, self.dirs[choice])
         return None
 
     def _degenerate(self) -> None:

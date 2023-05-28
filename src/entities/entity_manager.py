@@ -32,7 +32,7 @@ class EntityManager:
                 e.dna.dir_timer += clock_time
                 e.dna.move_timer += clock_time
                 self.m.grid[e.loc].remove(e)
-                neighbor = e.update(settings.WORLD_SIZE, settings.WORLD_SIZE, surroundings)
+                neighbor = e.update(surroundings)
                 if neighbor != None: c_man.bind(e, neighbor)
                 self.m.grid[e.loc].append(e)
             elif e.bound:
