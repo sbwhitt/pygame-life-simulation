@@ -36,7 +36,7 @@ ENTITY_LIMIT = 10000
 ENT_WIDTH = 20
 DIRS = [(0, -ENT_WIDTH), (-ENT_WIDTH, 0),
         (0, ENT_WIDTH), (ENT_WIDTH, 0),
-        (-ENT_WIDTH, -ENT_WIDTH), (ENT_WIDTH, ENT_WIDTH),
+        (-ENT_WIDTH, -ENT_WIDTH), (-ENT_WIDTH, ENT_WIDTH),
         (ENT_WIDTH, ENT_WIDTH), (ENT_WIDTH, -ENT_WIDTH)]
 
 # in game settings
