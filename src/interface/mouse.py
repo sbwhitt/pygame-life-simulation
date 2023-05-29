@@ -26,7 +26,7 @@ class Cursor(InterfaceElement):
             self.style.WIDTH = settings.ENT_WIDTH
             self.style.HEIGHT = settings.ENT_WIDTH
     
-    def render(self, screen: pygame.display) -> None:
+    def render(self, screen: pygame.Surface) -> None:
         self.render_border(screen)
 
 
@@ -40,7 +40,7 @@ class Mouse:
         self.spawn_modulus = 250
         self.spawn_interval = 0
 
-    def render_cursor(self, screen: pygame.display, i_map_active: bool) -> None:
+    def render_cursor(self, screen: pygame.Surface, i_map_active: bool) -> None:
         if not i_map_active:
             self.cursor.update(self.dragging[settings.LEFT_CLICK])
             self.cursor.render(screen)

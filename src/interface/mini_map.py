@@ -19,7 +19,7 @@ class MiniMapCursor(InterfaceElement):
     def update(self, pos: tuple) -> None:
         self.pos = pos
     
-    def render(self, screen: pygame.display) -> None:
+    def render(self, screen: pygame.Surface) -> None:
         self.render_border(screen)
 
 
@@ -34,7 +34,7 @@ class MiniMap(InterfaceElement):
             int(self.window.height * self.map_ratio),
             utils.add_twoples(self.pos, (2, 2)))
 
-    def render(self, screen: pygame.display, entities: list[Entity]) -> None:
+    def render(self, screen: pygame.Surface, entities: list[Entity]) -> None:
         # self.render_transparent(screen)
         if self.hovering():
             self.style.BORDER_WIDTH = 3
@@ -50,13 +50,13 @@ class MiniMap(InterfaceElement):
 
     # helpers
     
-    def _render_cursor(self, screen: pygame.display) -> None:
+    def _render_cursor(self, screen: pygame.Surface) -> None:
         offset_x_adj = int(self.window.offset[0] * self.map_ratio)
         offset_y_adj = int(self.window.offset[1] * self.map_ratio)
         self.cursor.update(utils.add_twoples(self.pos, (offset_x_adj, offset_y_adj)))
         self.cursor.render(screen)
     
-    def _render_small_entities(self, screen: pygame.display, entities: list[Entity]) -> None:
+    def _render_small_entities(self, screen: pygame.Surface, entities: list[Entity]) -> None:
         for e in entities:
             copy = e.rect.copy()
             adj_left_top = utils.add_twoples(

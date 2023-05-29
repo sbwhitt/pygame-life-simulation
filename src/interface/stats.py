@@ -15,7 +15,7 @@ class Stat:
         self.pos = pos
         self.color = color
     
-    def render(self, screen: pygame.display) -> None:
+    def render(self, screen: pygame.Surface) -> None:
         self.text.color = self.color
         self.text.render(screen, self.title, self.pos)
         self.text.render(screen, self.value, utils.add_twoples(self.pos, (0, settings.FONT_SIZE)))
@@ -29,7 +29,7 @@ class Stats(InterfaceElement):
         self.stats = []
         self.stat_text = Text()
     
-    def render(self, screen: pygame.display) -> None:
+    def render(self, screen: pygame.Surface) -> None:
         self.render_transparent(screen)
         self.render_border(screen)
         self._draw_stats(screen)
@@ -41,7 +41,7 @@ class Stats(InterfaceElement):
     def clear(self) -> None:
         self.stats.clear()
 
-    def _draw_stats(self, screen: pygame.display) -> None:
+    def _draw_stats(self, screen: pygame.Surface) -> None:
         s: Stat
         for s in self.stats:
             s.render(screen)

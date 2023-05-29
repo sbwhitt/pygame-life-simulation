@@ -18,7 +18,7 @@ class PickerMenuOption(InterfaceElement):
         self.selected = False
         self.text = Text(settings.FONT_SIZE_SMALLER)
     
-    def render(self, screen: pygame.display) -> None:
+    def render(self, screen: pygame.Surface) -> None:
         if self.hovering():
             self.render_hover(screen)
         else:
@@ -28,7 +28,7 @@ class PickerMenuOption(InterfaceElement):
     
     # helpers
 
-    def _render_option_text(self, screen: pygame.display) -> None:
+    def _render_option_text(self, screen: pygame.Surface) -> None:
         self.text.render(screen, self.option, self.pos)
 
 
@@ -44,7 +44,7 @@ class PickerMenu(InterfaceElement):
         self.title_text = Text(settings.FONT_SIZE)
         self.action_text = Text(settings.FONT_SIZE_SMALLER)
     
-    def render(self, screen: pygame.display) -> None:
+    def render(self, screen: pygame.Surface) -> None:
         self.style.COLOR = self.selected_option.style.COLOR
         if self.hovering() or self.menu_open:
             self.render_hover(screen)
@@ -89,14 +89,14 @@ class PickerMenu(InterfaceElement):
                     return True
         return False
     
-    def _render_menu_options(self, screen: pygame.display) -> None:
+    def _render_menu_options(self, screen: pygame.Surface) -> None:
         if not self.menu_open:
             return
         o: PickerMenuOption
         for o in self.options:
             o.render(screen)
     
-    def _render_menu_text(self, screen: pygame.display) -> None:
+    def _render_menu_text(self, screen: pygame.Surface) -> None:
         self.title_text.render(screen, "Actions", self.pos)
         self.action_text.render(screen, self.selected_option.option, utils.add_twoples(self.pos, (0, settings.FONT_SIZE)))
 

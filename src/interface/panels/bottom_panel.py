@@ -26,7 +26,7 @@ class BottomPanel(InterfaceElement):
         self.panel_open = False
         self.children = [BottomPanelOption(self.pos, colors.RED)]
 
-    def render(self, screen: pygame.display) -> None:
+    def render(self, screen: pygame.Surface) -> None:
         if self.panel_open:
             self.render_transparent(screen)
             self.render_border(screen)

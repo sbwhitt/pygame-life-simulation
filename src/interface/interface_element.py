@@ -10,28 +10,28 @@ class InterfaceElement:
         self.rect = self._build_rect()
         self.hidden = False
     
-    def render(self, screen: pygame.display) -> None:
+    def render(self, screen: pygame.Surface) -> None:
         if self.hovering():
             self.render_hover(screen)
         else:
             self.render_transparent(screen)
 
-    def render_hover(self, screen: pygame.display) -> None:
+    def render_hover(self, screen: pygame.Surface) -> None:
         self.rect = self._build_rect()
         pygame.draw.rect(screen, self.style.COLOR, self.rect)
         self.render_border(screen)
     
-    def render_opaque(self, screen: pygame.display) -> None:
+    def render_opaque(self, screen: pygame.Surface) -> None:
         self.rect = self._build_rect()
         pygame.draw.rect(screen, self.style.COLOR, self.rect)
     
-    def render_transparent(self, screen: pygame.display) -> None:
+    def render_transparent(self, screen: pygame.Surface) -> None:
         self.rect = self._build_rect()
         utils.draw_rect_alpha(screen,
                               utils.get_color_transparent(self.style.COLOR, self.style.ALPHA),
                               self.rect)
     
-    def render_border(self, screen: pygame.display) -> None:
+    def render_border(self, screen: pygame.Surface) -> None:
         self.rect = self._build_rect()
         pygame.draw.lines(screen,
                           self.style.BORDER_COLOR,

@@ -25,7 +25,7 @@ class SidePanel(InterfaceElement):
         self.stats = Stats()
         self.minimap = MiniMap(window)
     
-    def render(self, screen: pygame.display, entities: list[Entity]) -> None:
+    def render(self, screen: pygame.Surface, entities: list[Entity]) -> None:
         self.panel_button.render(screen, self.panel_open)
         if self.panel_open:
             self.stats.render(screen)

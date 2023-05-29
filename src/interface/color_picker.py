@@ -17,7 +17,7 @@ class ColorPickerOption(InterfaceElement):
         self.hidden = True
         self.updated = False
     
-    def render(self, screen: pygame.display) -> None:
+    def render(self, screen: pygame.Surface) -> None:
         self.render_opaque(screen)
         if self.hovering():
             self.render_border(screen)
@@ -39,7 +39,7 @@ class ColorPicker(InterfaceElement):
         self.style.COLOR = self._build_current_color()
         self.current_color = self._build_current_color()
     
-    def render(self, screen: pygame.display) -> None:
+    def render(self, screen: pygame.Surface) -> None:
         if self.menu_open:
             self.render_hover(screen)
             self._render_menu_options(screen)
@@ -56,7 +56,7 @@ class ColorPicker(InterfaceElement):
     
     # helpers
 
-    def _render_menu_options(self, screen: pygame.display) -> None:
+    def _render_menu_options(self, screen: pygame.Surface) -> None:
         if not self.menu_open:
             return
         o: ColorPickerOption

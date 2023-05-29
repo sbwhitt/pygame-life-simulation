@@ -11,7 +11,7 @@ class PanelButton(InterfaceElement):
         style = PanelButtonStyle()
         InterfaceElement.__init__(self, style, pos)
 
-    def render(self, screen: pygame.display, panel_open: bool) -> None:
+    def render(self, screen: pygame.Surface, panel_open: bool) -> None:
         self.style.COLOR = colors.RED if panel_open else colors.GREEN
         if self.hovering():
             self.render_hover(screen)

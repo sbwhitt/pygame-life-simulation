@@ -9,7 +9,7 @@ class Text:
         self.color = color
         self.font = self._init_font()
     
-    def render(self, screen: pygame.display, text: str, pos: tuple) -> None:
+    def render(self, screen: pygame.Surface, text: str, pos: tuple) -> None:
         screen.blit(self.font.render(text, True, self.color), pos)
 
     # helpers
