@@ -28,7 +28,7 @@ class SidePanelStyle(Style):
     ALPHA = 0
 
 @dataclass
-class SidePanelButtonStyle(Style):
+class PanelButtonStyle(Style):
     WIDTH = 40
     HEIGHT = 40
     COLOR = colors.RED
@@ -82,3 +82,14 @@ class ColorPickerOptionStyle(Style):
     COLOR = colors.BLACK
     MARGIN = (0, 10)
     ALPHA = 100
+
+@dataclass
+class BottomPanelStyle(Style):
+    HEIGHT = 240
+    WIDTH = settings.WINDOW_WIDTH-HEIGHT
+
+@dataclass
+class BottomPanelOptionStyle(Style):
+    WIDTH = 200
+    HEIGHT = 200
+    MARGIN = (20, 20)

@@ -9,6 +9,7 @@ from src.colonies.colony_manager import ColonyManager
 from src.interface.mouse import Mouse
 from src.utils.clock import Clock
 from src.interface.side_panel import SidePanel
+from src.interface.bottom_panel import BottomPanel
 from src.utils.interface_map import InterfaceMap
 from src.interface.picker_menu import PickerMenu
 from src.interface.color_picker import ColorPicker
@@ -35,6 +36,7 @@ class App:
         self.mouse = Mouse(self.window)
         self.metrics = Metrics()
         self.side_panel = SidePanel(self.window)
+        self.bottom_panel = BottomPanel()
         self.picker = PickerMenu((0, 0))
         self.color_picker = ColorPicker((self.picker.style.WIDTH, 0))
 
@@ -77,6 +79,7 @@ class App:
         self.e_man.render_selected(self.window, self.clock)
         self.mouse.render_cursor(self.screen, self.i_map.active)
         self.side_panel.render(self.screen, self.e_man.entities)
+        self.bottom_panel.render(self.screen)
         self.picker.render(self.screen)
         self.color_picker.render(self.screen)
         pygame.display.flip()
@@ -120,6 +123,7 @@ class App:
             self.i_map.add_element(o)
         # adding side panel toggle button
         self.i_map.add_element(self.side_panel.panel_button)
+        self.i_map.add_element(self.bottom_panel.panel_button)
         # adding minimap
         self.i_map.add_element(self.side_panel.minimap)
     
@@ -154,6 +158,7 @@ class App:
             self.picker.handle_click(settings.LEFT_CLICK)
             self.color_picker.handle_click(settings.LEFT_CLICK)
             self.side_panel.handle_click(settings.LEFT_CLICK)
+            self.bottom_panel.handle_click(settings.LEFT_CLICK)
     
     def _handle_mouse_actions(self) -> None:
         # mouse buttons: 0 == left, 1 == middle, 2 == right

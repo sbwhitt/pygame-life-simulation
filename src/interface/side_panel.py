@@ -7,33 +7,12 @@ from src.interface.window import Window
 from src.utils.clock import Clock
 from src.tracking.metrics import Metrics
 from src.entities.entity import Entity
+from src.interface.panel_button import PanelButton
 from src.entities.entity_manager import EntityManager
 from src.styles.styles import SidePanelStyle
-from src.styles.styles import SidePanelButtonStyle
+from src.styles.styles import PanelButtonStyle
 from src.interface.stats import Stats
 from src.interface.mini_map import MiniMap
-
-
-class SidePanelButton(InterfaceElement):
-    def __init__(self, panel_pos: tuple):
-        style = SidePanelButtonStyle()
-        pos = utils.subtract_twoples(panel_pos, (style.WIDTH, 0))
-        InterfaceElement.__init__(self, style, pos)
-
-    def render(self, screen: pygame.display, panel_open: bool) -> None:
-        self.style.COLOR = colors.RED if panel_open else colors.GREEN
-        if self.hovering():
-            self.render_hover(screen)
-        else:
-            self.render_transparent(screen)
-            self.render_border(screen)
-        # self._render_carat(screen, panel_open)
-    
-    def _render_carat(self, screen: pygame.display, panel_open: bool) -> None:
-        if panel_open:
-            pass
-        else:
-            pass
 
 
 class SidePanel(InterfaceElement):
@@ -41,10 +20,10 @@ class SidePanel(InterfaceElement):
         style = SidePanelStyle()
         pos = (settings.WINDOW_WIDTH-style.WIDTH, 0)
         InterfaceElement.__init__(self, style, pos)
-        self.panel_button = SidePanelButton(self.pos)
+        self.panel_button = PanelButton(utils.subtract_twoples(self.pos, (PanelButtonStyle.WIDTH, 0)))
+        self.panel_open = True
         self.stats = Stats()
         self.minimap = MiniMap(window)
-        self.panel_open = True
     
     def render(self, screen: pygame.display, entities: list[Entity]) -> None:
         self.panel_button.render(screen, self.panel_open)
