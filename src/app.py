@@ -118,9 +118,10 @@ class App:
         self.i_map.add_element(self.side_panel.panel_button)
         # adding bottom panel elements
         self.i_map.add_element(self.bottom_panel.panel_button)
-        self.i_map.add_element(self.bottom_panel.color_picker)
         for o in self.bottom_panel.color_picker.options:
             self.i_map.add_element(o)
+        for c in self.bottom_panel.choosers:
+            self.i_map.add_element(c)
         # adding minimap
         self.i_map.add_element(self.side_panel.minimap)
     

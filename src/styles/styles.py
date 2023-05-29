@@ -11,7 +11,7 @@ class Style:
     BORDER_COLOR = colors.BLACK
     BORDER_WIDTH = 2
     MARGIN = (0, 0)
-    ALPHA = 200
+    ALPHA = 100
 
 @dataclass
 class MouseCursorStyle(Style):
@@ -26,7 +26,6 @@ class PickerMenuOptionStyle(Style):
     HEIGHT = 80
     COLOR = colors.RED
     MARGIN = (10, 10)
-    ALPHA = 100
 
 @dataclass
 class PickerMenuStyle(Style):
@@ -34,14 +33,12 @@ class PickerMenuStyle(Style):
     HEIGHT = 100
     COLOR = colors.GRAY
     MARGIN = (10, 10)
-    ALPHA = 100
 
 @dataclass
 class ColorPickerStyle(Style):
     WIDTH = 80
     HEIGHT = 60
     MARGIN = (20, 20)
-    ALPHA = 100
 
 @dataclass
 class ColorPickerOptionStyle(Style):
@@ -49,4 +46,14 @@ class ColorPickerOptionStyle(Style):
     HEIGHT = 40
     COLOR = colors.BLACK
     MARGIN = (0, 10)
-    ALPHA = 100
+
+@dataclass
+class CheckboxStyle(Style):
+    WIDTH = 20
+    HEIGHT = 20
+
+@dataclass
+class ChooserStyle(Style):
+    WIDTH = 20
+    HEIGHT = 20
+    MARGIN = (20, 20)
