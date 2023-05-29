@@ -110,8 +110,12 @@ class EntityManager:
         return pygame.Color(int(r/num_e), int(g/num_e), int(b/num_e))
 
     # mouse command function helpers
-    def place_entity(self, pos: tuple, color: pygame.Color=None) -> None:
-        e = Entity(pos[0], pos[1], color) if color else Entity(pos[0], pos[1])
+    def place_entity(self, pos: tuple, atts: dict) -> None:
+        e = Entity(pos[0], pos[1], atts["color"])
+        e.dna.diseased = atts["diseased"]
+        e.dna.immune = atts["immune"]
+        if atts["immortal"]:
+            e.dna.age_limit = 2000000000
         self._add_entity(e)
     
     def select_entity(self, e: Entity) -> None:
@@ -176,8 +180,8 @@ class EntityManager:
             e1.dna.age_limit += 1
             e2.dna.age_limit += 1
         elif r == 2:
-            e1.nourished = True
-            e2.nourished = True
+            e1.dna.nourished = True
+            e2.dna.nourished = True
 
     def _spread_color(self, collisions: list[Entity]) -> None:
         r, g, b = 0, 0, 0

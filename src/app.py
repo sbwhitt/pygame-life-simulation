@@ -168,12 +168,13 @@ class App:
             shift = (pygame.K_LSHIFT in self.keys or pygame.K_RIGHT in self.keys)
             self.mouse.execute_left_click(self.picker.selected_option,
                                           self.e_man,
-                                          self.bottom_panel.color_picker.current_color,
+                                          self.bottom_panel.get_attributes(),
                                           shift)
         if buttons[settings.MIDDLE_CLICK]:
             self.mouse.spawn_outward(self.e_man,
                                      self._get_tile_pos(pygame.mouse.get_pos()),
-                                     self.bottom_panel.color_picker.current_color, self.clock.time)
+                                     self.bottom_panel.get_attributes(),
+                                     self.clock.time)
         else:
             self.mouse.stop_spawn()
         if buttons[settings.RIGHT_CLICK]:

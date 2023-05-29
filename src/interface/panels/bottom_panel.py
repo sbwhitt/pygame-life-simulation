@@ -49,6 +49,12 @@ class BottomPanel(InterfaceElement):
         else:
             self.panel_button.pos = (0, settings.WINDOW_HEIGHT-self.panel_button.style.HEIGHT)
 
+    def get_attributes(self) -> dict:
+        return {"color": self.color_picker.current_color,
+                "diseased": self.choosers[0].selected,
+                "immune": self.choosers[1].selected,
+                "immortal": self.choosers[2].selected}
+
     # helpers
 
     def _build_choosers(self, choosers: list[str]) -> list[Chooser]:

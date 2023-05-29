@@ -51,7 +51,7 @@ class Entity:
             if s: 
                 neighbor = self._check_neighbor(s)
                 if neighbor != None and neighbor.colony != self.colony and neighbor.bound:
-                    if neighbor.dna.diseased and random.randint(1, settings.DISEASE_SPREAD_CHANCE) == 1:
+                    if not self.dna.immune and neighbor.dna.diseased and random.randint(1, settings.DISEASE_SPREAD_CHANCE) == 1:
                         self.dna.diseased = True
                         return None
                     return neighbor
@@ -120,7 +120,7 @@ class Entity:
                     str(self.dna.generation) + " has reproduced")
     
     def _check_neighbor(self, collision: "Entity") -> "Entity":
-        if collision.dna.diseased and random.randint(1, settings.DISEASE_SPREAD_CHANCE) == 1:
+        if not self.dna.immune and collision.dna.diseased and random.randint(1, settings.DISEASE_SPREAD_CHANCE) == 1:
             self.dna.diseased = True
             return None
         if self.dna.compatible(collision.dna):

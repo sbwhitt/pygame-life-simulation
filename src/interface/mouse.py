@@ -45,12 +45,12 @@ class Mouse:
             self.cursor.update(self.dragging[settings.LEFT_CLICK])
             self.cursor.render(screen)
 
-    def spawn_outward(self, e_man: EntityManager, pos: tuple, color: pygame.Color, elapsed) -> None:
+    def spawn_outward(self, e_man: EntityManager, pos: tuple, atts: dict, elapsed) -> None:
         if self._increase_spawn_interval(elapsed):
             for i in range(0, len(settings.DIRS)):
                 d = utils.multiply_twople_by_constant(settings.DIRS[i], self.spawn_interval)
                 pos_i = (utils.add_twoples(pos, d))
-                e_man.place_entity(pos_i, color)
+                e_man.place_entity(pos_i, atts)
 
     def stop_spawn(self) -> None:
         self.click_timer = 0
@@ -65,13 +65,13 @@ class Mouse:
         elif button == settings.RIGHT_CLICK:
             self.window.move(self._get_drag_dir(settings.RIGHT_CLICK))
 
-    def execute_left_click(self, menu_option: PickerMenuOption, e_man: EntityManager, color: pygame.Color, shift: bool=False) -> None:
+    def execute_left_click(self, menu_option: PickerMenuOption, e_man: EntityManager, atts: dict, shift: bool=False) -> None:
         # selection
         if menu_option.option == settings.ACTION_MENU_OPTIONS[0]:
             self.select(e_man, shift)
         # creation
         elif menu_option.option == settings.ACTION_MENU_OPTIONS[1]:
-            self.place_selected(e_man, color)
+            self.place_selected(e_man, atts)
         # deletion
         elif menu_option.option == settings.ACTION_MENU_OPTIONS[2]:
             self.delete_selected(e_man)
@@ -88,12 +88,12 @@ class Mouse:
                 y += settings.ENT_WIDTH
             x += settings.ENT_WIDTH
     
-    def place_selected(self, e_man: EntityManager, color: pygame.Color) -> None:
+    def place_selected(self, e_man: EntityManager, atts: dict) -> None:
         x, y = self.cursor.rect.left, self.cursor.rect.top
         while x < self.cursor.rect.right:
             y = self.cursor.rect.top
             while y < self.cursor.rect.bottom:
-                e_man.place_entity(utils.add_twoples((x, y), self.window.offset), color)
+                e_man.place_entity(utils.add_twoples((x, y), self.window.offset), atts)
                 y += settings.ENT_WIDTH
             x += settings.ENT_WIDTH
 
