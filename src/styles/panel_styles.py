@@ -23,6 +23,7 @@ class StatsPanelStyle(Style):
     WIDTH = 240
     HEIGHT = settings.WINDOW_HEIGHT
     COLOR = colors.WHITE
+    ALPHA = 200
 
 @dataclass
 class MiniMapStyle(Style):
@@ -39,3 +40,4 @@ class MiniMapCursorStyle(Style):
 class BottomPanelStyle(Style):
     HEIGHT = 240
     WIDTH = settings.WINDOW_WIDTH-HEIGHT
+    ALPHA = 200
