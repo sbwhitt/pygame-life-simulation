@@ -14,8 +14,8 @@ class BottomPanel(InterfaceElement):
         style = BottomPanelStyle()
         pos = (0, settings.WINDOW_HEIGHT - style.HEIGHT)
         InterfaceElement.__init__(self, style, pos)
-        self.panel_button = PanelButton((0, settings.WINDOW_HEIGHT - PanelButtonStyle.HEIGHT))
-        self.panel_open = False
+        self.panel_button = PanelButton(utils.subtract_twoples(self.pos, (0, PanelButtonStyle.HEIGHT)))
+        self.panel_open = True
         self.color_picker = ColorPicker(self.pos)
 
     def render(self, screen: pygame.Surface) -> None:

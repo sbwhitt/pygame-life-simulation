@@ -225,6 +225,9 @@ class App:
         # toggle side panel
         elif key == pygame.K_p:
             self.side_panel.toggle_panel()
+        # toggle bottom panel
+        elif key == pygame.K_b:
+            self.bottom_panel.toggle_panel()
         # quit
         elif key == pygame.K_q:
             self._running = False

@@ -25,6 +25,7 @@ Simulates the life and behavior of small colored squares called entities. Entiti
 <b>h</b>: toggle colony highlighting</br>
 <b>x</b>: delete half of all entities</br>
 <b>p</b>: toggle side panel</br>
+<b>b</b>: toggle bottom panel</br>
 
 <h2>Building</h2>
 Requires <a href="https://www.pygame.org/wiki/GettingStarted" target="_blank">pygame</a> to run.</br>
