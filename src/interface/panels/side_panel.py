@@ -7,10 +7,10 @@ from src.interface.window import Window
 from src.utils.clock import Clock
 from src.tracking.metrics import Metrics
 from src.entities.entity import Entity
-from src.interface.panel_button import PanelButton
+from src.interface.panels.panel_button import PanelButton
 from src.entities.entity_manager import EntityManager
-from src.styles.styles import SidePanelStyle
-from src.styles.styles import PanelButtonStyle
+from src.styles.panel_styles import SidePanelStyle
+from src.styles.panel_styles import PanelButtonStyle
 from src.interface.stats import Stats
 from src.interface.mini_map import MiniMap
 

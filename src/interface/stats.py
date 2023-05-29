@@ -3,7 +3,7 @@ import src.utils.utils as utils
 import static.colors as colors
 import static.settings as settings
 from src.interface.interface_element import InterfaceElement
-from src.styles.styles import StatsPanelStyle
+from src.styles.panel_styles import StatsPanelStyle
 from src.interface.text import Text
 
 

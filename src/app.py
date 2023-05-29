@@ -8,8 +8,8 @@ from src.entities.entity_manager import EntityManager
 from src.colonies.colony_manager import ColonyManager
 from src.interface.mouse import Mouse
 from src.utils.clock import Clock
-from src.interface.side_panel import SidePanel
-from src.interface.bottom_panel import BottomPanel
+from src.interface.panels.side_panel import SidePanel
+from src.interface.panels.bottom_panel import BottomPanel
 from src.utils.interface_map import InterfaceMap
 from src.interface.picker_menu import PickerMenu
 from src.interface.color_picker import ColorPicker

@@ -3,10 +3,10 @@ import src.utils.utils as utils
 import static.colors as colors
 import static.settings as settings
 from src.interface.interface_element import InterfaceElement
-from src.styles.styles import BottomPanelStyle
-from src.styles.styles import BottomPanelOptionStyle
-from src.interface.panel_button import PanelButton
-from src.styles.styles import PanelButtonStyle
+from src.styles.panel_styles import BottomPanelStyle
+from src.styles.panel_styles import BottomPanelOptionStyle
+from src.interface.panels.panel_button import PanelButton
+from src.styles.panel_styles import PanelButtonStyle
 
 
 # placeholder class

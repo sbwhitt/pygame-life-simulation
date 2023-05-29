@@ -3,7 +3,7 @@ import static.colors as colors
 import static.settings as settings
 import src.utils.utils as utils
 from src.interface.interface_element import InterfaceElement
-from src.styles.styles import PanelButtonStyle
+from src.styles.panel_styles import PanelButtonStyle
 
 
 class PanelButton(InterfaceElement):

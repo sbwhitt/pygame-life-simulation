@@ -3,8 +3,8 @@ import static.colors as colors
 import static.settings as settings
 import src.utils.utils as utils
 from src.interface.interface_element import InterfaceElement
-from src.styles.styles import MiniMapStyle
-from src.styles.styles import MiniMapCursorStyle
+from src.styles.panel_styles import MiniMapStyle
+from src.styles.panel_styles import MiniMapCursorStyle
 from src.interface.window import Window
 from src.entities.entity import Entity
 
