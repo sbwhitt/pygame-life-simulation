@@ -19,11 +19,10 @@ class Entity:
             self.dna = DNA(args[2])
         else:
             self.dna = DNA(utils.get_random_color())
-        self.dirs = [(0, -settings.ENT_WIDTH), (-settings.ENT_WIDTH, 0), (0, settings.ENT_WIDTH), (settings.ENT_WIDTH, 0)]
 
     def update(self, surroundings: list["Entity"]) -> "Entity":
-        if self.dna.diseased:
-            self.dna.recover()
+        # if self.dna.diseased:
+        #     self.dna.recover()
         neighbor = self._choose_neighbor(surroundings)
         if neighbor != None:
             return neighbor
@@ -42,7 +41,6 @@ class Entity:
                 offspring.dna.mutate()
             else:
                 offspring.dna.inherit(self.dna)
-            
             self._degenerate()
             self._broadcast(offspring)
             return offspring
@@ -72,13 +70,13 @@ class Entity:
     def _move(self, choice: int) -> None:
         if self.dna.move_timer > settings.MOVE_INTERVAL:
             if choice == 0 and self.rect.top != 0:  # up
-                self.rect = self.rect.move(0, -settings.ENT_WIDTH)
+                self.rect = self.rect.move(settings.DIRS[choice][0], settings.DIRS[choice][1])
             elif choice == 1 and self.rect.left != 0:  # left
-                self.rect = self.rect.move(-settings.ENT_WIDTH, 0)
+                self.rect = self.rect.move(settings.DIRS[choice][0], settings.DIRS[choice][1])
             elif choice == 2 and self.rect.bottom <= settings.WORLD_SIZE:  # down
-                self.rect = self.rect.move(0, settings.ENT_WIDTH)
+                self.rect = self.rect.move(settings.DIRS[choice][0], settings.DIRS[choice][1])
             elif choice == 3 and self.rect.right < settings.WORLD_SIZE:  # right
-                self.rect = self.rect.move(settings.ENT_WIDTH, 0)
+                self.rect = self.rect.move(settings.DIRS[choice][0], settings.DIRS[choice][1])
             self.dna.move_timer = 0
             self.loc = (self.rect.left, self.rect.top)
     
@@ -98,8 +96,8 @@ class Entity:
             if self.edges[i]:
                 choices.append(i)
         if len(choices) > 0:
-            choice = random.randint(0, len(choices)-1)
-            return utils.add_twoples(self.loc, self.dirs[choice])
+            choice = choices[random.randint(0, len(choices)-1)]
+            return utils.add_twoples(self.loc, settings.DIRS[choice])
         return None
 
     def _degenerate(self) -> None:

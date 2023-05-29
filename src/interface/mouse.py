@@ -39,10 +39,6 @@ class Mouse:
         self.click_timer = 0
         self.spawn_modulus = 250
         self.spawn_interval = 0
-        self.deltas = [(settings.ENT_WIDTH, 0), (-settings.ENT_WIDTH, 0),
-                       (0, -settings.ENT_WIDTH), (0, settings.ENT_WIDTH),
-                       (settings.ENT_WIDTH, settings.ENT_WIDTH), (-settings.ENT_WIDTH, settings.ENT_WIDTH),
-                       (settings.ENT_WIDTH, -settings.ENT_WIDTH), (-settings.ENT_WIDTH, -settings.ENT_WIDTH)]
 
     def render_cursor(self, screen: pygame.display, i_map_active: bool) -> None:
         if not i_map_active:
@@ -51,8 +47,8 @@ class Mouse:
 
     def spawn_outward(self, e_man: EntityManager, pos: tuple, color: pygame.Color, elapsed) -> None:
         if self._increase_spawn_interval(elapsed):
-            for i in range(0, len(self.deltas)):
-                d = utils.multiply_twople_by_constant(self.deltas[i], self.spawn_interval)
+            for i in range(0, len(settings.DIRS)):
+                d = utils.multiply_twople_by_constant(settings.DIRS[i], self.spawn_interval)
                 pos_i = (utils.add_twoples(pos, d))
                 e_man.place_entity(pos_i, color)
 
