@@ -39,9 +39,3 @@ class MiniMapCursorStyle(Style):
 class BottomPanelStyle(Style):
     HEIGHT = 240
     WIDTH = settings.WINDOW_WIDTH-HEIGHT
-
-@dataclass
-class BottomPanelOptionStyle(Style):
-    WIDTH = 200
-    HEIGHT = 200
-    MARGIN = (20, 20)

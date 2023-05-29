@@ -12,7 +12,6 @@ from src.interface.panels.side_panel import SidePanel
 from src.interface.panels.bottom_panel import BottomPanel
 from src.utils.interface_map import InterfaceMap
 from src.interface.picker_menu import PickerMenu
-from src.interface.color_picker import ColorPicker
 
 '''
 x == width == rect.left
@@ -38,7 +37,6 @@ class App:
         self.side_panel = SidePanel(self.window)
         self.bottom_panel = BottomPanel()
         self.picker = PickerMenu((0, 0))
-        self.color_picker = ColorPicker((self.picker.style.WIDTH, 0))
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])
@@ -81,7 +79,6 @@ class App:
         self.side_panel.render(self.screen, self.e_man.entities)
         self.bottom_panel.render(self.screen)
         self.picker.render(self.screen)
-        self.color_picker.render(self.screen)
         pygame.display.flip()
 
     def on_cleanup(self) -> None:
@@ -117,13 +114,13 @@ class App:
         self.i_map.add_element(self.picker)
         for o in self.picker.options:
             self.i_map.add_element(o)
-        # adding color picker menu
-        self.i_map.add_element(self.color_picker)
-        for o in self.color_picker.options:
-            self.i_map.add_element(o)
         # adding side panel toggle button
         self.i_map.add_element(self.side_panel.panel_button)
+        # adding bottom panel elements
         self.i_map.add_element(self.bottom_panel.panel_button)
+        self.i_map.add_element(self.bottom_panel.color_picker)
+        for o in self.bottom_panel.color_picker.options:
+            self.i_map.add_element(o)
         # adding minimap
         self.i_map.add_element(self.side_panel.minimap)
     
@@ -156,7 +153,6 @@ class App:
         # left click is 1 here but 0 elsewhere
         if self.i_map.active and button-1 == settings.LEFT_CLICK:
             self.picker.handle_click(settings.LEFT_CLICK)
-            self.color_picker.handle_click(settings.LEFT_CLICK)
             self.side_panel.handle_click(settings.LEFT_CLICK)
             self.bottom_panel.handle_click(settings.LEFT_CLICK)
     
@@ -171,10 +167,12 @@ class App:
             shift = (pygame.K_LSHIFT in self.keys or pygame.K_RIGHT in self.keys)
             self.mouse.execute_left_click(self.picker.selected_option,
                                           self.e_man,
-                                          self.color_picker.current_color,
+                                          self.bottom_panel.color_picker.current_color,
                                           shift)
         if buttons[settings.MIDDLE_CLICK]:
-            self.mouse.spawn_outward(self.e_man, self._get_tile_pos(pygame.mouse.get_pos()), self.color_picker.current_color, self.clock.time)
+            self.mouse.spawn_outward(self.e_man,
+                                     self._get_tile_pos(pygame.mouse.get_pos()),
+                                     self.bottom_panel.color_picker.current_color, self.clock.time)
         else:
             self.mouse.stop_spawn()
         if buttons[settings.RIGHT_CLICK]:

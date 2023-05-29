@@ -14,8 +14,7 @@ class ColorPickerOption(InterfaceElement):
         self.control_color = color
         InterfaceElement.__init__(self, style, pos)
         self.option = option
-        self.hidden = True
-        self.updated = False
+        self.hidden = False
     
     def render(self, screen: pygame.Surface) -> None:
         self.render_opaque(screen)
@@ -32,7 +31,7 @@ class ColorPicker(InterfaceElement):
     def __init__(self, pos: tuple):
         style = ColorPickerStyle()
         InterfaceElement.__init__(self, style, pos)
-        self.menu_open = False
+        self.menu_open = True
         self.options = self._build_options([settings.COLOR_PICKER_OPTIONS[0],
                              settings.COLOR_PICKER_OPTIONS[1],
                              settings.COLOR_PICKER_OPTIONS[2]])
@@ -50,8 +49,8 @@ class ColorPicker(InterfaceElement):
             self.render_border(screen)
 
     def handle_click(self, button: int) -> None:
-        if self._contains_click(button):
-            self._toggle_menu()
+        # if self._contains_click(button):
+        #     self._toggle_menu()
         self._handle_option_click(button)
     
     # helpers
@@ -63,11 +62,11 @@ class ColorPicker(InterfaceElement):
         for o in self.options:
             o.render(screen)
 
-    def _toggle_menu(self) -> None:
-        self.menu_open = not self.menu_open
-        o: ColorPickerOption
-        for o in self.options:
-            o.hidden = not o.hidden
+    # def _toggle_menu(self) -> None:
+    #     self.menu_open = not self.menu_open
+    #     o: ColorPickerOption
+    #     for o in self.options:
+    #         o.hidden = not o.hidden
 
     def _contains_click(self, button: int) -> bool:
         if button == settings.LEFT_CLICK:
