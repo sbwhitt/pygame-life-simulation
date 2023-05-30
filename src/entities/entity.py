@@ -23,9 +23,10 @@ class Entity:
     def update(self, surroundings: list["Entity"]) -> "Entity":
         # if self.dna.diseased:
         #     self.dna.recover()
-        neighbor = self._choose_neighbor(surroundings)
-        if neighbor != None:
-            return neighbor
+        if not self.dna.unbindable:
+            neighbor = self._choose_neighbor(surroundings)
+            if neighbor != None:
+                return neighbor
         if not self.dna.immobile and (not self.bound and self.dna.dir_timer > settings.DIR_INTERVAL):
             self._move(self._choose_dir(surroundings))
         return None

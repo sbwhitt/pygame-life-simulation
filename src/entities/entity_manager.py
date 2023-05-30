@@ -227,14 +227,15 @@ class EntityManager:
                 self._cannibalize(e, collisions)
 
     def _handle_aging(self, e: Entity, clock_time: int, surroundings: list[Entity]) -> None:
-        if not e.dna.immortal and e.dna.age_timer > settings.AGE_LENGTH:
-            if e.dna.diseased:
-                self.remove_entity(e)
-                return
-            e.dna.age += 1
-            if e.dna.age >= e.dna.age_limit:
-                self.remove_entity(e)
-                return
+        if e.dna.age_timer > settings.AGE_LENGTH:
+            if not e.dna.immortal:
+                if e.dna.diseased:
+                    self.remove_entity(e)
+                    return
+                e.dna.age += 1
+                if e.dna.age >= e.dna.age_limit:
+                    self.remove_entity(e)
+                    return
             if len(self.entities) < settings.ENTITY_LIMIT:
                 offspring = e.reproduce(surroundings)
                 if offspring:
