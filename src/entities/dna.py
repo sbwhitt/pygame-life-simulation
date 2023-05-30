@@ -16,6 +16,7 @@ class DNA:
         self.generation = 1
         self.diseased = False
         self.immune = False
+        self.immortal = False
         self.nourished = False
         self.eaten = False
     

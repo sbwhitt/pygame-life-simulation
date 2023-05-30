@@ -114,8 +114,7 @@ class EntityManager:
         e = Entity(pos[0], pos[1], atts["color"])
         e.dna.diseased = atts["diseased"]
         e.dna.immune = atts["immune"]
-        if atts["immortal"]:
-            e.dna.age_limit = 2000000000
+        e.dna.immortal = atts["immortal"]
         self._add_entity(e)
     
     def select_entity(self, e: Entity) -> None:
@@ -225,7 +224,7 @@ class EntityManager:
                 self._cannibalize(e, collisions)
 
     def _handle_aging(self, e: Entity, clock_time: int) -> None:
-        if e.dna.age_timer > settings.AGE_LENGTH:
+        if not e.dna.immortal and e.dna.age_timer > settings.AGE_LENGTH:
             if e.dna.diseased:
                 self.remove_entity(e)
                 return
