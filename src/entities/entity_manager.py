@@ -41,7 +41,7 @@ class EntityManager:
                     c_man.bind(e, neighbor)
                     self._spread_characteristics(e, neighbor)
             self._handle_collisions(e)
-            self._handle_aging(e, clock_time)
+            self._handle_aging(e, clock_time, surroundings)
             e.scan_edges(self.m.get_surroundings(e.loc))
 
     def render_entities(self, window: Window) -> None:
@@ -117,6 +117,7 @@ class EntityManager:
         e.dna.immortal = atts["immortal"]
         e.dna.immobile = atts["immobile"]
         e.dna.sterile = atts["sterile"]
+        e.dna.unbindable = atts["unbindable"]
         self._add_entity(e)
     
     def select_entity(self, e: Entity) -> None:
@@ -225,7 +226,7 @@ class EntityManager:
             if random.randint(1, 50) == 1:
                 self._cannibalize(e, collisions)
 
-    def _handle_aging(self, e: Entity, clock_time: int) -> None:
+    def _handle_aging(self, e: Entity, clock_time: int, surroundings: list[Entity]) -> None:
         if not e.dna.immortal and e.dna.age_timer > settings.AGE_LENGTH:
             if e.dna.diseased:
                 self.remove_entity(e)
@@ -235,7 +236,7 @@ class EntityManager:
                 self.remove_entity(e)
                 return
             if len(self.entities) < settings.ENTITY_LIMIT:
-                offspring = e.reproduce()
+                offspring = e.reproduce(surroundings)
                 if offspring:
                     self._add_entity(offspring)
             e.dna.age_timer = 0

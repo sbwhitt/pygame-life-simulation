@@ -14,7 +14,7 @@ FONT_SIZE_SMALLER = 16
 # menu options
 ACTION_MENU_OPTIONS = {0: "Selection", 1: "Creation", 2: "Deletion"}
 COLOR_PICKER_OPTIONS = {0: "Red", 1: "Green", 2: "Blue"}
-CHOOSER_OPTIONS = {0: "diseased", 1: "immune", 2: "immortal", 3: "immobile", 4: "sterile"}
+CHOOSER_OPTIONS = {0: "diseased", 1: "immune", 2: "immortal", 3: "immobile", 4: "sterile", 5: "unbindable"}
 
 # input settings
 LEFT_CLICK = 0

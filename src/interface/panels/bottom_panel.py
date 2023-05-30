@@ -21,11 +21,7 @@ class BottomPanel(InterfaceElement):
         self.panel_open = True
         self.color_picker = ColorPicker(self.pos)
         self.text = Text(font_size=settings.FONT_SIZE)
-        self.choosers = self._build_choosers([settings.CHOOSER_OPTIONS[0],
-                                              settings.CHOOSER_OPTIONS[1],
-                                              settings.CHOOSER_OPTIONS[2],
-                                              settings.CHOOSER_OPTIONS[3],
-                                              settings.CHOOSER_OPTIONS[4]])
+        self.choosers = self._build_choosers()
 
     def render(self, screen: pygame.Surface) -> None:
         if self.panel_open:
@@ -56,12 +52,11 @@ class BottomPanel(InterfaceElement):
             self._toggle_hide_choosers()
 
     def get_attributes(self) -> dict:
-        return {"color": self.color_picker.current_color,
-                "diseased": self.choosers[0].selected,
-                "immune": self.choosers[1].selected,
-                "immortal": self.choosers[2].selected,
-                "immobile": self.choosers[3].selected,
-                "sterile": self.choosers[4].selected}
+        atts = {}
+        atts["color"] = self.color_picker.current_color
+        for k, v in settings.CHOOSER_OPTIONS.items():
+            atts[v] = self.choosers[k].selected
+        return atts
 
     # helpers
 
@@ -69,21 +64,12 @@ class BottomPanel(InterfaceElement):
         for c in self.choosers:
             c.hidden = not c.hidden
 
-    def _build_choosers(self, choosers: list[str]) -> list[Chooser]:
+    def _build_choosers(self) -> list[Chooser]:
         c = []
-        for i in range(len(choosers)):
-            if settings.CHOOSER_OPTIONS[i] == "diseased":
-                c.append(self._build_chooser(choosers[i], i))
-            elif settings.CHOOSER_OPTIONS[i] == "immune":
-                c.append(self._build_chooser(choosers[i], i))
-            elif settings.CHOOSER_OPTIONS[i] == "immortal":
-                c.append(self._build_chooser(choosers[i], i))
-            elif settings.CHOOSER_OPTIONS[i] == "immobile":
-                c.append(self._build_chooser(choosers[i], i))
-            elif settings.CHOOSER_OPTIONS[i] == "sterile":
-                c.append(self._build_chooser(choosers[i], i))
+        for k, v in settings.CHOOSER_OPTIONS.items():
+            c.append(self._build_chooser(v, k))
         return c
     
     def _build_chooser(self, option: str, offset: int) -> Chooser:
-        pos = (self.color_picker.rect.right, self.pos[1] + 5 + (ChooserStyle.HEIGHT*offset*2))
+        pos = (self.color_picker.rect.right, self.pos[1] + (int(ChooserStyle.HEIGHT*offset*1.7)))
         return Chooser(pos, self.text, option)

@@ -30,11 +30,11 @@ class Entity:
             self._move(self._choose_dir(surroundings))
         return None
 
-    def reproduce(self) -> "Entity|None":
+    def reproduce(self, surroundings: list["Entity"]) -> "Entity|None":
         if self.dna.sterile: return
         self.dna.genes += 1
         r = random.randint(0, 1+self.dna.amnt_offspring)
-        spawn_loc = self._choose_spawn_location()
+        spawn_loc = self._choose_spawn_location(surroundings)
         if not self.dna.diseased and spawn_loc and (self.dna.nourished or r == 1):
             offspring = Entity(spawn_loc[0], spawn_loc[1])
             if random.randint(1, settings.MUTATE_CHANCE) == 1:
@@ -90,15 +90,11 @@ class Entity:
             return choices[random.randint(0, len(choices)-1)]
         return -1
     
-    def _choose_spawn_location(self) -> tuple|None:
-        # up left down right        
-        choices = []
-        for i in range(len(self.edges)):
-            if self.edges[i]:
-                choices.append(i)
-        if len(choices) > 0:
-            choice = choices[random.randint(0, len(choices)-1)]
-            return utils.add_twoples(self.loc, settings.DIRS[choice])
+    def _choose_spawn_location(self, surroundings: list["Entity"]) -> tuple|None:       
+        choice = self._choose_dir(surroundings)
+        if choice >= 0:
+            spawn_loc = utils.add_twoples(self.loc, settings.DIRS[choice])
+            return spawn_loc
         return None
 
     def _degenerate(self) -> None:
@@ -131,6 +127,6 @@ class Entity:
         for i in range(len(surroundings)):
             if random.randint(1, 10) == 1 and surroundings[i] != None:
                 neighbor = self._check_neighbor(surroundings[i])
-                if neighbor != None:
+                if neighbor != None and not neighbor.dna.unbindable:
                     return neighbor
         return None

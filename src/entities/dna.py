@@ -19,6 +19,7 @@ class DNA:
         self.immortal = False
         self.immobile = False
         self.sterile = False
+        self.unbindable = False
         self.nourished = False
         self.eaten = False
     
