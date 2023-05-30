@@ -17,6 +17,8 @@ class DNA:
         self.diseased = False
         self.immune = False
         self.immortal = False
+        self.immobile = False
+        self.sterile = False
         self.nourished = False
         self.eaten = False
     

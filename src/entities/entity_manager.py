@@ -115,6 +115,8 @@ class EntityManager:
         e.dna.diseased = atts["diseased"]
         e.dna.immune = atts["immune"]
         e.dna.immortal = atts["immortal"]
+        e.dna.immobile = atts["immobile"]
+        e.dna.sterile = atts["sterile"]
         self._add_entity(e)
     
     def select_entity(self, e: Entity) -> None:

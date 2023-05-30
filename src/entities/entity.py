@@ -26,11 +26,12 @@ class Entity:
         neighbor = self._choose_neighbor(surroundings)
         if neighbor != None:
             return neighbor
-        if (not self.bound and self.dna.dir_timer > settings.DIR_INTERVAL):
+        if not self.dna.immobile and (not self.bound and self.dna.dir_timer > settings.DIR_INTERVAL):
             self._move(self._choose_dir(surroundings))
         return None
 
     def reproduce(self) -> "Entity|None":
+        if self.dna.sterile: return
         self.dna.genes += 1
         r = random.randint(0, 1+self.dna.amnt_offspring)
         spawn_loc = self._choose_spawn_location()

@@ -52,6 +52,11 @@ class ColorPicker(InterfaceElement):
         # if self._contains_click(button):
         #     self._toggle_menu()
         self._handle_option_click(button)
+
+    def toggle_hide(self):
+        self.hidden = not self.hidden
+        for o in self.options:
+            o.hidden = not o.hidden
     
     # helpers
 
