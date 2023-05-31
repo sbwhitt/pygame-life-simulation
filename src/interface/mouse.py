@@ -6,7 +6,7 @@ from src.interface.interface_element import InterfaceElement
 from src.styles.styles import MouseCursorStyle
 from src.entities.entity_manager import EntityManager
 from src.interface.window import Window
-from src.interface.picker_menu import PickerMenuOption
+from src.interface.components.picker_menu import PickerMenuOption
 
 
 class Cursor(InterfaceElement):

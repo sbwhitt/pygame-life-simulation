@@ -4,11 +4,11 @@ import static.colors as colors
 import static.settings as settings
 from src.interface.interface_element import InterfaceElement
 from src.styles.panel_styles import BottomPanelStyle
-from src.interface.panels.panel_button import PanelButton
+from src.interface.components.panel_button import PanelButton
 from src.styles.panel_styles import PanelButtonStyle
-from src.interface.color_picker import ColorPicker
+from src.interface.components.color_picker import ColorPicker
 from src.interface.text import Text
-from src.interface.chooser import Chooser
+from src.interface.components.chooser import Chooser
 from src.styles.styles import ChooserStyle
 
 

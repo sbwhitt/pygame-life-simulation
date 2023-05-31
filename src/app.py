@@ -11,7 +11,7 @@ from src.utils.clock import Clock
 from src.interface.panels.side_panel import SidePanel
 from src.interface.panels.bottom_panel import BottomPanel
 from src.utils.interface_map import InterfaceMap
-from src.interface.picker_menu import PickerMenu
+from src.interface.components.picker_menu import PickerMenu
 
 '''
 x == width == rect.left

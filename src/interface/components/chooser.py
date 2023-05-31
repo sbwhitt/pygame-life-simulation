@@ -5,7 +5,7 @@ import static.settings as settings
 from src.interface.interface_element import InterfaceElement
 from src.styles.styles import ChooserStyle
 from src.interface.text import Text
-from src.interface.checkbox import Checkbox
+from src.interface.components.checkbox import Checkbox
 
 
 class Chooser(InterfaceElement):
