@@ -44,7 +44,7 @@ class ColorPickerStyle(Style):
 class ColorPickerOptionStyle(Style):
     WIDTH = 80
     HEIGHT = 40
-    COLOR = colors.BLACK
+    COLOR = colors.GRAY
     MARGIN = (0, 10)
 
 @dataclass

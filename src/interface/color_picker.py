@@ -10,21 +10,32 @@ from src.styles.styles import ColorPickerOptionStyle
 class ColorPickerOption(InterfaceElement):
     def __init__(self, option: str, pos: tuple, color: pygame.color):
         style = ColorPickerOptionStyle()
-        style.COLOR = color
-        self.control_color = color
         InterfaceElement.__init__(self, style, pos)
+        self.control_color = color
+        self.current_color = color
+        self.ratio = 1.0
         self.option = option
         self.hidden = False
     
     def render(self, screen: pygame.Surface) -> None:
-        self.render_opaque(screen)
         if self.hovering():
-            self.render_border(screen)
+            self.render_opaque(screen)
+        else:
+            self.render_transparent(screen)
+        self._render_control_rect(screen)
+        self.render_border(screen)
     
     def pick_color(self, pos: tuple) -> None:
         x_adj = utils.subtract_twoples(pos, self.pos)[0]
-        ratio = x_adj/self.style.WIDTH
-        self.style.COLOR = utils.multiply_color(self.control_color, ratio)
+        self.ratio = x_adj/self.style.WIDTH
+        self.current_color = utils.multiply_color(self.control_color, self.ratio)
+
+    # helpers
+
+    def _render_control_rect(self, screen: pygame.Surface) -> None:
+        r = self.rect.copy()
+        r.width = r.width*self.ratio
+        pygame.draw.rect(screen, self.control_color, r)
 
 
 class ColorPicker(InterfaceElement):
@@ -92,7 +103,7 @@ class ColorPicker(InterfaceElement):
         c = pygame.Color(0, 0, 0)
         o: ColorPickerOption
         for o in self.options:
-            c += o.style.COLOR
+            c += o.current_color
         return c
 
     def _build_options(self, options: list[str]) -> list[ColorPickerOption]:
