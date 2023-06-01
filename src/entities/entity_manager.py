@@ -134,40 +134,22 @@ class EntityManager:
         self.selected.clear()
 
     def zoom_in_entities(self, speed: int) -> None:
-        # print("zoom in")
-        # print("prev map size: " + str(settings.WORLD_SIZE))
         self.m.rebuild_map_in(speed)
-        # print("new map size: " + str(settings.WORLD_SIZE))
         e: Entity
         for e in self.entities:
-            # print("prev loc: " + str(e.loc))
-            # loc_adj = utils.divide_twople_by_constant(e.loc, int(settings.ENT_WIDTH/2), integer=True)
             loc_adj = utils.multiply_twople_by_constant(e.loc, speed)
-            # print("new width: " + str(settings.ENT_WIDTH))
-            # print("new loc: " + str(loc_adj))
             e.rect.update(loc_adj[0], loc_adj[1], e.rect.width*speed, e.rect.height*speed)
             e.loc = loc_adj
             self.m.grid[e.loc].append(e)
-            # print()
 
     def zoom_out_entities(self, speed: int) -> None:
-        # print("zoom out")
-        # print("prev map size: " + str(settings.WORLD_SIZE))
         self.m.rebuild_map_out(speed)
-        # print("new map size: " + str(settings.WORLD_SIZE))
         e: Entity
         for e in self.entities:
-            # print("prev loc: " + str(e.loc))
-            # loc_adj = utils.divide_twople_by_constant(e.loc, settings.ENT_WIDTH*speed, integer=True)
-            loc_adj = utils.divide_twople_by_constant(e.loc, speed, integer=True)
-            # print("new width: " + str(settings.ENT_WIDTH))
-            # loc_adj = utils.multiply_twople_by_constant(loc_adj, settings.ENT_WIDTH)
-            # loc_adj = utils.add_twoples(loc_adj, (loc_adj[0] % settings.ENT_WIDTH, loc_adj[1] % settings.ENT_WIDTH))
-            # print("new loc: " + str(loc_adj))
+            loc_adj = utils.divide_twople_by_constant(e.loc, speed)
             e.rect.update(loc_adj[0], loc_adj[1], e.rect.width/speed, e.rect.height/speed)
             e.loc = loc_adj
             self.m.grid[e.loc].append(e)
-            # print()
 
     # key command function helpers
     def cull(self) -> None:

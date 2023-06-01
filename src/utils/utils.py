@@ -15,7 +15,7 @@ def multiply_twople_by_constant(t1: tuple, const: int) -> tuple:
     '''Returns two element tuple with all elements multiplied by given constant'''
     return (t1[0] * const, t1[1] * const) if len(t1) == 2 else None
 
-def divide_twople_by_constant(t1: tuple, const: int, integer: bool=False) -> tuple:
+def divide_twople_by_constant(t1: tuple, const: int, integer: bool=True) -> tuple:
     '''Returns two element tuple with all elements divided by given constant'''
     if integer:
         return (int(t1[0] / const), int(t1[1] / const)) if len(t1) == 2 else None
