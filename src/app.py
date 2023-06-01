@@ -156,7 +156,12 @@ class App:
             self.picker.handle_click(settings.LEFT_CLICK)
             self.side_panel.handle_click(settings.LEFT_CLICK)
             self.bottom_panel.handle_click(settings.LEFT_CLICK)
-    
+        # yikes...
+        elif button == settings.SCROLL_IN and settings.ENT_WIDTH*2 >= 5:
+            self.e_man.zoom_in_entities(settings.SCROLL_SPEED)
+        elif button == settings.SCROLL_OUT and settings.ENT_WIDTH*2 <= 40:
+            self.e_man.zoom_out_entities(settings.SCROLL_SPEED)
+
     def _handle_mouse_actions(self) -> None:
         # mouse buttons: 0 == left, 1 == middle, 2 == right
         buttons = pygame.mouse.get_pressed(3)

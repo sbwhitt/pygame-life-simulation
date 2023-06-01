@@ -129,6 +129,22 @@ class EntityManager:
     def clear_selected(self) -> None:
         self.selected.clear()
 
+    def zoom_in_entities(self, speed: int) -> None:
+        self.m.rebuild_map_in()
+        e: Entity
+        for e in self.entities:
+            e.rect.update(e.rect.left*speed, e.rect.top*speed, e.rect.width*speed, e.rect.height*speed)
+            e.loc = (e.rect.left, e.rect.top)
+            self.m.grid[e.loc].append(e)
+
+    def zoom_out_entities(self, speed: int) -> None:
+        self.m.rebuild_map_out()
+        e: Entity
+        for e in self.entities:
+            e.rect.update(e.rect.left/speed, e.rect.top/speed, e.rect.width/speed, e.rect.height/speed)
+            e.loc = (e.rect.left, e.rect.top)
+            self.m.grid[e.loc].append(e)
+
     # key command function helpers
     def cull(self) -> None:
         for i in range(int(len(self.entities)/2)):
