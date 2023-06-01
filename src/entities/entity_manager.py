@@ -13,7 +13,7 @@ from src.utils.clock import Clock
 class EntityManager:
     def __init__(self, screen: pygame.Surface):
         self.screen = screen
-        self.m = Map(settings.WORLD_SIZE, settings.WORLD_SIZE)
+        self.m = Map()
         self.entities = []
         self.selected = []
         self.created = 0
@@ -34,6 +34,10 @@ class EntityManager:
                 self.m.grid[e.loc].remove(e)
                 neighbor = e.update(surroundings)
                 if neighbor != None: c_man.bind(e, neighbor)
+                if (self.m.grid.get(e.loc) == None):
+                    print("world: " + str(settings.WORLD_SIZE))
+                    print("ent width: " + str(settings.ENT_WIDTH))
+                    print("loc: " + str(e.loc))
                 self.m.grid[e.loc].append(e)
             elif e.bound:
                 neighbor = e.look_for_colony(surroundings)
@@ -130,20 +134,40 @@ class EntityManager:
         self.selected.clear()
 
     def zoom_in_entities(self, speed: int) -> None:
-        self.m.rebuild_map_in()
+        # print("zoom in")
+        # print("prev map size: " + str(settings.WORLD_SIZE))
+        self.m.rebuild_map_in(speed)
+        # print("new map size: " + str(settings.WORLD_SIZE))
         e: Entity
         for e in self.entities:
-            e.rect.update(e.rect.left*speed, e.rect.top*speed, e.rect.width*speed, e.rect.height*speed)
-            e.loc = (e.rect.left, e.rect.top)
+            # print("prev loc: " + str(e.loc))
+            # loc_adj = utils.divide_twople_by_constant(e.loc, int(settings.ENT_WIDTH/2), integer=True)
+            loc_adj = utils.multiply_twople_by_constant(e.loc, speed)
+            # print("new width: " + str(settings.ENT_WIDTH))
+            # print("new loc: " + str(loc_adj))
+            e.rect.update(loc_adj[0], loc_adj[1], e.rect.width*speed, e.rect.height*speed)
+            e.loc = loc_adj
             self.m.grid[e.loc].append(e)
+            # print()
 
     def zoom_out_entities(self, speed: int) -> None:
-        self.m.rebuild_map_out()
+        # print("zoom out")
+        # print("prev map size: " + str(settings.WORLD_SIZE))
+        self.m.rebuild_map_out(speed)
+        # print("new map size: " + str(settings.WORLD_SIZE))
         e: Entity
         for e in self.entities:
-            e.rect.update(e.rect.left/speed, e.rect.top/speed, e.rect.width/speed, e.rect.height/speed)
-            e.loc = (e.rect.left, e.rect.top)
+            # print("prev loc: " + str(e.loc))
+            # loc_adj = utils.divide_twople_by_constant(e.loc, settings.ENT_WIDTH*speed, integer=True)
+            loc_adj = utils.divide_twople_by_constant(e.loc, speed, integer=True)
+            # print("new width: " + str(settings.ENT_WIDTH))
+            # loc_adj = utils.multiply_twople_by_constant(loc_adj, settings.ENT_WIDTH)
+            # loc_adj = utils.add_twoples(loc_adj, (loc_adj[0] % settings.ENT_WIDTH, loc_adj[1] % settings.ENT_WIDTH))
+            # print("new loc: " + str(loc_adj))
+            e.rect.update(loc_adj[0], loc_adj[1], e.rect.width/speed, e.rect.height/speed)
+            e.loc = loc_adj
             self.m.grid[e.loc].append(e)
+            # print()
 
     # key command function helpers
     def cull(self) -> None:

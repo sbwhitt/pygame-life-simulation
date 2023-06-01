@@ -157,9 +157,9 @@ class App:
             self.side_panel.handle_click(settings.LEFT_CLICK)
             self.bottom_panel.handle_click(settings.LEFT_CLICK)
         # yikes...
-        elif button == settings.SCROLL_IN and settings.ENT_WIDTH*2 >= 5:
+        elif button == settings.SCROLL_IN and settings.ENT_WIDTH*settings.SCROLL_SPEED <= 40:
             self.e_man.zoom_in_entities(settings.SCROLL_SPEED)
-        elif button == settings.SCROLL_OUT and settings.ENT_WIDTH*2 <= 40:
+        elif button == settings.SCROLL_OUT and int(settings.ENT_WIDTH/settings.SCROLL_SPEED) >= 5:
             self.e_man.zoom_out_entities(settings.SCROLL_SPEED)
 
     def _handle_mouse_actions(self) -> None:
