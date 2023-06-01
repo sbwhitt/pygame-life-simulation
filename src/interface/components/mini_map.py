@@ -51,14 +51,14 @@ class MiniMap(InterfaceElement):
     def zoom_in(self, speed: int) -> None:
         new_w = int(self.cursor.style.WIDTH / speed)
         new_h = int(self.cursor.style.HEIGHT / speed)
-        self.cursor.style.WIDTH = new_w if new_w <= settings.WORLD_SIZE else settings.WORLD_SIZE
-        self.cursor.style.HEIGHT = new_h if new_h <= settings.WORLD_SIZE else settings.WORLD_SIZE
+        self.cursor.style.WIDTH = new_w #if new_w <= settings.WORLD_SIZE else settings.WORLD_SIZE
+        self.cursor.style.HEIGHT = new_h #if new_h <= settings.WORLD_SIZE else settings.WORLD_SIZE
 
     def zoom_out(self, speed: int) -> None:
         new_w = self.cursor.style.WIDTH * speed
         new_h = self.cursor.style.HEIGHT * speed
-        self.cursor.style.WIDTH = new_w if new_w <= settings.WORLD_SIZE else settings.WORLD_SIZE
-        self.cursor.style.HEIGHT = new_h if new_h <= settings.WORLD_SIZE else settings.WORLD_SIZE
+        self.cursor.style.WIDTH = new_w #if new_w <= settings.WORLD_SIZE else settings.WORLD_SIZE
+        self.cursor.style.HEIGHT = new_h #if new_h <= settings.WORLD_SIZE else settings.WORLD_SIZE
 
     # helpers
     
