@@ -12,7 +12,6 @@ from src.utils.clock import Clock
 from src.interface.panels.side_panel import SidePanel
 from src.interface.panels.bottom_panel import BottomPanel
 from src.utils.interface_map import InterfaceMap
-from src.interface.components.picker_menu import PickerMenu
 
 '''
 x == width == rect.left
@@ -37,7 +36,6 @@ class App:
         self.metrics = Metrics()
         self.side_panel = SidePanel(self.window)
         self.bottom_panel = BottomPanel()
-        self.picker = PickerMenu((0, 0))
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])
@@ -80,7 +78,6 @@ class App:
         self.mouse.render_cursor(self.screen, self.i_map.active)
         self.side_panel.render(self.screen, self.e_man.entities)
         self.bottom_panel.render(self.screen)
-        self.picker.render(self.screen)
         pygame.display.flip()
 
     def on_cleanup(self) -> None:
@@ -117,18 +114,18 @@ class App:
         self.metrics.create_tracker("eaten")
     
     def _init_interface_map(self) -> None:
-        # adding action picker menu
-        self.i_map.add_element(self.picker)
-        for o in self.picker.options:
-            self.i_map.add_element(o)
         # adding side panel toggle button
         self.i_map.add_element(self.side_panel.panel_button)
         # adding bottom panel elements
         self.i_map.add_element(self.bottom_panel.panel_button)
         for o in self.bottom_panel.color_picker.options:
             self.i_map.add_element(o)
+        # adding bottom panel entity attribute choices
         for c in self.bottom_panel.choosers:
             self.i_map.add_element(c)
+        # adding action picker menu options
+        for a in self.bottom_panel.actions.options:
+            self.i_map.add_element(a)
         # adding minimap
         self.i_map.add_element(self.side_panel.minimap)
     
@@ -161,7 +158,6 @@ class App:
         # left click is 1 here but 0 elsewhere
         # single left click
         if self.i_map.active and button-1 == settings.LEFT_CLICK:
-            self.picker.handle_click(settings.LEFT_CLICK)
             self.side_panel.handle_click(settings.LEFT_CLICK)
             self.bottom_panel.handle_click(settings.LEFT_CLICK)
         # scroll wheel in
@@ -184,7 +180,7 @@ class App:
             self.mouse.drag(settings.LEFT_CLICK)
         elif self.mouse.dragging[settings.LEFT_CLICK]:
             shift = (pygame.K_LSHIFT in self.keys or pygame.K_RIGHT in self.keys)
-            self.mouse.execute_left_click(self.picker.selected_option,
+            self.mouse.execute_left_click(self.bottom_panel.actions.selected_option,
                                           self.e_man,
                                           self.bottom_panel.get_attributes(),
                                           shift)

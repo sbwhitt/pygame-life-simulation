@@ -6,7 +6,7 @@ from src.interface.interface_element import InterfaceElement
 from src.styles.styles import MouseCursorStyle
 from src.entities.entity_manager import EntityManager
 from src.interface.window import Window
-from src.interface.components.picker_menu import PickerMenuOption
+from src.interface.components.action_menu import ActionMenuOption
 
 
 class Cursor(InterfaceElement):
@@ -65,7 +65,7 @@ class Mouse:
         elif button == settings.RIGHT_CLICK:
             self.window.move(self._get_drag_dir(settings.RIGHT_CLICK))
 
-    def execute_left_click(self, menu_option: PickerMenuOption, e_man: EntityManager, atts: dict, shift: bool=False) -> None:
+    def execute_left_click(self, menu_option: ActionMenuOption, e_man: EntityManager, atts: dict, shift: bool=False) -> None:
         # selection
         if menu_option.option == settings.ACTION_MENU_OPTIONS[0]:
             self.select(e_man, shift)
