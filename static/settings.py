@@ -20,6 +20,9 @@ CHOOSER_OPTIONS = {0: "diseased", 1: "immune", 2: "immortal", 3: "immobile", 4: 
 LEFT_CLICK = 0
 MIDDLE_CLICK = 1
 RIGHT_CLICK = 2
+SCROLL_IN = 4
+SCROLL_OUT = 5
+SCROLL_SPEED = 2
 
 # clock settings
 CLOCK_RATE = 60

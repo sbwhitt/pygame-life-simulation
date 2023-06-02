@@ -13,7 +13,7 @@ from src.utils.clock import Clock
 class EntityManager:
     def __init__(self, screen: pygame.Surface):
         self.screen = screen
-        self.m = Map(settings.WORLD_SIZE, settings.WORLD_SIZE)
+        self.m = Map()
         self.entities = []
         self.selected = []
         self.created = 0
@@ -34,6 +34,10 @@ class EntityManager:
                 self.m.grid[e.loc].remove(e)
                 neighbor = e.update(surroundings)
                 if neighbor != None: c_man.bind(e, neighbor)
+                if (self.m.grid.get(e.loc) == None):
+                    print("world: " + str(settings.WORLD_SIZE))
+                    print("ent width: " + str(settings.ENT_WIDTH))
+                    print("loc: " + str(e.loc))
                 self.m.grid[e.loc].append(e)
             elif e.bound:
                 neighbor = e.look_for_colony(surroundings)
@@ -128,6 +132,24 @@ class EntityManager:
 
     def clear_selected(self) -> None:
         self.selected.clear()
+
+    def zoom_in_entities(self, speed: int) -> None:
+        self.m.rebuild_map_in(speed)
+        e: Entity
+        for e in self.entities:
+            loc_adj = utils.multiply_twople_by_constant(e.loc, speed)
+            e.rect.update(loc_adj[0], loc_adj[1], e.rect.width*speed, e.rect.height*speed)
+            e.loc = loc_adj
+            self.m.grid[e.loc].append(e)
+
+    def zoom_out_entities(self, speed: int) -> None:
+        self.m.rebuild_map_out(speed)
+        e: Entity
+        for e in self.entities:
+            loc_adj = utils.divide_twople_by_constant(e.loc, speed)
+            e.rect.update(loc_adj[0], loc_adj[1], e.rect.width/speed, e.rect.height/speed)
+            e.loc = loc_adj
+            self.m.grid[e.loc].append(e)
 
     # key command function helpers
     def cull(self) -> None:

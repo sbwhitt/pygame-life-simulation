@@ -83,7 +83,11 @@ class Mouse:
         while x < self.cursor.rect.right:
             y = self.cursor.rect.top
             while y < self.cursor.rect.bottom:
-                for e in e_man.m.grid[utils.add_twoples((x, y), self.window.offset)]:
+                pos = utils.add_twoples((x, y), self.window.offset)
+                if e_man.m.grid.get(pos) == None:
+                    y += settings.ENT_WIDTH
+                    continue
+                for e in e_man.m.grid[pos]:
                     e_man.select_entity(e)
                 y += settings.ENT_WIDTH
             x += settings.ENT_WIDTH
@@ -93,7 +97,11 @@ class Mouse:
         while x < self.cursor.rect.right:
             y = self.cursor.rect.top
             while y < self.cursor.rect.bottom:
-                e_man.place_entity(utils.add_twoples((x, y), self.window.offset), atts)
+                pos = utils.add_twoples((x, y), self.window.offset)
+                if e_man.m.grid.get(pos) == None:
+                    y += settings.ENT_WIDTH
+                    continue
+                e_man.place_entity(pos, atts)
                 y += settings.ENT_WIDTH
             x += settings.ENT_WIDTH
 
@@ -102,6 +110,10 @@ class Mouse:
         while x < self.cursor.rect.right:
             y = self.cursor.rect.top
             while y < self.cursor.rect.bottom:
+                pos = utils.add_twoples((x, y), self.window.offset)
+                if e_man.m.grid.get(pos) == None:
+                    y += settings.ENT_WIDTH
+                    continue
                 for e in e_man.m.grid[utils.add_twoples((x, y), self.window.offset)]:
                     e_man.remove_entity(e)
                 y += settings.ENT_WIDTH
