@@ -2,6 +2,7 @@ import pygame
 import asyncio
 import static.colors as colors
 import static.settings as settings
+import src.utils.utils as utils
 from src.interface.window import Window
 from src.tracking.metrics import Metrics
 from src.entities.entity_manager import EntityManager
@@ -71,7 +72,8 @@ class App:
         self.c_man.update_colonies()
 
     def on_render(self) -> None:
-        self.screen.fill(colors.WHITE)
+        self.screen.fill(colors.GRAY)
+        self._render_map_background()
         self.e_man.render_entities(self.window)
         self.c_man.render_colonies(self.window)
         self.e_man.render_selected(self.window, self.clock)
@@ -102,6 +104,11 @@ class App:
         self.on_cleanup()
 
     # helpers
+
+    def _render_map_background(self) -> None:
+        pos = utils.subtract_twoples((0, 0), self.window.offset)
+        r = pygame.rect.Rect(pos[0], pos[1], settings.WORLD_SIZE, settings.WORLD_SIZE)
+        pygame.draw.rect(self.screen, colors.WHITE, r)
 
     def _create_metrics(self) -> None:
         self.metrics.create_tracker("created")
@@ -156,13 +163,14 @@ class App:
             self.picker.handle_click(settings.LEFT_CLICK)
             self.side_panel.handle_click(settings.LEFT_CLICK)
             self.bottom_panel.handle_click(settings.LEFT_CLICK)
-        # yikes...
         elif button == settings.SCROLL_IN and settings.ENT_WIDTH*settings.SCROLL_SPEED <= 40:
             self.e_man.zoom_in_entities(settings.SCROLL_SPEED)
             self.side_panel.minimap.zoom_in(settings.SCROLL_SPEED)
+            self.window.set_offset(utils.multiply_twople_by_constant(self.window.offset, settings.SCROLL_SPEED))
         elif button == settings.SCROLL_OUT and int(settings.ENT_WIDTH/settings.SCROLL_SPEED) >= 5:
             self.e_man.zoom_out_entities(settings.SCROLL_SPEED)
             self.side_panel.minimap.zoom_out(settings.SCROLL_SPEED)
+            self.window.set_offset(utils.divide_twople_by_constant(self.window.offset, settings.SCROLL_SPEED))
 
     def _handle_mouse_actions(self) -> None:
         # mouse buttons: 0 == left, 1 == middle, 2 == right
