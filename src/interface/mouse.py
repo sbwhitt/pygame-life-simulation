@@ -1,6 +1,5 @@
 import pygame
 import src.utils.utils as utils
-import static.colors as colors
 import static.settings as settings
 from src.interface.interface_element import InterfaceElement
 from src.styles.styles import MouseCursorStyle
@@ -118,6 +117,10 @@ class Mouse:
                     e_man.remove_entity(e)
                 y += settings.ENT_WIDTH
             x += settings.ENT_WIDTH
+
+    def copy_selected(self, e_man: EntityManager, pos: tuple) -> dict:
+        if e_man.m.grid.get(pos):
+            return e_man.get_attributes(e_man.m.grid.get(pos)[0])
     
     def stop_drag(self, button: int) -> None:
         self.dragging[button] = False

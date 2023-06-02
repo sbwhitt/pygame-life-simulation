@@ -66,6 +66,11 @@ class BottomPanel(InterfaceElement):
             atts[v] = self.choosers[k].selected
         return atts
 
+    def set_attributes(self, atts: dict) -> None:
+        self.color_picker.set_color(atts["color"])
+        for k, v in settings.CHOOSER_OPTIONS.items():
+            self.choosers[k].selected = atts[v]
+
     # helpers
 
     def _toggle_hide_choosers(self) -> None:

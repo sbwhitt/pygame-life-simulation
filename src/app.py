@@ -177,6 +177,10 @@ class App:
         if self.i_map.active:
             return
         if buttons[settings.LEFT_CLICK]:
+            # need something better than this, and this doesn't work
+            # if self.bottom_panel.actions.selected_option == settings.ACTION_MENU_OPTIONS[3]:
+            #     atts = self.mouse.copy_selected(self.e_man, utils.get_tile_pos(pygame.mouse.get_pos()))
+            #     self.bottom_panel.set_attributes(atts)
             self.mouse.drag(settings.LEFT_CLICK)
         elif self.mouse.dragging[settings.LEFT_CLICK]:
             shift = (pygame.K_LSHIFT in self.keys or pygame.K_RIGHT in self.keys)
@@ -186,7 +190,7 @@ class App:
                                           shift)
         if buttons[settings.MIDDLE_CLICK]:
             self.mouse.spawn_outward(self.e_man,
-                                     self._get_tile_pos(pygame.mouse.get_pos()),
+                                     utils.get_tile_pos(pygame.mouse.get_pos()),
                                      self.bottom_panel.get_attributes(),
                                      self.clock.time)
         else:
