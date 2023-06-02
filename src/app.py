@@ -107,7 +107,7 @@ class App:
 
     def _render_map_background(self) -> None:
         pos = utils.subtract_twoples((0, 0), self.window.offset)
-        r = pygame.rect.Rect(pos[0], pos[1], settings.WORLD_SIZE, settings.WORLD_SIZE)
+        r = pygame.rect.Rect(pos[0], pos[1], settings.WORLD_SIZE, settings.WORLD_SIZE+settings.ENT_WIDTH)
         pygame.draw.rect(self.screen, colors.WHITE, r)
 
     def _create_metrics(self) -> None:
