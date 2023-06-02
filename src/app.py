@@ -159,14 +159,17 @@ class App:
     def _handle_click(self, button) -> None:
         # why are event.button values different from pygame.mouse.get_pressed???
         # left click is 1 here but 0 elsewhere
+        # single left click
         if self.i_map.active and button-1 == settings.LEFT_CLICK:
             self.picker.handle_click(settings.LEFT_CLICK)
             self.side_panel.handle_click(settings.LEFT_CLICK)
             self.bottom_panel.handle_click(settings.LEFT_CLICK)
+        # scroll wheel in
         elif button == settings.SCROLL_IN and settings.ENT_WIDTH*settings.SCROLL_SPEED <= 40:
             self.e_man.zoom_in_entities(settings.SCROLL_SPEED)
             self.side_panel.minimap.zoom_in(settings.SCROLL_SPEED)
             self.window.set_offset(utils.multiply_twople_by_constant(self.window.offset, settings.SCROLL_SPEED))
+        # scroll wheel out
         elif button == settings.SCROLL_OUT and int(settings.ENT_WIDTH/settings.SCROLL_SPEED) >= 5:
             self.e_man.zoom_out_entities(settings.SCROLL_SPEED)
             self.side_panel.minimap.zoom_out(settings.SCROLL_SPEED)

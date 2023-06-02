@@ -19,8 +19,18 @@ class MiniMapCursor(InterfaceElement):
     def update(self, pos: tuple) -> None:
         self.pos = pos
     
-    def render(self, screen: pygame.Surface) -> None:
-        self.render_border(screen)
+    def render(self, screen: pygame.Surface, boundary: pygame.Rect) -> None:
+        self.rect = self.build_rect()
+        lines = utils.get_rect_outline(self.rect)
+        border = lines
+        for i in range(len(lines)):
+            l = lines[i]
+            if l[0] < boundary.left: border[i] = (boundary.left, border[i][1])
+            elif l[0] > boundary.right: border[i] = (boundary.right, border[i][1])
+            if l[1] < boundary.top: border[i] = (border[i][0], boundary.top)
+            elif l[1] > boundary.bottom: border[i] = (border[i][0], boundary.bottom)
+        pygame.draw.lines(screen, colors.BLACK, True, border)
+
 
 
 class MiniMap(InterfaceElement):
@@ -51,23 +61,23 @@ class MiniMap(InterfaceElement):
     def zoom_in(self, speed: int) -> None:
         new_w = int(self.cursor.style.WIDTH / speed)
         new_h = int(self.cursor.style.HEIGHT / speed)
-        self.cursor.style.WIDTH = new_w #if new_w <= settings.WORLD_SIZE else settings.WORLD_SIZE
-        self.cursor.style.HEIGHT = new_h #if new_h <= settings.WORLD_SIZE else settings.WORLD_SIZE
+        self.cursor.style.WIDTH = new_w
+        self.cursor.style.HEIGHT = new_h
 
     def zoom_out(self, speed: int) -> None:
         new_w = self.cursor.style.WIDTH * speed
         new_h = self.cursor.style.HEIGHT * speed
-        self.cursor.style.WIDTH = new_w #if new_w <= settings.WORLD_SIZE else settings.WORLD_SIZE
-        self.cursor.style.HEIGHT = new_h #if new_h <= settings.WORLD_SIZE else settings.WORLD_SIZE
+        self.cursor.style.WIDTH = new_w
+        self.cursor.style.HEIGHT = new_h
 
     # helpers
-    
+
     def _render_cursor(self, screen: pygame.Surface) -> None:
         ratio = self._calculate_map_ratio()
         x_adj, y_adj = int(self.window.offset[0] * ratio), int(self.window.offset[1] * ratio)
         self.cursor.update(utils.add_twoples(self.pos, (x_adj, y_adj)))
-        self.cursor.render(screen)
-    
+        self.cursor.render(screen, self.rect)
+
     def _render_small_entities(self, screen: pygame.Surface, entities: list[Entity]) -> None:
         ratio = self._calculate_map_ratio()
         for e in entities:

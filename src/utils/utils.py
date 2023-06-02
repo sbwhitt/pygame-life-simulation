@@ -79,9 +79,9 @@ def get_rect_outline(rect: pygame.rect.Rect, offset: tuple=(0, 0)) -> list[tuple
     '''Returns pygame rect vertices minus offset for rendering outline'''
     return [
         subtract_twoples(rect.topleft, offset),
-        subtract_twoples(rect.topright, offset),
+        subtract_twoples(rect.bottomleft, offset),
         subtract_twoples(rect.bottomright, offset),
-        subtract_twoples(rect.bottomleft, offset)
+        subtract_twoples(rect.topright, offset)
     ]
 
 def within_rect(pos: tuple, rect: pygame.rect.Rect) -> bool:
