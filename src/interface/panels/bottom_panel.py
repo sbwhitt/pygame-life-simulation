@@ -59,6 +59,9 @@ class BottomPanel(InterfaceElement):
             self._toggle_hide_choosers()
             self._toggle_hide_actions()
 
+    def get_selected_action(self) -> str:
+        return self.actions.selected_option.option
+
     def get_attributes(self) -> dict:
         atts = {}
         atts["color"] = self.color_picker.current_color

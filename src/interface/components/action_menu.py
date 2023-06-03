@@ -22,7 +22,6 @@ class ActionMenuOption(InterfaceElement):
             self.render_hover(screen)
         else:
             self.render_transparent(screen)
-            self.render_border(screen)
         self._render_option_text(screen)
     
     # helpers
@@ -73,7 +72,6 @@ class ActionMenu(InterfaceElement):
         return ops
     
     def _build_option(self, option: str, offset: int, color: pygame.Color) -> ActionMenuOption:
-        print(self.positions)
         p_off = utils.multiply_twoples(self.positions[offset], (ActionMenuOptionStyle.WIDTH, ActionMenuOptionStyle.HEIGHT))
         p_adj = utils.add_twoples(self.pos, p_off)
         return ActionMenuOption(option, p_adj, color)

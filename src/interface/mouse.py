@@ -126,6 +126,7 @@ class Mouse:
         self.dragging[button] = False
 
     # helpers
+
     def _start_drag(self, button: int) -> None:
         self.dragging[button] = True
         m_pos = pygame.mouse.get_pos()

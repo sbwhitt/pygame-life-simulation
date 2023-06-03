@@ -74,11 +74,12 @@ class ColorPicker(InterfaceElement):
     def set_color(self, color: pygame.Color) -> None:
         for o in self.options:
             if o.option == settings.COLOR_PICKER_OPTIONS[0]:
-                o.set_color_value(o.control_color.r/color.r, pygame.Color(color.r, 0, 0))
+                o.set_color_value(color.r / o.control_color.r, pygame.Color(color.r, 0, 0))
             elif o.option == settings.COLOR_PICKER_OPTIONS[1]:
-                o.set_color_value(o.control_color.g/color.g, pygame.Color(0, color.g, 0))
+                o.set_color_value(color.g / o.control_color.g, pygame.Color(0, color.g, 0))
             elif o.option == settings.COLOR_PICKER_OPTIONS[2]:
-                o.set_color_value(o.control_color.b/color.b, pygame.Color(0, 0, color.b))
+                o.set_color_value(color.b / o.control_color.b, pygame.Color(0, 0, color.b))
+        self._set_current_color()
     
     # helpers
 
