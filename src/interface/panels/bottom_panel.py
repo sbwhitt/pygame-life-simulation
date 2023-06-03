@@ -10,6 +10,7 @@ from src.interface.components.color_picker import ColorPicker
 from src.interface.text import Text
 from src.interface.components.chooser import Chooser
 from src.styles.styles import ChooserStyle
+from src.interface.components.action_menu import ActionMenu
 
 
 class BottomPanel(InterfaceElement):
@@ -22,6 +23,7 @@ class BottomPanel(InterfaceElement):
         self.color_picker = ColorPicker(self.pos)
         self.text = Text(font_size=settings.FONT_SIZE)
         self.choosers = self._build_choosers()
+        self.actions = ActionMenu(utils.add_twoples(self.pos, (self.style.WIDTH, 0)))
 
     def render(self, screen: pygame.Surface) -> None:
         if self.panel_open:
@@ -30,6 +32,7 @@ class BottomPanel(InterfaceElement):
             self.color_picker.render(screen)
             for c in self.choosers:
                 c.render(screen)
+            self.actions.render(screen)
         self.panel_button.render(screen, self.panel_open)
     
     def handle_click(self, button: int) -> None:
@@ -38,7 +41,10 @@ class BottomPanel(InterfaceElement):
                 self.toggle_panel()
         self.color_picker.handle_click(button)
         for c in self.choosers:
-            c.handle_click(button)
+            if button == settings.LEFT_CLICK and c.hovering():
+                c.handle_click(settings.LEFT_CLICK)
+        if button == settings.LEFT_CLICK and self.actions.hovering():
+            self.actions.handle_click(settings.LEFT_CLICK)
 
     def toggle_panel(self) -> None:
         self.panel_open = not self.panel_open
@@ -46,10 +52,15 @@ class BottomPanel(InterfaceElement):
             self.panel_button.pos = utils.subtract_twoples(self.pos, (0, PanelButtonStyle.HEIGHT))
             self.color_picker.toggle_hide()
             self._toggle_hide_choosers()
+            self._toggle_hide_actions()
         else:
             self.panel_button.pos = (0, settings.WINDOW_HEIGHT-self.panel_button.style.HEIGHT)
             self.color_picker.toggle_hide()
             self._toggle_hide_choosers()
+            self._toggle_hide_actions()
+
+    def get_selected_action(self) -> str:
+        return self.actions.selected_option.option
 
     def get_attributes(self) -> dict:
         atts = {}
@@ -58,11 +69,20 @@ class BottomPanel(InterfaceElement):
             atts[v] = self.choosers[k].selected
         return atts
 
+    def set_attributes(self, atts: dict) -> None:
+        self.color_picker.set_color(atts["color"])
+        for k, v in settings.CHOOSER_OPTIONS.items():
+            self.choosers[k].selected = atts[v]
+
     # helpers
 
     def _toggle_hide_choosers(self) -> None:
         for c in self.choosers:
             c.hidden = not c.hidden
+
+    def _toggle_hide_actions(self) -> None:
+        for a in self.actions.options:
+            a.hidden = not a.hidden
 
     def _build_choosers(self) -> list[Chooser]:
         c = []

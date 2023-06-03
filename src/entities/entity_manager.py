@@ -123,6 +123,17 @@ class EntityManager:
         e.dna.sterile = atts["sterile"]
         e.dna.unbindable = atts["unbindable"]
         self._add_entity(e)
+
+    def get_attributes(self, e: Entity) -> dict:
+        return {
+            "color": e.dna.color,
+            "diseased": e.dna.diseased,
+            "immune": e.dna.immune,
+            "immortal": e.dna.immortal,
+            "immobile": e.dna.immobile,
+            "sterile": e.dna.sterile,
+            "unbindable": e.dna.unbindable
+        }
     
     def select_entity(self, e: Entity) -> None:
         if e not in self.selected: self.selected.append(e)

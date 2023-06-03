@@ -80,5 +80,3 @@ class SidePanel(InterfaceElement):
         # self.stats.add_stat("eaten per minute: ", 
         #                     str(int(metrics.get_rate("eaten"))), 
         #                     colors.ORANGE)
-
-    # helpers

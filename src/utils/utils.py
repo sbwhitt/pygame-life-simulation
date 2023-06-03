@@ -11,6 +11,10 @@ def subtract_twoples(t1: tuple, t2: tuple) -> tuple:
     '''Returns difference of two element tuples'''
     return (t1[0] - t2[0], t1[1] - t2[1]) if len(t1) == len(t2) == 2 else None
 
+def multiply_twoples(t1: tuple, t2: tuple) -> tuple:
+    '''Returns product of two element tuples ( ex. (x1, x2) * (y1, y2) = (x1*y1, y1*y2) )'''
+    return (t1[0] * t2[0], t1[1] * t2[1]) if len(t1) == len(t2) == 2 else None
+
 def multiply_twople_by_constant(t1: tuple, const: int) -> tuple:
     '''Returns two element tuple with all elements multiplied by given constant'''
     return (t1[0] * const, t1[1] * const) if len(t1) == 2 else None
