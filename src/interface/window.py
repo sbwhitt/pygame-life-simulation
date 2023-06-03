@@ -46,6 +46,7 @@ class Window:
         corrected = utils.subtract_twoples((new_x, new_y), (new_x % settings.ENT_WIDTH, new_y % settings.ENT_WIDTH))
         self.offset = corrected
 
+# TODO: make zoom centered
     def zoom_in(self, speed: int) -> None:
         # print("in old off: " + str(self.offset))
         off_adj = utils.multiply_twople_by_constant(self.offset, speed)
