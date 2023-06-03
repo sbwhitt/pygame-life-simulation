@@ -45,3 +45,21 @@ class Window:
         # correcting new offset tuple to be aligned with entity grid
         corrected = utils.subtract_twoples((new_x, new_y), (new_x % settings.ENT_WIDTH, new_y % settings.ENT_WIDTH))
         self.offset = corrected
+
+    def zoom_in(self, speed: int) -> None:
+        # print("in old off: " + str(self.offset))
+        off_adj = utils.multiply_twople_by_constant(self.offset, speed)
+        # mod = utils.multiply_twople_by_constant((int(self.width/2), int(self.height/2)), speed)
+        # off_center = utils.subtract_twoples(off_adj, (int(self.width/2), int(self.height/2)))
+        # self.set_offset(utils.add_twoples(off_adj, mod)
+        self.set_offset(off_adj)
+        # print("in new off: " + str(self.offset))
+
+    def zoom_out(self, speed: int) -> None:
+        # print("out old off: " + str(self.offset))
+        off_adj = utils.divide_twople_by_constant(self.offset, speed)
+        # mod = utils.divide_twople_by_constant((int(self.width/2), int(self.height/2)), speed)
+        # off_center = utils.subtract_twoples(off_adj, (int(self.width/2), int(self.height/2)))
+        # self.set_offset(utils.subtract_twoples(off_adj, mod))
+        self.set_offset(off_adj)
+        # print("out new off: " + str(self.offset))

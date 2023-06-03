@@ -148,11 +148,17 @@ class App:
         else:
             settings.IN_GAME_SETTINGS[setting] = 1
             print(setting + ' toggled on')
-    
-    def _get_tile_pos(self, pos: tuple) -> tuple:
-        loc = (pos[0]+self.window.offset[0], pos[1]+self.window.offset[1])
-        return (loc[0]-(loc[0] % settings.ENT_WIDTH), loc[1]-(loc[1] % settings.ENT_WIDTH))
-    
+
+    def _zoom_in(self, speed: int) -> None:
+        self.e_man.zoom_in_entities(speed)
+        self.side_panel.minimap.zoom_in(speed)
+        self.window.zoom_in(speed)
+
+    def _zoom_out(self, speed: int) -> None:
+        self.e_man.zoom_out_entities(speed)
+        self.side_panel.minimap.zoom_out(speed)
+        self.window.zoom_out(speed)
+
     def _handle_click(self, button) -> None:
         # why are event.button values different from pygame.mouse.get_pressed???
         # left click is 1 here but 0 elsewhere
@@ -162,14 +168,10 @@ class App:
             self.bottom_panel.handle_click(settings.LEFT_CLICK)
         # scroll wheel in
         elif button == settings.SCROLL_IN and settings.ENT_WIDTH*settings.SCROLL_SPEED <= 40:
-            self.e_man.zoom_in_entities(settings.SCROLL_SPEED)
-            self.side_panel.minimap.zoom_in(settings.SCROLL_SPEED)
-            self.window.set_offset(utils.multiply_twople_by_constant(self.window.offset, settings.SCROLL_SPEED))
+            self._zoom_in(settings.SCROLL_SPEED)
         # scroll wheel out
         elif button == settings.SCROLL_OUT and int(settings.ENT_WIDTH/settings.SCROLL_SPEED) >= 5:
-            self.e_man.zoom_out_entities(settings.SCROLL_SPEED)
-            self.side_panel.minimap.zoom_out(settings.SCROLL_SPEED)
-            self.window.set_offset(utils.divide_twople_by_constant(self.window.offset, settings.SCROLL_SPEED))
+            self._zoom_out(settings.SCROLL_SPEED)
 
     def _handle_mouse_actions(self) -> None:
         # mouse buttons: 0 == left, 1 == middle, 2 == right
@@ -179,9 +181,7 @@ class App:
         if buttons[settings.LEFT_CLICK]:
             # copy is a special case here
             if self.bottom_panel.get_selected_action() == settings.ACTION_MENU_OPTIONS[3]:
-                atts = self.mouse.copy_selected(self.e_man,
-                                                utils.get_tile_pos(pygame.mouse.get_pos(),
-                                                offset=self.window.offset))
+                atts = self.mouse.copy_selected(self.e_man, utils.get_tile_pos(pygame.mouse.get_pos(), self.window.offset))
                 if atts: self.bottom_panel.set_attributes(atts)
             else: self.mouse.drag(settings.LEFT_CLICK)
         elif self.mouse.dragging[settings.LEFT_CLICK]:
@@ -192,8 +192,7 @@ class App:
                                           shift)
         if buttons[settings.MIDDLE_CLICK]:
             self.mouse.spawn_outward(self.e_man,
-                                     utils.get_tile_pos(pygame.mouse.get_pos(),
-                                                        offset=self.window.offset),
+                                     utils.get_tile_pos(pygame.mouse.get_pos(), self.window.offset),
                                      self.bottom_panel.get_attributes(),
                                      self.clock.time)
         else:
