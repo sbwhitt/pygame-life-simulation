@@ -64,13 +64,13 @@ class Mouse:
         elif button == settings.RIGHT_CLICK:
             self.window.move(self._get_drag_dir(settings.RIGHT_CLICK))
 
-    def execute_left_click(self, menu_option: ActionMenuOption, e_man: EntityManager, atts: dict, shift: bool=False) -> None:
-        # selection
-        if menu_option.option == settings.ACTION_MENU_OPTIONS[0]:
-            self.select(e_man, shift)
+    def execute_left_click_drag(self, menu_option: ActionMenuOption, e_man: EntityManager, atts: dict, shift: bool=False) -> None:
         # creation
-        elif menu_option.option == settings.ACTION_MENU_OPTIONS[1]:
+        if menu_option.option == settings.ACTION_MENU_OPTIONS[0]:
             self.place_selected(e_man, atts)
+        # selection
+        elif menu_option.option == settings.ACTION_MENU_OPTIONS[1]:
+            self.select(e_man, shift)
         # deletion
         elif menu_option.option == settings.ACTION_MENU_OPTIONS[2]:
             self.delete_selected(e_man)

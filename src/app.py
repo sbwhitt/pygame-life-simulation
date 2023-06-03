@@ -186,7 +186,7 @@ class App:
             else: self.mouse.drag(settings.LEFT_CLICK)
         elif self.mouse.dragging[settings.LEFT_CLICK]:
             shift = (pygame.K_LSHIFT in self.keys or pygame.K_RSHIFT in self.keys)
-            self.mouse.execute_left_click(self.bottom_panel.actions.selected_option,
+            self.mouse.execute_left_click_drag(self.bottom_panel.actions.selected_option,
                                           self.e_man,
                                           self.bottom_panel.get_attributes(),
                                           shift)

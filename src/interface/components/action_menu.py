@@ -61,10 +61,10 @@ class ActionMenu(InterfaceElement):
     def _build_options(self) -> list[ActionMenuOption]:
         ops = []
         for k, v in settings.ACTION_MENU_OPTIONS.items():
-            if v == "Select":
-                ops.append(self._build_option(v, k, colors.CYAN))
             if v == "Create":
                 ops.append(self._build_option(v, k, colors.GREEN))
+            if v == "Select":
+                ops.append(self._build_option(v, k, colors.CYAN))
             if v == "Delete":
                 ops.append(self._build_option(v, k, colors.RED))
             if v == "Copy":
