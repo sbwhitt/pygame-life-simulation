@@ -12,7 +12,7 @@ FONT_SIZE_BIGGER = 40
 FONT_SIZE_SMALLER = 16
 
 # menu options
-ACTION_MENU_OPTIONS = {0: "Selection", 1: "Creation", 2: "Deletion"}
+ACTION_MENU_OPTIONS = {0: "Create", 1: "Select", 2: "Delete", 3: "Copy"}
 COLOR_PICKER_OPTIONS = {0: "Red", 1: "Green", 2: "Blue"}
 CHOOSER_OPTIONS = {0: "diseased", 1: "immune", 2: "immortal", 3: "immobile", 4: "sterile", 5: "unbindable"}
 
@@ -20,6 +20,9 @@ CHOOSER_OPTIONS = {0: "diseased", 1: "immune", 2: "immortal", 3: "immobile", 4: 
 LEFT_CLICK = 0
 MIDDLE_CLICK = 1
 RIGHT_CLICK = 2
+SCROLL_IN = 4
+SCROLL_OUT = 5
+SCROLL_SPEED = 2
 
 # clock settings
 CLOCK_RATE = 60

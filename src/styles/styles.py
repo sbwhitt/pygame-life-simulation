@@ -21,18 +21,15 @@ class MouseCursorStyle(Style):
     ALPHA = 0
 
 @dataclass
-class PickerMenuOptionStyle(Style):
+class ActionMenuOptionStyle(Style):
     WIDTH = 80
     HEIGHT = 80
-    COLOR = colors.RED
-    MARGIN = (10, 10)
+    MARGIN = (40, 40)
 
 @dataclass
-class PickerMenuStyle(Style):
-    WIDTH = 100
-    HEIGHT = 100
-    COLOR = colors.GRAY
-    MARGIN = (10, 10)
+class ActionMenuStyle(Style):
+    WIDTH = 240
+    HEIGHT = 240
 
 @dataclass
 class ColorPickerStyle(Style):
@@ -44,7 +41,7 @@ class ColorPickerStyle(Style):
 class ColorPickerOptionStyle(Style):
     WIDTH = 80
     HEIGHT = 40
-    COLOR = colors.BLACK
+    COLOR = colors.GRAY
     MARGIN = (0, 10)
 
 @dataclass

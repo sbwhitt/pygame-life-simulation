@@ -7,7 +7,7 @@ class InterfaceElement:
     def __init__(self, style: Style, pos: tuple):
         self.style = style
         self.pos = utils.add_twoples(pos, self.style.MARGIN)
-        self.rect = self._build_rect()
+        self.rect = self.build_rect()
         self.hidden = False
     
     def render(self, screen: pygame.Surface) -> None:
@@ -17,22 +17,22 @@ class InterfaceElement:
             self.render_transparent(screen)
 
     def render_hover(self, screen: pygame.Surface) -> None:
-        self.rect = self._build_rect()
+        self.rect = self.build_rect()
         pygame.draw.rect(screen, self.style.COLOR, self.rect)
         self.render_border(screen)
     
     def render_opaque(self, screen: pygame.Surface) -> None:
-        self.rect = self._build_rect()
+        self.rect = self.build_rect()
         pygame.draw.rect(screen, self.style.COLOR, self.rect)
     
     def render_transparent(self, screen: pygame.Surface) -> None:
-        self.rect = self._build_rect()
+        self.rect = self.build_rect()
         utils.draw_rect_alpha(screen,
                               utils.get_color_transparent(self.style.COLOR, self.style.ALPHA),
                               self.rect)
     
     def render_border(self, screen: pygame.Surface) -> None:
-        self.rect = self._build_rect()
+        self.rect = self.build_rect()
         pygame.draw.lines(screen,
                           self.style.BORDER_COLOR,
                           True,
@@ -46,9 +46,7 @@ class InterfaceElement:
     def hovering(self) -> bool:
         return utils.within_rect(pygame.mouse.get_pos(), self.rect)
 
-    # helpers
-    
-    def _build_rect(self) -> pygame.Rect:
+    def build_rect(self) -> pygame.Rect:
         return pygame.rect.Rect(self.pos[0],
                                 self.pos[1],
                                 self.style.WIDTH,

@@ -10,21 +10,36 @@ from src.styles.styles import ColorPickerOptionStyle
 class ColorPickerOption(InterfaceElement):
     def __init__(self, option: str, pos: tuple, color: pygame.color):
         style = ColorPickerOptionStyle()
-        style.COLOR = color
-        self.control_color = color
         InterfaceElement.__init__(self, style, pos)
+        self.control_color = color
+        self.current_color = color
+        self.ratio = 1.0
         self.option = option
         self.hidden = False
     
     def render(self, screen: pygame.Surface) -> None:
-        self.render_opaque(screen)
         if self.hovering():
-            self.render_border(screen)
+            self.render_opaque(screen)
+        else:
+            self.render_transparent(screen)
+        self._render_control_rect(screen)
+        self.render_border(screen)
     
     def pick_color(self, pos: tuple) -> None:
         x_adj = utils.subtract_twoples(pos, self.pos)[0]
-        ratio = x_adj/self.style.WIDTH
-        self.style.COLOR = utils.multiply_color(self.control_color, ratio)
+        self.ratio = x_adj/self.style.WIDTH
+        self.current_color = utils.multiply_color(self.control_color, self.ratio)
+
+    def set_color_value(self, ratio: float, color: pygame.Color) -> None:
+        self.ratio = ratio
+        self.current_color = color
+
+    # helpers
+
+    def _render_control_rect(self, screen: pygame.Surface) -> None:
+        r = self.rect.copy()
+        r.width = r.width*self.ratio
+        pygame.draw.rect(screen, self.control_color, r)
 
 
 class ColorPicker(InterfaceElement):
@@ -32,9 +47,7 @@ class ColorPicker(InterfaceElement):
         style = ColorPickerStyle()
         InterfaceElement.__init__(self, style, pos)
         self.menu_open = True
-        self.options = self._build_options([settings.COLOR_PICKER_OPTIONS[0],
-                             settings.COLOR_PICKER_OPTIONS[1],
-                             settings.COLOR_PICKER_OPTIONS[2]])
+        self.options = self._build_options()
         self.style.COLOR = self._build_current_color()
         self.current_color = self._build_current_color()
     
@@ -57,6 +70,16 @@ class ColorPicker(InterfaceElement):
         self.hidden = not self.hidden
         for o in self.options:
             o.hidden = not o.hidden
+
+    def set_color(self, color: pygame.Color) -> None:
+        for o in self.options:
+            if o.option == settings.COLOR_PICKER_OPTIONS[0]:
+                o.set_color_value(color.r / o.control_color.r, pygame.Color(color.r, 0, 0))
+            elif o.option == settings.COLOR_PICKER_OPTIONS[1]:
+                o.set_color_value(color.g / o.control_color.g, pygame.Color(0, color.g, 0))
+            elif o.option == settings.COLOR_PICKER_OPTIONS[2]:
+                o.set_color_value(color.b / o.control_color.b, pygame.Color(0, 0, color.b))
+        self._set_current_color()
     
     # helpers
 
@@ -92,18 +115,18 @@ class ColorPicker(InterfaceElement):
         c = pygame.Color(0, 0, 0)
         o: ColorPickerOption
         for o in self.options:
-            c += o.style.COLOR
+            c += o.current_color
         return c
 
-    def _build_options(self, options: list[str]) -> list[ColorPickerOption]:
+    def _build_options(self) -> list[ColorPickerOption]:
         ops = []
-        for i in range(len(options)):
-            if settings.COLOR_PICKER_OPTIONS[i] == "Red":
-                ops.append(self._build_option(options[i], i, colors.RED))
-            if settings.COLOR_PICKER_OPTIONS[i] == "Green":
-                ops.append(self._build_option(options[i], i, colors.GREEN))
-            if settings.COLOR_PICKER_OPTIONS[i] == "Blue":
-                ops.append(self._build_option(options[i], i, colors.BLUE))
+        for k, v in settings.COLOR_PICKER_OPTIONS.items():
+            if v == "Red":
+                ops.append(self._build_option(v, k, colors.RED))
+            if v == "Green":
+                ops.append(self._build_option(v, k, colors.GREEN))
+            if v == "Blue":
+                ops.append(self._build_option(v, k, colors.BLUE))
         return ops
     
     def _build_option(self, option: str, offset: int, color: pygame.Color) -> ColorPickerOption:

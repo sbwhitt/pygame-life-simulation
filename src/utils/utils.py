@@ -11,9 +11,20 @@ def subtract_twoples(t1: tuple, t2: tuple) -> tuple:
     '''Returns difference of two element tuples'''
     return (t1[0] - t2[0], t1[1] - t2[1]) if len(t1) == len(t2) == 2 else None
 
+def multiply_twoples(t1: tuple, t2: tuple) -> tuple:
+    '''Returns product of two element tuples ( ex. (x1, x2) * (y1, y2) = (x1*y1, y1*y2) )'''
+    return (t1[0] * t2[0], t1[1] * t2[1]) if len(t1) == len(t2) == 2 else None
+
 def multiply_twople_by_constant(t1: tuple, const: int) -> tuple:
     '''Returns two element tuple with all elements multiplied by given constant'''
     return (t1[0] * const, t1[1] * const) if len(t1) == 2 else None
+
+def divide_twople_by_constant(t1: tuple, const: int, integer: bool=True) -> tuple:
+    '''Returns two element tuple with all elements divided by given constant'''
+    if integer:
+        return (int(t1[0] / const), int(t1[1] / const)) if len(t1) == 2 else None
+    else:
+        return (t1[0] / const, t1[1] / const) if len(t1) == 2 else None
 
 def get_random_color(start: int=-1, end: int=-1) -> pygame.Color:
     '''Returns random pygame color between given values or 10, 245 by default'''
@@ -72,9 +83,9 @@ def get_rect_outline(rect: pygame.rect.Rect, offset: tuple=(0, 0)) -> list[tuple
     '''Returns pygame rect vertices minus offset for rendering outline'''
     return [
         subtract_twoples(rect.topleft, offset),
-        subtract_twoples(rect.topright, offset),
+        subtract_twoples(rect.bottomleft, offset),
         subtract_twoples(rect.bottomright, offset),
-        subtract_twoples(rect.bottomleft, offset)
+        subtract_twoples(rect.topright, offset)
     ]
 
 def within_rect(pos: tuple, rect: pygame.rect.Rect) -> bool:
@@ -85,7 +96,8 @@ def within_rect(pos: tuple, rect: pygame.rect.Rect) -> bool:
             pos[1] <= rect.bottom)
 
 # source: https://stackoverflow.com/questions/6339057/draw-a-transparent-rectangles-and-polygons-in-pygame
-def draw_rect_alpha(surface, color, rect, border_radius=-1):
+def draw_rect_alpha(surface, color, rect, border_radius=-1) -> None:
+    '''Draws given rect to given surface with alpha value of given color'''
     shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
     pygame.draw.rect(shape_surf, color, shape_surf.get_rect(), border_radius=border_radius)
     surface.blit(shape_surf, rect)

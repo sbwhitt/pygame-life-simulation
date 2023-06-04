@@ -1,12 +1,11 @@
 import pygame
 import src.utils.utils as utils
-import static.colors as colors
 import static.settings as settings
 from src.interface.interface_element import InterfaceElement
 from src.styles.styles import MouseCursorStyle
 from src.entities.entity_manager import EntityManager
 from src.interface.window import Window
-from src.interface.picker_menu import PickerMenuOption
+from src.interface.components.action_menu import ActionMenuOption
 
 
 class Cursor(InterfaceElement):
@@ -65,13 +64,13 @@ class Mouse:
         elif button == settings.RIGHT_CLICK:
             self.window.move(self._get_drag_dir(settings.RIGHT_CLICK))
 
-    def execute_left_click(self, menu_option: PickerMenuOption, e_man: EntityManager, atts: dict, shift: bool=False) -> None:
-        # selection
-        if menu_option.option == settings.ACTION_MENU_OPTIONS[0]:
-            self.select(e_man, shift)
+    def execute_left_click_drag(self, menu_option: ActionMenuOption, e_man: EntityManager, atts: dict, shift: bool=False) -> None:
         # creation
-        elif menu_option.option == settings.ACTION_MENU_OPTIONS[1]:
+        if menu_option.option == settings.ACTION_MENU_OPTIONS[0]:
             self.place_selected(e_man, atts)
+        # selection
+        elif menu_option.option == settings.ACTION_MENU_OPTIONS[1]:
+            self.select(e_man, shift)
         # deletion
         elif menu_option.option == settings.ACTION_MENU_OPTIONS[2]:
             self.delete_selected(e_man)
@@ -83,7 +82,11 @@ class Mouse:
         while x < self.cursor.rect.right:
             y = self.cursor.rect.top
             while y < self.cursor.rect.bottom:
-                for e in e_man.m.grid[utils.add_twoples((x, y), self.window.offset)]:
+                pos = utils.add_twoples((x, y), self.window.offset)
+                if e_man.m.grid.get(pos) == None:
+                    y += settings.ENT_WIDTH
+                    continue
+                for e in e_man.m.grid[pos]:
                     e_man.select_entity(e)
                 y += settings.ENT_WIDTH
             x += settings.ENT_WIDTH
@@ -93,7 +96,11 @@ class Mouse:
         while x < self.cursor.rect.right:
             y = self.cursor.rect.top
             while y < self.cursor.rect.bottom:
-                e_man.place_entity(utils.add_twoples((x, y), self.window.offset), atts)
+                pos = utils.add_twoples((x, y), self.window.offset)
+                if e_man.m.grid.get(pos) == None:
+                    y += settings.ENT_WIDTH
+                    continue
+                e_man.place_entity(pos, atts)
                 y += settings.ENT_WIDTH
             x += settings.ENT_WIDTH
 
@@ -102,15 +109,24 @@ class Mouse:
         while x < self.cursor.rect.right:
             y = self.cursor.rect.top
             while y < self.cursor.rect.bottom:
+                pos = utils.add_twoples((x, y), self.window.offset)
+                if e_man.m.grid.get(pos) == None:
+                    y += settings.ENT_WIDTH
+                    continue
                 for e in e_man.m.grid[utils.add_twoples((x, y), self.window.offset)]:
                     e_man.remove_entity(e)
                 y += settings.ENT_WIDTH
             x += settings.ENT_WIDTH
+
+    def copy_selected(self, e_man: EntityManager, pos: tuple) -> dict:
+        if e_man.m.grid.get(pos):
+            return e_man.get_attributes(e_man.m.grid.get(pos)[0])
     
     def stop_drag(self, button: int) -> None:
         self.dragging[button] = False
 
     # helpers
+
     def _start_drag(self, button: int) -> None:
         self.dragging[button] = True
         m_pos = pygame.mouse.get_pos()

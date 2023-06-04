@@ -2,6 +2,7 @@ import pygame
 import asyncio
 import static.colors as colors
 import static.settings as settings
+import src.utils.utils as utils
 from src.interface.window import Window
 from src.tracking.metrics import Metrics
 from src.entities.entity_manager import EntityManager
@@ -11,7 +12,6 @@ from src.utils.clock import Clock
 from src.interface.panels.side_panel import SidePanel
 from src.interface.panels.bottom_panel import BottomPanel
 from src.utils.interface_map import InterfaceMap
-from src.interface.picker_menu import PickerMenu
 
 '''
 x == width == rect.left
@@ -36,7 +36,6 @@ class App:
         self.metrics = Metrics()
         self.side_panel = SidePanel(self.window)
         self.bottom_panel = BottomPanel()
-        self.picker = PickerMenu((0, 0))
 
     def on_init(self) -> None:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN])
@@ -71,14 +70,14 @@ class App:
         self.c_man.update_colonies()
 
     def on_render(self) -> None:
-        self.screen.fill(colors.WHITE)
+        self.screen.fill(colors.GRAY)
+        self._render_map_background()
         self.e_man.render_entities(self.window)
         self.c_man.render_colonies(self.window)
         self.e_man.render_selected(self.window, self.clock)
         self.mouse.render_cursor(self.screen, self.i_map.active)
         self.side_panel.render(self.screen, self.e_man.entities)
         self.bottom_panel.render(self.screen)
-        self.picker.render(self.screen)
         pygame.display.flip()
 
     def on_cleanup(self) -> None:
@@ -103,6 +102,11 @@ class App:
 
     # helpers
 
+    def _render_map_background(self) -> None:
+        pos = utils.subtract_twoples((0, 0), self.window.offset)
+        r = pygame.rect.Rect(pos[0], pos[1], settings.WORLD_SIZE, settings.WORLD_SIZE+settings.ENT_WIDTH)
+        pygame.draw.rect(self.screen, colors.WHITE, r)
+
     def _create_metrics(self) -> None:
         self.metrics.create_tracker("created")
         self.metrics.create_tracker("destroyed")
@@ -110,18 +114,18 @@ class App:
         self.metrics.create_tracker("eaten")
     
     def _init_interface_map(self) -> None:
-        # adding action picker menu
-        self.i_map.add_element(self.picker)
-        for o in self.picker.options:
-            self.i_map.add_element(o)
         # adding side panel toggle button
         self.i_map.add_element(self.side_panel.panel_button)
         # adding bottom panel elements
         self.i_map.add_element(self.bottom_panel.panel_button)
         for o in self.bottom_panel.color_picker.options:
             self.i_map.add_element(o)
+        # adding bottom panel entity attribute choices
         for c in self.bottom_panel.choosers:
             self.i_map.add_element(c)
+        # adding action picker menu options
+        for a in self.bottom_panel.actions.options:
+            self.i_map.add_element(a)
         # adding minimap
         self.i_map.add_element(self.side_panel.minimap)
     
@@ -144,35 +148,51 @@ class App:
         else:
             settings.IN_GAME_SETTINGS[setting] = 1
             print(setting + ' toggled on')
-    
-    def _get_tile_pos(self, pos: tuple) -> tuple:
-        loc = (pos[0]+self.window.offset[0], pos[1]+self.window.offset[1])
-        return (loc[0]-(loc[0] % settings.ENT_WIDTH), loc[1]-(loc[1] % settings.ENT_WIDTH))
-    
+
+    def _zoom_in(self, speed: int) -> None:
+        self.e_man.zoom_in_entities(speed)
+        self.side_panel.minimap.zoom_in(speed)
+        self.window.zoom_in(speed)
+
+    def _zoom_out(self, speed: int) -> None:
+        self.e_man.zoom_out_entities(speed)
+        self.side_panel.minimap.zoom_out(speed)
+        self.window.zoom_out(speed)
+
     def _handle_click(self, button) -> None:
         # why are event.button values different from pygame.mouse.get_pressed???
         # left click is 1 here but 0 elsewhere
+        # single left click
         if self.i_map.active and button-1 == settings.LEFT_CLICK:
-            self.picker.handle_click(settings.LEFT_CLICK)
             self.side_panel.handle_click(settings.LEFT_CLICK)
             self.bottom_panel.handle_click(settings.LEFT_CLICK)
-    
+        # scroll wheel in
+        elif button == settings.SCROLL_IN and settings.ENT_WIDTH*settings.SCROLL_SPEED <= 40:
+            self._zoom_in(settings.SCROLL_SPEED)
+        # scroll wheel out
+        elif button == settings.SCROLL_OUT and int(settings.ENT_WIDTH/settings.SCROLL_SPEED) >= 5:
+            self._zoom_out(settings.SCROLL_SPEED)
+
     def _handle_mouse_actions(self) -> None:
         # mouse buttons: 0 == left, 1 == middle, 2 == right
         buttons = pygame.mouse.get_pressed(3)
         if self.i_map.active:
             return
         if buttons[settings.LEFT_CLICK]:
-            self.mouse.drag(settings.LEFT_CLICK)
+            # copy is a special case here
+            if self.bottom_panel.get_selected_action() == settings.ACTION_MENU_OPTIONS[3]:
+                atts = self.mouse.copy_selected(self.e_man, utils.get_tile_pos(pygame.mouse.get_pos(), self.window.offset))
+                if atts: self.bottom_panel.set_attributes(atts)
+            else: self.mouse.drag(settings.LEFT_CLICK)
         elif self.mouse.dragging[settings.LEFT_CLICK]:
-            shift = (pygame.K_LSHIFT in self.keys or pygame.K_RIGHT in self.keys)
-            self.mouse.execute_left_click(self.picker.selected_option,
+            shift = (pygame.K_LSHIFT in self.keys or pygame.K_RSHIFT in self.keys)
+            self.mouse.execute_left_click_drag(self.bottom_panel.actions.selected_option,
                                           self.e_man,
                                           self.bottom_panel.get_attributes(),
                                           shift)
         if buttons[settings.MIDDLE_CLICK]:
             self.mouse.spawn_outward(self.e_man,
-                                     self._get_tile_pos(pygame.mouse.get_pos()),
+                                     utils.get_tile_pos(pygame.mouse.get_pos(), self.window.offset),
                                      self.bottom_panel.get_attributes(),
                                      self.clock.time)
         else:
