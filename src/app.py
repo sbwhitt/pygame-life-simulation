@@ -98,20 +98,7 @@ class App:
                   str(self.e_man.find_avg_color()))
             print("average color (all time): " + str(self.e_man.avg_color))
         if settings.SAVE_GAME:
-            saver.save_data({
-                "settings": {
-                    "ENT_WIDTH": settings.ENT_WIDTH,
-                    "WORLD_SIZE": settings.WORLD_SIZE,
-                    "DIRS": settings.DIRS
-                },
-                "e_man": {
-                    "entities": self.e_man.entities,
-                    "map": self.e_man.m
-                },
-                "c_man": {
-                    "colonies": self.c_man.colonies
-                }
-            })
+            saver.save_data(self._get_save_data())
         pygame.quit()
 
     async def on_execute(self) -> None:
@@ -131,8 +118,24 @@ class App:
         if settings.LOAD_GAME:
             loader.load_settings()
             save_data = loader.load_data()
-            if save_data: 
+            if save_data:
                 return save_data
+
+    def _get_save_data(self) -> dict:
+        return {
+                "settings": {
+                    "ENT_WIDTH": settings.ENT_WIDTH,
+                    "WORLD_SIZE": settings.WORLD_SIZE,
+                    "DIRS": settings.DIRS
+                },
+                "e_man": {
+                    "entities": self.e_man.entities,
+                    "map": self.e_man.m
+                },
+                "c_man": {
+                    "colonies": self.c_man.colonies
+                }
+            }
 
     def _render_map_background(self) -> None:
         pos = utils.subtract_twoples((0, 0), self.window.offset)
