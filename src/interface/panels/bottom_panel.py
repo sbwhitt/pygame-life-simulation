@@ -1,7 +1,7 @@
 import pygame
 import src.utils.utils as utils
 import static.colors as colors
-import static.settings as settings
+from static.settings import Settings as settings
 from src.interface.interface_element import InterfaceElement
 from src.styles.panel_styles import BottomPanelStyle
 from src.interface.components.panel_button import PanelButton

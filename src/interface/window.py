@@ -1,5 +1,5 @@
 import src.utils.utils as utils
-import static.settings as settings
+from static.settings import Settings as settings
 
 
 class Window:

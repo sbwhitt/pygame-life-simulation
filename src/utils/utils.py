@@ -1,6 +1,6 @@
 import pygame
 import random
-import static.settings as settings
+from static.settings import Settings as settings
 
 
 def add_twoples(t1: tuple, t2: tuple) -> tuple:

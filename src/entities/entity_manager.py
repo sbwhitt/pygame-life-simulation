@@ -2,7 +2,7 @@ import pygame
 import random
 import src.utils.utils as utils
 import static.colors as colors
-import static.settings as settings
+from static.settings import Settings as settings
 from src.entities.entity import Entity
 from src.utils.map import Map
 from src.interface.window import Window
@@ -11,10 +11,10 @@ from src.utils.clock import Clock
 
 
 class EntityManager:
-    def __init__(self, screen: pygame.Surface):
+    def __init__(self, screen: pygame.Surface, map: Map=None, entities: list[Entity]=None):
         self.screen = screen
-        self.m = Map()
-        self.entities = []
+        self.m = map if map else Map()
+        self.entities = entities if entities else []
         self.selected = []
         self.created = 0
         self.destroyed = 0
@@ -34,10 +34,6 @@ class EntityManager:
                 self.m.grid[e.loc].remove(e)
                 neighbor = e.update(surroundings)
                 if neighbor != None: c_man.bind(e, neighbor)
-                if (self.m.grid.get(e.loc) == None):
-                    print("world: " + str(settings.WORLD_SIZE))
-                    print("ent width: " + str(settings.ENT_WIDTH))
-                    print("loc: " + str(e.loc))
                 self.m.grid[e.loc].append(e)
             elif e.bound:
                 neighbor = e.look_for_colony(surroundings)

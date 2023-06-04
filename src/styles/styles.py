@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import static.colors as colors
-import static.settings as settings
+from static.settings import Settings as settings
 
 @dataclass
 class Style:

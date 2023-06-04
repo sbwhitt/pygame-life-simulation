@@ -1,15 +1,15 @@
 import pygame
 import static.colors as colors
-import static.settings as settings
+from static.settings import Settings as settings
 from src.colonies.colony import Colony
 from src.entities.entity import Entity
 from src.interface.window import Window
 
 
 class ColonyManager:
-    def __init__(self, screen: pygame.Surface):
+    def __init__(self, screen: pygame.Surface, colonies: list[Colony]=None):
         self.screen = screen
-        self.colonies = []
+        self.colonies = colonies if colonies else []
         self.created = 0
         self.destroyed = 0
     

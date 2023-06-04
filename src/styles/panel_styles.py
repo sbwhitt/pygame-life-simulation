@@ -1,5 +1,5 @@
 import static.colors as colors
-import static.settings as settings
+from static.settings import Settings as settings
 from dataclasses import dataclass
 from src.styles.styles import Style
 

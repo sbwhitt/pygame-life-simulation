@@ -1,8 +1,10 @@
 import pygame
 import asyncio
 import static.colors as colors
-import static.settings as settings
+from static.settings import Settings as settings
 import src.utils.utils as utils
+import src.utils.saver as saver
+import src.utils.loader as loader
 from src.interface.window import Window
 from src.tracking.metrics import Metrics
 from src.entities.entity_manager import EntityManager
@@ -22,15 +24,23 @@ y == height == rect.top
 class App:
     def __init__(self):
         self._running = True
-        self.paused = False
+        self.paused = True
         self.window = Window(0, 0)
         self.clock = Clock()
         self.screen = pygame.display.set_mode(
             (self.window.width, self.window.height), pygame.SCALED | pygame.RESIZABLE | pygame.DOUBLEBUF)
         self.screen.set_alpha(None)
         self.i_map = InterfaceMap()
-        self.e_man = EntityManager(self.screen)
-        self.c_man = ColonyManager(self.screen)
+        data = self._load_save_file()
+        if data:
+            self.e_man = EntityManager(self.screen,
+                                       map=data["e_man"]["map"],
+                                       entities=data["e_man"]["entities"])
+            self.c_man = ColonyManager(self.screen,
+                                       colonies=data["c_man"]["colonies"])
+        else:
+            self.e_man = EntityManager(self.screen)
+            self.c_man = ColonyManager(self.screen)
         self.keys = []
         self.mouse = Mouse(self.window)
         self.metrics = Metrics()
@@ -87,6 +97,21 @@ class App:
             print("average color (last frame): " +
                   str(self.e_man.find_avg_color()))
             print("average color (all time): " + str(self.e_man.avg_color))
+        if settings.SAVE_GAME:
+            saver.save_data({
+                "settings": {
+                    "ENT_WIDTH": settings.ENT_WIDTH,
+                    "WORLD_SIZE": settings.WORLD_SIZE,
+                    "DIRS": settings.DIRS
+                },
+                "e_man": {
+                    "entities": self.e_man.entities,
+                    "map": self.e_man.m
+                },
+                "c_man": {
+                    "colonies": self.c_man.colonies
+                }
+            })
         pygame.quit()
 
     async def on_execute(self) -> None:
@@ -101,6 +126,13 @@ class App:
         self.on_cleanup()
 
     # helpers
+
+    def _load_save_file(self) -> dict:
+        if settings.LOAD_GAME:
+            loader.load_settings()
+            save_data = loader.load_data()
+            if save_data: 
+                return save_data
 
     def _render_map_background(self) -> None:
         pos = utils.subtract_twoples((0, 0), self.window.offset)
