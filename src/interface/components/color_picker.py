@@ -62,8 +62,8 @@ class ColorPicker(InterfaceElement):
             self.render_border(screen)
 
     def handle_click(self, button: int) -> None:
-        # if self._contains_click(button):
-        #     self._toggle_menu()
+        if self.hovering() and button == settings.LEFT_CLICK:
+            self._choose_random_color()
         self._handle_option_click(button)
 
     def toggle_hide(self):
@@ -89,16 +89,6 @@ class ColorPicker(InterfaceElement):
         o: ColorPickerOption
         for o in self.options:
             o.render(screen)
-
-    # def _toggle_menu(self) -> None:
-    #     self.menu_open = not self.menu_open
-    #     o: ColorPickerOption
-    #     for o in self.options:
-    #         o.hidden = not o.hidden
-
-    def _contains_click(self, button: int) -> bool:
-        if button == settings.LEFT_CLICK:
-            return self.hovering()
     
     def _handle_option_click(self, button: int) -> bool:
         if button == settings.LEFT_CLICK:
@@ -106,6 +96,9 @@ class ColorPicker(InterfaceElement):
             for o in self.options:
                 if o.hovering():
                     self._pick_option(o, pygame.mouse.get_pos())
+
+    def _choose_random_color(self) -> None:
+        self.set_color(utils.get_random_color())
 
     def _set_current_color(self) -> None:
         self.style.COLOR = self._build_current_color()
