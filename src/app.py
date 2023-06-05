@@ -14,6 +14,7 @@ from src.utils.clock import Clock
 from src.interface.panels.side_panel import SidePanel
 from src.interface.panels.bottom_panel import BottomPanel
 from src.utils.interface_map import InterfaceMap
+from src.interface.components.info_box import InfoBox
 
 '''
 x == width == rect.left
@@ -37,6 +38,7 @@ class App:
             self.metrics = Metrics()
         self.keys = []
         self.mouse = Mouse(self.window)
+        self.info_box = InfoBox((0, 0), settings.FONT_SIZE_BIGGER)
         self.side_panel = SidePanel(self.window)
         self.bottom_panel = BottomPanel()
 
@@ -81,6 +83,8 @@ class App:
         self.mouse.render_cursor(self.screen, self.i_map.active)
         self.side_panel.render(self.screen, self.e_man.entities)
         self.bottom_panel.render(self.screen)
+        if self.paused:
+            self.info_box.render(self.screen, "paused")
         pygame.display.flip()
 
     def on_cleanup(self) -> None:

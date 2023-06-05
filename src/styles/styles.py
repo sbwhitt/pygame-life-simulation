@@ -54,3 +54,7 @@ class ChooserStyle(Style):
     WIDTH = 20
     HEIGHT = 20
     MARGIN = (20, 20)
+
+@dataclass
+class InfoBoxStyle(Style):
+    pass
