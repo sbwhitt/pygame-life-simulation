@@ -38,11 +38,3 @@ Then simply clone and run:
 <img src="./imgs/current.PNG"/></br>
 </br>
 <img src="./imgs/current1.PNG"/></br>
-</br>
-<b>Old example screenshots:</b></br>
-<img src="./imgs/exampleOLD.PNG"/></br>
-</br>
-<img src="./imgs/example2OLD.PNG"/></br>
-</br>
-<b>Old simulation example after a long time:</b></br>
-<img src="./imgs/exampleLONG_OLD.PNG"/></br>
