@@ -11,15 +11,21 @@ from src.utils.clock import Clock
 
 
 class EntityManager:
-    def __init__(self, screen: pygame.Surface, map: Map=None, entities: list[Entity]=None):
+    def __init__(self, screen: pygame.Surface,
+                 map: Map=None,
+                 entities: list[Entity]=None,
+                 created: int=None,
+                 destroyed: int=None,
+                 diseased: int=None,
+                 eaten: int=None):
         self.screen = screen
         self.m = map if map else Map()
         self.entities = entities if entities else []
         self.selected = []
-        self.created = 0
-        self.destroyed = 0
-        self.diseased = 0
-        self.eaten = 0
+        self.created = created if created else 0
+        self.destroyed = destroyed if destroyed else 0
+        self.diseased = diseased if diseased else 0
+        self.eaten = eaten if eaten else 0
         self.dir_timer = 0
         self.move_timer = 0
         self.avg_color = pygame.Color(0, 0, 0)

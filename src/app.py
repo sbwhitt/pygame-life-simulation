@@ -31,19 +31,12 @@ class App:
             (self.window.width, self.window.height), pygame.SCALED | pygame.RESIZABLE | pygame.DOUBLEBUF)
         self.screen.set_alpha(None)
         self.i_map = InterfaceMap()
-        data = self._load_save_file()
-        if data:
-            self.e_man = EntityManager(self.screen,
-                                       map=data["e_man"]["map"],
-                                       entities=data["e_man"]["entities"])
-            self.c_man = ColonyManager(self.screen,
-                                       colonies=data["c_man"]["colonies"])
-        else:
+        if not self._load_save_file():
             self.e_man = EntityManager(self.screen)
             self.c_man = ColonyManager(self.screen)
+            self.metrics = Metrics()
         self.keys = []
         self.mouse = Mouse(self.window)
-        self.metrics = Metrics()
         self.side_panel = SidePanel(self.window)
         self.bottom_panel = BottomPanel()
 
@@ -114,27 +107,37 @@ class App:
 
     # helpers
 
-    def _load_save_file(self) -> dict:
+    def _load_save_file(self) -> bool:
         if settings.LOAD_GAME:
             loader.load_settings()
-            save_data = loader.load_data()
-            if save_data:
-                return save_data
+            data = loader.load_data()
+            if data:
+                self.e_man = EntityManager(self.screen,
+                                       map=data["map"],
+                                       entities=data["entities"],
+                                       created=data["created"],
+                                       destroyed=data["destroyed"],
+                                       diseased=data["diseased"],
+                                       eaten=data["eaten"])
+                self.c_man = ColonyManager(self.screen,
+                                       colonies=data["colonies"])
+                self.metrics = Metrics(elapsed=data["elapsed"])
+                return True
+        return False
 
     def _get_save_data(self) -> dict:
         return {
-                "settings": {
-                    "ENT_WIDTH": settings.ENT_WIDTH,
-                    "WORLD_SIZE": settings.WORLD_SIZE,
-                    "DIRS": settings.DIRS
-                },
-                "e_man": {
-                    "entities": self.e_man.entities,
-                    "map": self.e_man.m
-                },
-                "c_man": {
-                    "colonies": self.c_man.colonies
-                }
+                "ENT_WIDTH": settings.ENT_WIDTH,
+                "WORLD_SIZE": settings.WORLD_SIZE,
+                "DIRS": settings.DIRS,
+                "map": self.e_man.m,
+                "entities": self.e_man.entities,
+                "created": self.e_man.created,
+                "destroyed": self.e_man.destroyed,
+                "diseased": self.e_man.diseased,
+                "eaten": self.e_man.eaten,
+                "colonies": self.c_man.colonies,
+                "elapsed": self.metrics.time_elapsed
             }
 
     def _render_map_background(self) -> None:

@@ -20,7 +20,7 @@ def load_settings() -> None:
     with open(path, "rb") as fin:
         obs = pickle.load(fin)
         fin.close()
-        if obs["settings"]:
-            settings.ENT_WIDTH = obs["settings"]["ENT_WIDTH"]
-            settings.WORLD_SIZE = obs["settings"]["WORLD_SIZE"]
-            settings.DIRS = obs["settings"]["DIRS"]
+        if obs:
+            settings.ENT_WIDTH = obs["ENT_WIDTH"]
+            settings.WORLD_SIZE = obs["WORLD_SIZE"]
+            settings.DIRS = obs["DIRS"]
