@@ -51,5 +51,4 @@ class Settings:
     IN_GAME_SETTINGS= {"MARK_DISEASED": 1, "LOGGING": 0, "HIGHLIGHT": 1}
 
     # save settings
-    SAVE_GAME = True
-    LOAD_GAME = True
+    AUTO_SAVE = False

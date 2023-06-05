@@ -22,7 +22,7 @@ y == height == rect.top
 
 
 class App:
-    def __init__(self):
+    def __init__(self, save_file: str=None):
         self._running = True
         self.paused = True
         self.window = Window(0, 0)
@@ -31,7 +31,7 @@ class App:
             (self.window.width, self.window.height), pygame.SCALED | pygame.RESIZABLE | pygame.DOUBLEBUF)
         self.screen.set_alpha(None)
         self.i_map = InterfaceMap()
-        if not self._load_save_file():
+        if not self._load_save_file(save_file):
             self.e_man = EntityManager(self.screen)
             self.c_man = ColonyManager(self.screen)
             self.metrics = Metrics()
@@ -90,7 +90,7 @@ class App:
             print("average color (last frame): " +
                   str(self.e_man.find_avg_color()))
             print("average color (all time): " + str(self.e_man.avg_color))
-        if settings.SAVE_GAME:
+        if settings.AUTO_SAVE:
             saver.save_data(self._get_save_data())
         pygame.quit()
 
@@ -107,10 +107,9 @@ class App:
 
     # helpers
 
-    def _load_save_file(self) -> bool:
-        if settings.LOAD_GAME:
-            loader.load_settings()
-            data = loader.load_data()
+    def _load_save_file(self, save_file: str) -> bool:
+        if save_file:
+            data = loader.load_data(save_file)
             if data:
                 self.e_man = EntityManager(self.screen,
                                        map=data["map"],
@@ -123,7 +122,6 @@ class App:
                                        colonies=data["colonies"])
                 self.metrics = Metrics(elapsed=data["elapsed"])
                 return True
-        return False
 
     def _get_save_data(self) -> dict:
         return {
@@ -267,6 +265,8 @@ class App:
             self.e_man.update_all_colors((0, 255, 255))
         elif (pygame.K_LCTRL in self.keys or pygame.K_RCTRL in self.keys) and key == pygame.K_a:
             self.e_man.select_all_entities()
+        elif (pygame.K_LCTRL in self.keys or pygame.K_RCTRL in self.keys) and key == pygame.K_s:
+            saver.save_data(self._get_save_data())
         # shift colors
         elif key == pygame.K_c:
             self.e_man.shift_colors()

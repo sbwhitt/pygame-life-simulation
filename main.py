@@ -1,3 +1,4 @@
+import sys
 import asyncio
 import random
 from src.app import App
@@ -10,5 +11,10 @@ async def main(a: App) -> None:
 if __name__ == "__main__":
     random.seed()
     display.set_caption("pygame life simulation")
-    a = App()
-    asyncio.run(main(a))
+    a = None
+    if len(sys.argv) == 2:
+        a = App(save_file=sys.argv[1])
+        asyncio.run(main(a))
+    else:
+        a = App()
+        asyncio.run(main(a))
