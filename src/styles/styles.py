@@ -56,5 +56,9 @@ class ChooserStyle(Style):
     MARGIN = (20, 20)
 
 @dataclass
-class InfoBoxStyle(Style):
+class InfoMessageStyle(Style):
     pass
+
+@dataclass
+class InfoBoxStyle(Style):
+    WIDTH = settings.WINDOW_WIDTH

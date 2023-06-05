@@ -107,3 +107,13 @@ def get_current_date_str() -> str:
     '''Returns current date as string formatted as YEAR-MONTH-DAY_HOUR-MINUTE-SECONDS'''
     d = datetime.now()
     return str(datetime.date(d)) + "_" + str(datetime.time(d).hour) + "-" + str(datetime.time(d).minute) + "-" + str(datetime.time(d).second)
+
+def get_centered_x_pos(boundary: pygame.Rect, width: int) -> tuple:
+    '''Returns x position of given width centered within given boundary rect'''
+    return (int(boundary.width/2) - int(width/2))
+
+def get_centered_pos(boundary: pygame.Rect, to_center: pygame.Rect) -> tuple:
+    '''Returns position of given to_center rect centered within given boundary rect'''
+    center_x = int(boundary.width/2) - int(to_center.width/2)
+    center_y = int(boundary.height/2) - int(to_center.height/2)
+    return (center_x, center_y)

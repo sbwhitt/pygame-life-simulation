@@ -70,6 +70,7 @@ class App:
         self._check_interface_map()
         self.clock.step()
         if self.paused:
+            self.info_box.add_message("paused")
             return
         self.e_man.update_entities(self.clock.time, self.c_man)
         self.c_man.update_colonies()
@@ -83,8 +84,7 @@ class App:
         self.mouse.render_cursor(self.screen, self.i_map.active)
         self.side_panel.render(self.screen, self.e_man.entities)
         self.bottom_panel.render(self.screen)
-        if self.paused:
-            self.info_box.render(self.screen, "paused")
+        self.info_box.render(self.screen, self.clock)
         pygame.display.flip()
 
     def on_cleanup(self) -> None:
@@ -271,6 +271,7 @@ class App:
         elif (pygame.K_LCTRL in self.keys or pygame.K_RCTRL in self.keys) and key == pygame.K_a:
             self.e_man.select_all_entities()
         elif (pygame.K_LCTRL in self.keys or pygame.K_RCTRL in self.keys) and key == pygame.K_s:
+            self.info_box.add_message("saving...", duration=settings.MESSAGE_DURATION)
             saver.save_data(self._get_save_data())
         # shift colors
         elif key == pygame.K_c:

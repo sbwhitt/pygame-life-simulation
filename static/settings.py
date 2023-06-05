@@ -14,6 +14,7 @@ class Settings:
     FONT_SIZE = 20
     FONT_SIZE_BIGGER = 40
     FONT_SIZE_SMALLER = 16
+    MESSAGE_DURATION = 10
 
     # menu options
     ACTION_MENU_OPTIONS = {0: "Create", 1: "Select", 2: "Delete", 3: "Copy"}
