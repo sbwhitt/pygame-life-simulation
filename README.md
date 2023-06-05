@@ -37,6 +37,6 @@ Or, if trying to load a save file, run: <code>python main.py (file-name).ent</co
 <h2>Screenshots</h2>
 
 <b>Current examples:</b></br>
-<img src="./imgs/current.PNG"/></br>
+<img src="./imgs/current_ex1.PNG"/></br>
 </br>
-<img src="./imgs/current1.PNG"/></br>
+<img src="./imgs/current_ex2.PNG"/></br>
