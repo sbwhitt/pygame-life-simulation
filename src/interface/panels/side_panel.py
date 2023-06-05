@@ -1,6 +1,6 @@
 import pygame
 import static.colors as colors
-import static.settings as settings
+from static.settings import Settings as settings
 import src.utils.utils as utils
 from src.interface.interface_element import InterfaceElement
 from src.interface.window import Window

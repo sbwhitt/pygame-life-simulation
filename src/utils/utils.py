@@ -1,6 +1,7 @@
 import pygame
 import random
-import static.settings as settings
+from datetime import datetime
+from static.settings import Settings as settings
 
 
 def add_twoples(t1: tuple, t2: tuple) -> tuple:
@@ -101,3 +102,8 @@ def draw_rect_alpha(surface, color, rect, border_radius=-1) -> None:
     shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
     pygame.draw.rect(shape_surf, color, shape_surf.get_rect(), border_radius=border_radius)
     surface.blit(shape_surf, rect)
+
+def get_current_date_str() -> str:
+    '''Returns current date as string formatted as YEAR-MONTH-DAY_HOUR-MINUTE-SECONDS'''
+    d = datetime.now()
+    return str(datetime.date(d)) + "_" + str(datetime.time(d).hour) + "-" + str(datetime.time(d).minute) + "-" + str(datetime.time(d).second)

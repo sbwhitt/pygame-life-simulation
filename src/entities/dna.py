@@ -1,6 +1,6 @@
 import pygame
 import random
-import static.settings as settings
+from static.settings import Settings as settings
 
 
 class DNA:

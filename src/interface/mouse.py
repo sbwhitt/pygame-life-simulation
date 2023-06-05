@@ -1,6 +1,6 @@
 import pygame
 import src.utils.utils as utils
-import static.settings as settings
+from static.settings import Settings as settings
 from src.interface.interface_element import InterfaceElement
 from src.styles.styles import MouseCursorStyle
 from src.entities.entity_manager import EntityManager

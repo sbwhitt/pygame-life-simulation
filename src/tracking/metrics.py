@@ -8,9 +8,9 @@ class Tracker:
 
 
 class Metrics:
-    def __init__(self):
+    def __init__(self, elapsed: int=None):
         self.timestamp = time.time()
-        self.time_elapsed = 0
+        self.time_elapsed = elapsed if elapsed else 0
         self.trackers = {}
 
     def get_rate(self, name: str) -> float:
