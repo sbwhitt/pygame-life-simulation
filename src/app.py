@@ -81,7 +81,7 @@ class App:
         self.e_man.render_entities(self.window)
         self.c_man.render_colonies(self.window)
         self.e_man.render_selected(self.window, self.clock)
-        self.mouse.render_cursor(self.screen, self.i_map.active)
+        self.mouse.render_cursor(self.screen, self.i_map.active, self.bottom_panel.get_selected_action())
         self.side_panel.render(self.screen, self.e_man.entities)
         self.bottom_panel.render(self.screen)
         self.info_box.render(self.screen, self.clock)

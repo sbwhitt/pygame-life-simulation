@@ -68,7 +68,7 @@ class ActionMenu(InterfaceElement):
             if v == "Delete":
                 ops.append(self._build_option(v, k, colors.RED))
             if v == "Copy":
-                ops.append(self._build_option(v, k, colors.YELLOW))
+                ops.append(self._build_option(v, k, colors.ORANGE))
         return ops
     
     def _build_option(self, option: str, offset: int, color: pygame.Color) -> ActionMenuOption:

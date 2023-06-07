@@ -1,5 +1,6 @@
 import pygame
 import src.utils.utils as utils
+import static.colors as colors
 from static.settings import Settings as settings
 from src.interface.interface_element import InterfaceElement
 from src.styles.styles import MouseCursorStyle
@@ -25,8 +26,21 @@ class Cursor(InterfaceElement):
             self.style.WIDTH = settings.ENT_WIDTH
             self.style.HEIGHT = settings.ENT_WIDTH
     
-    def render(self, screen: pygame.Surface) -> None:
+    def render(self, screen: pygame.Surface, action: str) -> None:
+        self._set_color(action)
         self.render_border(screen)
+
+    # helpers
+
+    def _set_color(self, action: str) -> None:
+        if action == settings.ACTION_MENU_OPTIONS[0]:
+            self.style.BORDER_COLOR = colors.GREEN
+        elif action == settings.ACTION_MENU_OPTIONS[1]:
+            self.style.BORDER_COLOR = colors.CYAN
+        elif action == settings.ACTION_MENU_OPTIONS[2]:
+            self.style.BORDER_COLOR = colors.RED
+        elif action == settings.ACTION_MENU_OPTIONS[3]:
+            self.style.BORDER_COLOR = colors.ORANGE
 
 
 class Mouse:
@@ -39,10 +53,10 @@ class Mouse:
         self.spawn_modulus = 250
         self.spawn_interval = 0
 
-    def render_cursor(self, screen: pygame.Surface, i_map_active: bool) -> None:
+    def render_cursor(self, screen: pygame.Surface, i_map_active: bool, action: str) -> None:
         if not i_map_active:
             self.cursor.update(self.dragging[settings.LEFT_CLICK])
-            self.cursor.render(screen)
+            self.cursor.render(screen, action)
 
     def spawn_outward(self, e_man: EntityManager, pos: tuple, atts: dict, elapsed) -> None:
         if self._increase_spawn_interval(elapsed):

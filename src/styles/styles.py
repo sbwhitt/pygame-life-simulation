@@ -17,7 +17,7 @@ class Style:
 class MouseCursorStyle(Style):
     WIDTH = settings.ENT_WIDTH
     HEIGHT = settings.ENT_WIDTH
-    BORDER_WIDTH = 1
+    BORDER_WIDTH = 2
     ALPHA = 0
 
 @dataclass
