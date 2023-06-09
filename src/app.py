@@ -252,19 +252,19 @@ class App:
             self.e_man.randomize_color()
         # change colors to red
         elif key == pygame.K_1:
-            self.e_man.update_all_colors((255, 0, 0))
+            self.e_man.update_all_colors(colors.RED)
         # change colors to green
         elif key == pygame.K_2:
-            self.e_man.update_all_colors((0, 255, 0))
+            self.e_man.update_all_colors(colors.GREEN)
         # change colors to blue
         elif key == pygame.K_3:
-            self.e_man.update_all_colors((0, 0, 255))
+            self.e_man.update_all_colors(colors.BLUE)
         # change colors to yellow
         elif key == pygame.K_4:
-            self.e_man.update_all_colors((255, 255, 0))
+            self.e_man.update_all_colors(colors.YELLOW)
         # change colors to magenta
         elif key == pygame.K_5:
-            self.e_man.update_all_colors((255, 0, 255))
+            self.e_man.update_all_colors(colors.MAGENTA)
         # change colors to cyan
         elif key == pygame.K_6:
             self.e_man.update_all_colors((0, 255, 255))

@@ -176,7 +176,7 @@ class EntityManager:
 
     def update_all_colors(self, color) -> None:
         for e in self.selected:
-            e.dna.color.update(color)
+            e.dna.color = color
         self.clear_selected()
 
     def shift_colors(self) -> None:
