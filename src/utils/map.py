@@ -1,6 +1,6 @@
-import src.utils.utils as utils
+import utils.utils as utils
 from static.settings import Settings as settings
-from src.entities.entity import Entity
+from entities.entity import Entity
 
 
 class Map:

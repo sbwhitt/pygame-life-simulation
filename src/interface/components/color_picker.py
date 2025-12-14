@@ -1,10 +1,10 @@
 import pygame
-import src.utils.utils as utils
+import utils.utils as utils
 import static.colors as colors
 from static.settings import Settings as settings
-from src.interface.interface_element import InterfaceElement
-from src.styles.styles import ColorPickerStyle
-from src.styles.styles import ColorPickerOptionStyle
+from interface.interface_element import InterfaceElement
+from styles.styles import ColorPickerStyle
+from styles.styles import ColorPickerOptionStyle
 
 
 class ColorPickerOption(InterfaceElement):

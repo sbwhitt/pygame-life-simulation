@@ -1,18 +1,18 @@
 import pygame
 import static.colors as colors
 from static.settings import Settings as settings
-import src.utils.utils as utils
-from src.interface.interface_element import InterfaceElement
-from src.interface.window import Window
-from src.utils.clock import Clock
-from src.tracking.metrics import Metrics
-from src.entities.entity import Entity
-from src.interface.components.panel_button import PanelButton
-from src.entities.entity_manager import EntityManager
-from src.styles.panel_styles import SidePanelStyle
-from src.styles.panel_styles import PanelButtonStyle
-from src.interface.components.stats import Stats
-from src.interface.components.mini_map import MiniMap
+import utils.utils as utils
+from interface.interface_element import InterfaceElement
+from interface.window import Window
+from utils.clock import Clock
+from tracking.metrics import Metrics
+from entities.entity import Entity
+from interface.components.panel_button import PanelButton
+from entities.entity_manager import EntityManager
+from styles.panel_styles import SidePanelStyle
+from styles.panel_styles import PanelButtonStyle
+from interface.components.stats import Stats
+from interface.components.mini_map import MiniMap
 
 
 class SidePanel(InterfaceElement):

@@ -1,5 +1,5 @@
-import src.utils.utils as utils
-from src.interface.interface_element import InterfaceElement
+import utils.utils as utils
+from interface.interface_element import InterfaceElement
 
 
 class InterfaceMap:

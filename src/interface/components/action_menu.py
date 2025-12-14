@@ -1,11 +1,11 @@
 import pygame
-import src.utils.utils as utils
+import utils.utils as utils
 import static.colors as colors
 from static.settings import Settings as settings
-from src.interface.text import Text
-from src.interface.interface_element import InterfaceElement
-from src.styles.styles import ActionMenuOptionStyle
-from src.styles.styles import ActionMenuStyle
+from interface.text import Text
+from interface.interface_element import InterfaceElement
+from styles.styles import ActionMenuOptionStyle
+from styles.styles import ActionMenuStyle
 
 
 class ActionMenuOption(InterfaceElement):

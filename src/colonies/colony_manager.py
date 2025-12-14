@@ -1,9 +1,9 @@
 import pygame
 import static.colors as colors
 from static.settings import Settings as settings
-from src.colonies.colony import Colony
-from src.entities.entity import Entity
-from src.interface.window import Window
+from colonies.colony import Colony
+from entities.entity import Entity
+from interface.window import Window
 
 
 class ColonyManager:

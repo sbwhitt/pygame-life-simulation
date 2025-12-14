@@ -1,10 +1,10 @@
 import pygame
-import src.utils.utils as utils
-from src.interface.interface_element import InterfaceElement
-from src.styles.styles import InfoBoxStyle
-from src.styles.styles import InfoMessageStyle
-from src.interface.text import Text
-from src.utils.clock import Clock
+import utils.utils as utils
+from interface.interface_element import InterfaceElement
+from styles.styles import InfoBoxStyle
+from styles.styles import InfoMessageStyle
+from interface.text import Text
+from utils.clock import Clock
 
 
 class InfoMessage(InterfaceElement):

@@ -1,6 +1,6 @@
 import pygame
-import src.utils.utils as utils
-from src.styles.styles import Style
+import utils.utils as utils
+from styles.styles import Style
 
 
 class InterfaceElement:

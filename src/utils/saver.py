@@ -1,6 +1,6 @@
 import os
 import pickle
-import src.utils.utils as utils
+import utils.utils as utils
 
 def save_data(to_save: dict):
     name = "save_" + utils.get_current_date_str() + ".ent"

@@ -2,19 +2,19 @@ import pygame
 import asyncio
 import static.colors as colors
 from static.settings import Settings as settings
-import src.utils.utils as utils
-import src.utils.saver as saver
-import src.utils.loader as loader
-from src.interface.window import Window
-from src.tracking.metrics import Metrics
-from src.entities.entity_manager import EntityManager
-from src.colonies.colony_manager import ColonyManager
-from src.interface.mouse import Mouse
-from src.utils.clock import Clock
-from src.interface.panels.side_panel import SidePanel
-from src.interface.panels.bottom_panel import BottomPanel
-from src.utils.interface_map import InterfaceMap
-from src.interface.components.info_box import InfoBox
+import utils.utils as utils
+import utils.saver as saver
+import utils.loader as loader
+from interface.window import Window
+from tracking.metrics import Metrics
+from entities.entity_manager import EntityManager
+from colonies.colony_manager import ColonyManager
+from interface.mouse import Mouse
+from utils.clock import Clock
+from interface.panels.side_panel import SidePanel
+from interface.panels.bottom_panel import BottomPanel
+from utils.interface_map import InterfaceMap
+from interface.components.info_box import InfoBox
 
 '''
 x == width == rect.left

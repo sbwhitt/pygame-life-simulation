@@ -1,11 +1,11 @@
 import pygame
-import src.utils.utils as utils
+import utils.utils as utils
 import static.colors as colors
 from static.settings import Settings as settings
-from src.interface.interface_element import InterfaceElement
-from src.styles.styles import ChooserStyle
-from src.interface.text import Text
-from src.interface.components.checkbox import Checkbox
+from interface.interface_element import InterfaceElement
+from styles.styles import ChooserStyle
+from interface.text import Text
+from interface.components.checkbox import Checkbox
 
 
 class Chooser(InterfaceElement):

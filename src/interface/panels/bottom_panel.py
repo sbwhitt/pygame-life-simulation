@@ -1,16 +1,16 @@
 import pygame
-import src.utils.utils as utils
+import utils.utils as utils
 import static.colors as colors
 from static.settings import Settings as settings
-from src.interface.interface_element import InterfaceElement
-from src.styles.panel_styles import BottomPanelStyle
-from src.interface.components.panel_button import PanelButton
-from src.styles.panel_styles import PanelButtonStyle
-from src.interface.components.color_picker import ColorPicker
-from src.interface.text import Text
-from src.interface.components.chooser import Chooser
-from src.styles.styles import ChooserStyle
-from src.interface.components.action_menu import ActionMenu
+from interface.interface_element import InterfaceElement
+from styles.panel_styles import BottomPanelStyle
+from interface.components.panel_button import PanelButton
+from styles.panel_styles import PanelButtonStyle
+from interface.components.color_picker import ColorPicker
+from interface.text import Text
+from interface.components.chooser import Chooser
+from styles.styles import ChooserStyle
+from interface.components.action_menu import ActionMenu
 
 
 class BottomPanel(InterfaceElement):

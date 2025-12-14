@@ -1,0 +1,9 @@
+[project]
+name = "pygame-life-simulation"
+version = "0.1.0"
+description = "Pygame project that simulates the life and behavior of small colored squares called entities."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pygame>=2.6.1",
+]

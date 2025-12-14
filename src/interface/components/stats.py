@@ -1,10 +1,10 @@
 import pygame
-import src.utils.utils as utils
+import utils.utils as utils
 import static.colors as colors
 from static.settings import Settings as settings
-from src.interface.interface_element import InterfaceElement
-from src.styles.panel_styles import StatsPanelStyle
-from src.interface.text import Text
+from interface.interface_element import InterfaceElement
+from styles.panel_styles import StatsPanelStyle
+from interface.text import Text
 
 
 class Stat:

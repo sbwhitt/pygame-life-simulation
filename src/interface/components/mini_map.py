@@ -1,12 +1,12 @@
 import pygame
 import static.colors as colors
 from static.settings import Settings as settings
-import src.utils.utils as utils
-from src.interface.interface_element import InterfaceElement
-from src.styles.panel_styles import MiniMapStyle
-from src.styles.panel_styles import MiniMapCursorStyle
-from src.interface.window import Window
-from src.entities.entity import Entity
+import utils.utils as utils
+from interface.interface_element import InterfaceElement
+from styles.panel_styles import MiniMapStyle
+from styles.panel_styles import MiniMapCursorStyle
+from interface.window import Window
+from entities.entity import Entity
 
 
 class MiniMapCursor(InterfaceElement):

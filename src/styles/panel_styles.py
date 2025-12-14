@@ -1,7 +1,7 @@
 import static.colors as colors
 from static.settings import Settings as settings
 from dataclasses import dataclass
-from src.styles.styles import Style
+from styles.styles import Style
 
 @dataclass
 class SidePanelStyle(Style):

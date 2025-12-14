@@ -1,12 +1,12 @@
 import pygame
-import src.utils.utils as utils
+import utils.utils as utils
 import static.colors as colors
 from static.settings import Settings as settings
-from src.interface.interface_element import InterfaceElement
-from src.styles.styles import MouseCursorStyle
-from src.entities.entity_manager import EntityManager
-from src.interface.window import Window
-from src.interface.components.action_menu import ActionMenuOption
+from interface.interface_element import InterfaceElement
+from styles.styles import MouseCursorStyle
+from entities.entity_manager import EntityManager
+from interface.window import Window
+from interface.components.action_menu import ActionMenuOption
 
 
 class Cursor(InterfaceElement):

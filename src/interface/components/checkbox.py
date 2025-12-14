@@ -1,9 +1,9 @@
 import pygame
-import src.utils.utils as utils
+import utils.utils as utils
 import static.colors as colors
 from static.settings import Settings as settings
-from src.interface.interface_element import InterfaceElement
-from src.styles.styles import CheckboxStyle
+from interface.interface_element import InterfaceElement
+from styles.styles import CheckboxStyle
 
 
 class Checkbox(InterfaceElement):

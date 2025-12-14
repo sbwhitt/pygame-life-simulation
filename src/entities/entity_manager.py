@@ -1,13 +1,13 @@
 import pygame
 import random
-import src.utils.utils as utils
+import utils.utils as utils
 import static.colors as colors
 from static.settings import Settings as settings
-from src.entities.entity import Entity
-from src.utils.map import Map
-from src.interface.window import Window
-from src.colonies.colony_manager import ColonyManager
-from src.utils.clock import Clock
+from entities.entity import Entity
+from utils.map import Map
+from interface.window import Window
+from colonies.colony_manager import ColonyManager
+from utils.clock import Clock
 
 
 class EntityManager:

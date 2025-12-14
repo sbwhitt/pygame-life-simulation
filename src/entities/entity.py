@@ -1,8 +1,8 @@
 import pygame
 import random
-import src.utils.utils as utils
+import utils.utils as utils
 from static.settings import Settings as settings
-from src.entities.dna import DNA
+from entities.dna import DNA
 
 
 class Entity:

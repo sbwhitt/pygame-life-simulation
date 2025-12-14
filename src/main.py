@@ -1,7 +1,7 @@
 import sys
 import asyncio
 import random
-from src.app import App
+from app import App
 from pygame import display
 
 
